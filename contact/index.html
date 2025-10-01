@@ -13,7 +13,28 @@
         <a href = "index.html">Contact Information</a> |
         <a href ="https://github.com/alhayslip" target="blank"> My Github Page</a>
     </nav>
-    <h1>Academic Projects</h1>
-   <p>Below are my academic projects<p>
+    <h1>Contact Submission Form</h1>
+   <p>Please enter the following information to contact Alex<p>
+    <form action="mailto:alhayslip@ucsd.edu", method="POST", enctype="text/plain">
+        <label>
+            Your Email:
+            <input type="email" name="email" required>
+            </label>
+            <br><br>
+
+        <label>:
+            Subject:
+            <input name="subject" required>
+        </label>
+        <br><br>
+
+         <label>
+            Message:
+            <textarea name="body" rows="5" cols="30" required></textarea>
+        </label>
+        <br><br>
+
+        <button>Send<button>
+    </form>
 </body>
 </html>
