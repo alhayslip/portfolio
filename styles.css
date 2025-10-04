@@ -36,3 +36,20 @@ nav a:hover {
 :root{
   --color-accent: oklch(65% 50% 0);
 }
+
+input, textarea, button {
+  font: inherit;
+}
+
+form label,
+form input
+form textarea
+form button {
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+form label{
+  margin-block: 2em; 
+}
