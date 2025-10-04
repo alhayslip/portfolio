@@ -5,3 +5,27 @@ body {
   background-color: #D3D3D3;
   font: 100%/1.5 system-ui;
 }
+
+nav {
+  display: flex;
+  justify-content: space-evenly;
+  border-bottom: solid 1px oklch(80% 3% 200);
+  margin-bottom: 2em;
+}
+nav a {
+  flex: 1;
+  text-align: center;
+  color: inherit;
+  text-align: center;
+  text-decoration: none;
+  padding: 1em;
+}
+
+nav a.current{
+  border-bottom: 0.6em solid oklch(80% 3% 200);
+  padding-bottom: 0.2em;
+}
+
+:root{
+  --color-accent: oklch(65% 50% 0);
+}
