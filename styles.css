@@ -91,3 +91,66 @@ h2, h3, h4, h5, h6 {
     line-height: 1.1;
     text-wrap: balance;
 }
+
+.resume-container{
+  width: 90%;
+  background-color: aliceblue;
+  margin: 30px auto;
+  padding: 30px auto;
+  border-radius: 10px;
+box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+h1 {
+  text-align: center;
+  font-size: 2.5rem;
+  margin-bottom: 1.8rem;
+  color: #000000;
+}
+
+h2 {
+  font-size:1.5rem;
+  color: #000000;
+  margin-top: 4rem;
+  border-bottom: 4px solid #808080;
+  padding-bottom: 0.5rem;
+}
+
+h3, h4, h5, h6{
+  font-size: 1.3rem;
+  font-weight: bold;
+  margin-top: 2rem;
+  margin-bottom: 0.4rem;
+  color: #000000;
+}
+
+section:first-of-type p {
+  margin: 0.4rem 0;
+}
+
+time{
+  font-style: Arial Verdana Helvetica;
+  color: #808080;
+}
+
+ul {
+  margin-left: 2rem;
+  margin-bottom: 1rem;
+}
+
+ul li {
+  margin-bottom: 0.5rem;
+}
+
+section:last-of-type ul{
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  gap: 1rem;
+  list-style-type: square;
+}
+
+nav a.current {
+  font-weight: bold;
+  color: aquamarine;
+  text-decoration: underline;
+}
