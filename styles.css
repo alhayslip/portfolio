@@ -1,6 +1,7 @@
 body {
-  /* Set line height to 1.5 times the font size
-	   and use the OS’s UI font as the website font
-	 */
+  font-family: arial;
+  max-width: 1500px;
+  margin-inline: auto;
+  background-color: #D3D3D3;
   font: 100%/1.5 system-ui;
 }
