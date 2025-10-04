@@ -41,15 +41,26 @@ input, textarea, button {
   font: inherit;
 }
 
-form label,
+form {
+display: grid;
+grid-template-columns: auto 1fr auto;
+gap: 2em;
+max-width: 60rem; 
+}
+
+form label{
+  display: grid;
+  grid-template-columns: subgrid;
+  grid-column: 1/ -1;
+}
+
 form input
-form textarea
-form button {
-  display: block;
+form textarea{
   width: 100%;
   box-sizing: border-box;
 }
 
-form label{
-  margin-block: 2em; 
+form button{
+  grid-column: 1 / -1;
+  padding: 1.5em 2em;
 }
