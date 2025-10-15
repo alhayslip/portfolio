@@ -8,7 +8,9 @@ body {
 
 nav {
   display: flex;
+  border-color: oklch(50% 10% 200 / 40%);
   border-bottom: solid 1px oklch(80% 3% 200);
+  padding: 1rem;
   margin-bottom: 1em;
 }
 nav a {
@@ -27,12 +29,19 @@ nav a.current{
 }
 
 nav a:hover {
+  background-color: color-mix(in oklch, var(--color-accent), canvas 85%);
   border-bottom: 0.4em solid var(--color-accent);
   padding-bottom: 0.1em;
 }
 
 :root{
   --color-accent: oklch(65% 50% 0);
+}
+
+html {
+  color-scheme: light dark;
+  background-color: canvas;
+  color: canvastext;
 }
 
 input, textarea, button {
