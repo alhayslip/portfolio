@@ -9,25 +9,11 @@
 <body>
     <h1>Contact Submission Form</h1>
    <p>Please enter the following information to contact Alex</p>
-    <form action="mailto:alhayslip@ucsd.edu" method="POST" enctype="text/plain">
-        <label>
-            Your Email:
-            <input type="email" name="email" required>
-        </label>
-
-        <label>
-            Subject:
-            <input name="subject" required>
-        </label>
-
-         <label>
-            Message:
-            <textarea name="body" rows="5" cols="30" required></textarea>
-        </label>
-
-        <button>Send</button>
+    <form action="mailto:alhayslip@ucsd.edu" method="GET">
+    <p><label>Subject: <input type = "text" name="Subject" required</label></p>
+    <p><label>Message: <textarea name="body" required></textarea></label></p>
+    <p><button type="submit">Send Email</button></p>
     </form>
-
 <script type="module" src="../global.js"></script>
 </body>
 </html>
