@@ -6,12 +6,20 @@ body {
   font: 100%/1.5 system-ui;
 }
 
+:root{
+  --color-accent: oklch(65% 50% 0);
+}
+
+html {
+  color-scheme: light dark;
+  background-color: canvas;
+  color: canvastext;
+}
+
 nav {
-  display: flex;
   border-color: oklch(50% 10% 200 / 40%);
   border-bottom: solid 1px oklch(80% 3% 200);
   padding: 1rem;
-  margin-bottom: 1em;
 }
 nav a {
   flex: 1;
@@ -30,19 +38,20 @@ nav a.current{
 
 nav a:hover {
   background-color: color-mix(in oklch, var(--color-accent), canvas 85%);
-  border-bottom: 0.4em solid var(--color-accent);
-  padding-bottom: 0.1em;
 }
 
-:root{
-  --color-accent: oklch(65% 50% 0);
+.color-scheme {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  font-size: 0.8rem;
+  font-family: inherit;
 }
 
-html {
-  color-scheme: light dark;
-  background-color: canvas;
-  color: canvastext;
+.color-scheme select {
+  font-family: inherit;
 }
+
 
 input, textarea, button {
   font: inherit;
