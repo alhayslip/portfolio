@@ -5,24 +5,19 @@ async function loadProjects() {
         const projects = await fetchJSON('../lib/projects.json');
         const projectsContainer = document.querySelector('.projects');
         const projectsTitle = document.querySelector('projects-title');
+        
+        renderProjects(projects, projectsContainer, 'h2');
 
-        if (!projectsContainer){
-    console.error("Error: .projects container is not found in the DOM.");
-    return;
-}
-
-renderProjects(projects, projectsContainer, 'h2');
-
-if (projectsTitle){
-    projectsTitle.textContent = `${projects.length} Projects`;
-}
-
-} catch (error){
-    console.error('Error loading projects:', error);
+        if (projectsTitle){
+            projectsTitle.textContent = `${projects.length} Projects`;
+        }
+    } catch (error){
+        console.error('There is an error associated with loading the projects:', error);
     }
 }
 
 loadProjects();
+
 
 
 
