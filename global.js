@@ -32,7 +32,6 @@ for (let p of pages) {
   );
 
   a.toggleAttribute("target", a.host !== location.host);
-
   nav.append(a);
 }
 
@@ -70,9 +69,7 @@ const form = document.querySelector("form");
 
 form?.addEventListener("submit", (event) => {
   event.preventDefault(); 
-
   const data = new FormData(form);
-
   let url = form.action + "?";
   const params = [];
 
@@ -81,24 +78,21 @@ form?.addEventListener("submit", (event) => {
   }
 
   url += params.join("&");
-
   location.href = url;
 });
 
 export async function fetchJSON(url){
   try{
-       const response = await fetch(url);
-if (!response.ok) {
-  throw new Error(`Failed to fetch projects: ${response.statusText}`);
-}
-
-console.log('Fetch response:', response);
-
-const data = await response.json();
-return data;
-
-  }catch (error){
-    console.error('Error fetching or prasing JSON data:', error);
+    const response = await fetch(url);
+    if (!response.ok) {
+      throw new Error(`Failed to fetch projects: ${response.statusText}`);
+    }
+    console.log('Fetch response:', response);
+    const data = await response.json();
+    return data;
+  } catch (error){
+    console.error('Error fetching or parsing JSON data:', error);
+    return [];
   }
 }
 
@@ -108,32 +102,32 @@ export function renderProjects(projects, containerElement, headingLevel = 'h2') 
     return;
   }
 
-const headings = ['h1', 'h2', 'h3', 'h4', 'h5', 'h6'];
-if (!headings.includes(headingLevel)){
-  console.warn(`Invalid heading level "${headingLevel}" is provided. Defaulting to <h2>.`);
-  headingLevel = 'h2';
-}
+  const headings = ['h1', 'h2', 'h3', 'h4', 'h5', 'h6'];
+  if (!headings.includes(headingLevel)){
+    console.warn(`Invalid heading level "${headingLevel}" provided. Defaulting to <h2>.`);
+    headingLevel = 'h2';
+  }
 
-containerElement.innerHTML = '';
+  containerElement.innerHTML = '';
 
-if (!projects || projects.length === 0){
-  containerElement.innerHTML = `<p>There are no projects to display</p>`;
-  return;
-}
+  if (!projects || projects.length === 0){
+    containerElement.innerHTML = `<p>No projects to display.</p>`;
+    return;
+  }
 
-projects.forEach(project => {
-  const article = document.createElement('article');
+  projects.forEach(project => {
+    const article = document.createElement('article');
 
-const title = 'Project Without a Title';
-const image = project.image = 'https://unsplash.com/photos/brown-tabby-kitten-sitting-on-floor-nKC772R_qog';
-const description = project.description || 'No description, this is a placeholder';
+    const title = project.title || 'This project does not have a title';
+    const image = project.image || 'https://en.wikipedia.org/wiki/Tabby_cat';
+    const description = project.description || 'This is a placeholder';
 
-article.innerHTML = `
-    <h3>${project.title}</h3>
-    <img src="${project.image}" alt="${project.title}">
-    <p>${project.description}</p>
+    article.innerHTML = `
+      <${headingLevel}>${title}</${headingLevel}>
+      <img src="${image}" alt="${title}">
+      <p>${description}</p>
     `;
 
-containerElement.appendChild(article);
-});
+    containerElement.appendChild(article);
+  });
 }
