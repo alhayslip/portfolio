@@ -84,3 +84,55 @@ form?.addEventListener("submit", (event) => {
 
   location.href = url;
 });
+
+export async function fetchJSON(url){
+  try{
+       const response = await fetch(url);
+if (!response.ok) {
+  throw new Error(`Failed to fetch projects: ${response.statusText}`);
+}
+
+console.log('Fetch response:', response);
+
+const data = await response.json();
+return data;
+
+  }catch (error){
+    console.error('Error fetching or prasing JSON data:', error);
+  }
+}
+
+export function renderProjects(projects, containerElement, headingLevel='h2') {
+  if (!containerElement){
+    console.error('Container element is not found or invalid.');
+    return;
+  }
+}
+
+const headings = ['h1', 'h2', 'h3', 'h4', 'h5', 'h6'];
+if (!headings.includes(headingLevel)){
+  console.warn(`Invalid heading level "${headingLevel}" is provided. Defaulting to <h2>.`)
+}
+
+containerElement.innerHTML = '';
+
+if (!projects || projects.length === 0){
+  containerElement.innerHTML = `<p>There are no projects to display</p>`
+  return;
+}
+
+projects.forEach(project => {
+  const article = document.createElement('article');
+});
+
+const title = 'Project Without a Title';
+const image = project.image = 'https://unsplash.com/photos/brown-tabby-kitten-sitting-on-floor-nKC772R_qog';
+const description = project.description || 'No description, this is a placeholder';
+
+article.innerHTML = `
+    <h3>${project.title}</h3>
+    <img src="${project.image}" alt="${project.title}">
+    <p>${project.description}</p>
+`;
+
+containerElement.appendChild(article);
