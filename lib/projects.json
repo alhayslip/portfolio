@@ -6,17 +6,17 @@
     },
     {
         "title": "DSC 209 Project 2 Proposition",
-        "image": "lineplot.png",
+        "image": "https://alhayslip.github.io/portfolio/images/lineplot.png",
         "description": "This line graph showcases that neighborhood policing in New York resulting in an increase in complaints filed"
     },
     {
         "title": "DSC 209 Project 2 2015 Neighborhood Policing Bar Plot",
-        "image": "2015_barplot.png",
+        "image": "https://alhayslip.github.io/portfolio/images/2015_barplot.png",
         "description": "This barplot indicates that the implementation in neighborhood policing in 2015 increased the number of complaints filed."
     },
     {
         "title": "DSC 209 Project 2 Precinct 75 Pie Chart Before and After Neighborhood Policing",
-        "image": "pie_chart.png",
+        "image": "https://alhayslip.github.io/portfolio/images/pie_chart.png",
         "description": "This pie chart indicates the distribution of complaints filed from January 2011 to December in Precinct 75 by whether it occurred before or after neighborhood policing"
     },
     {
