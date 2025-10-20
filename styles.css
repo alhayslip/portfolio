@@ -190,8 +190,11 @@ nav a.current {
   margin: 0;
 }
 
-.project-image{
-  width:300px;
-  height: 150px;
-  border-radius: 5px;
+article img {
+  width: 200px;    
+  height: auto;    
+  object-fit: contain; 
+  display: block;
+  margin: 0 auto;   
+  border-radius: 5px; 
 }
