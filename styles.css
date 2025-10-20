@@ -137,6 +137,7 @@ h2, h3, h4, h5, h6 {
 }
 
 .resume-container{
+  grid-template-columns: repeat(3, 1fr);
   width: 90%;
   background-color: aliceblue;
   margin: 30px auto;
