@@ -25,7 +25,7 @@ const profileStats = document.querySelector('#profile-stats');
 
 async function loadGitHubProfile(){
   try{
-  const githubData = await fetchGitHubData('alhayslip');
+  const githubData = await fetchGithubData('alhayslip');
 
    if (!profileStats) {
       console.error("No element found with ID #profile-stats");
