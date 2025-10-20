@@ -189,3 +189,9 @@ nav a.current {
   grid-row: 2;
   margin: 0;
 }
+
+.project-image{
+  width:300px;
+  height: 150px;
+  border-radius: 5px;
+}
