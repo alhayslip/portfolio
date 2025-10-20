@@ -5,19 +5,19 @@
         "description": "This histogram was used to visualize organic products at Whole Foods by their food processing score"
     },
     {
-        "title": "Sequi molestias labore expedita?",
-        "image": "https://vis-society.github.io/labs/2/images/empty.svg",
-        "description": "Aliquid, explicabo provident qui corporis praesentium rem sequi molestiae eaque accusamus laborum in eligendi itaque non nesciunt laboriosam harum dolores animi optio mollitia culpa illum. Molestiae hic blanditiis voluptates eveniet?"
+        "title": "DSC 209 Project 2 Proposition",
+        "image": "lineplot.png",
+        "description": "This line graph showcases that neighborhood policing in New York resulting in an increase in complaints filed"
     },
     {
-        "title": "Quaerat temporibus error saepe!",
-        "image": "https://vis-society.github.io/labs/2/images/empty.svg",
-        "description": "Voluptas illum ratione dicta unde voluptatibus, iure quam ea dolore, culpa amet blanditiis! Laborum delectus optio sunt consectetur minima, quibusdam fuga deserunt hic animi explicabo debitis! Doloribus consequuntur explicabo ipsa."
+        "title": "DSC 209 Project 2 2015 Neighborhood Policing Bar Plot",
+        "image": "2015_barplot.png",
+        "description": "This barplot indicates that the implementation in neighborhood policing in 2015 increased the number of complaints filed."
     },
     {
-        "title": "Dolorum eum in blanditiis?",
-        "image": "https://vis-society.github.io/labs/2/images/empty.svg",
-        "description": "Optio deserunt, ipsam ex rem, nisi porro itaque delectus voluptates, ad molestias dolorem autem perspiciatis nulla velit consequuntur aut rerum quis quod. Quas veritatis voluptas voluptatem minima iusto, nemo reprehenderit."
+        "title": "DSC 209 Project 2 Precinct 75 Pie Chart Before and After Neighborhood Policing",
+        "image": "pie_chart.png",
+        "description": "This pie chart indicates the distribution of complaints filed from January 2011 to December in Precinct 75 by whether it occurred before or after neighborhood policing"
     },
     {
         "title": "Nostrum facilis deserunt consequuntur!",
