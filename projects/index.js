@@ -24,18 +24,22 @@ import {fetchGitHubData} from './global.js';
 const profileStats = document.querySelector('#profile-stats');
 
 async function loadGitHubProfile(){
+  try{
   const githubData = await fetchGitHubData('alhayslip');
-}
 
-if (profileStats) {
-  profileStats.innerHTML = `
+  if (profileStats && githubData) {
+      profileStats.innerHTML += `
         <dl>
           <dt>Public Repos:</dt><dd>${githubData.public_repos}</dd>
           <dt>Public Gists:</dt><dd>${githubData.public_gists}</dd>
           <dt>Followers:</dt><dd>${githubData.followers}</dd>
           <dt>Following:</dt><dd>${githubData.following}</dd>
         </dl>
-    `;
+      `;
+    }
+  } catch (err) {
+    console.error("Error loading GitHub profile:", err);
+  }
 }
 
 loadGitHubProfile();
