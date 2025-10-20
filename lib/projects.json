@@ -22,25 +22,25 @@
     {
         "title": "DSC 207 Mini Project Boxplot of Happiness by Country",
         "image": "https://alhayslip.github.io/portfolio/images/boxplots.png",
-        "description": "For my DSC 207 Python course, I was tasking with analyzing happiness scores by country, which can be found here https://www.kaggle.com/datasets/bhanupratapbiswas/world-happiness-2016. This boxplot visualizes the distribution of life expectancy for region that is referenced in the dataset."
+        "description": "For my DSC 207 Python course, I was tasked with analyzing happiness scores by country, which can be found here https://www.kaggle.com/datasets/bhanupratapbiswas/world-happiness-2016. This boxplot visualizes the distribution of life expectancy for region that is referenced in the dataset."
     },
     {
-        "title": "Veritatis placeat distinctio ea.",
-        "image": "https://vis-society.github.io/labs/2/images/empty.svg",
-        "description": "Aut fuga tempora saepe quos incidunt eius magnam in ratione commodi at consequatur totam labore laudantium cum, iure possimus culpa quo sit fugit placeat deleniti exercitationem quod? Voluptatibus, expedita accusantium!"
+        "title": "DSC 207 Final Project KMeans of NBA field goals data",
+        "image": "https://alhayslip.github.io/portfolio/images/kmeans.png",
+        "description": "For my DSC 207 Python course, I decided to analyze data for NBA Field Goals attempted between the 2004 and 2022 seasons. This visualization represents a KMeans Clustering Analysis that I performed to categorize groups of players by the amount of field goals attempted and field goal percentage."
     },
     {
-        "title": "Quos laborum fugiat vitae.",
-        "image": "https://vis-society.github.io/labs/2/images/empty.svg",
-        "description": "Sint quo nostrum non repudiandae, praesentium harum laborum perspiciatis. Nulla illo modi, asperiores quas maiores, numquam cum iste commodi voluptatibus rem quae sint fugit ea? Adipisci autem unde esse rem!"
+        "title": "DSC 232 Group Project for Spotify Data",
+        "image": "https://alhayslip.github.io/portfolio/images/cluster.png",
+        "description": "For my DSC 232 Big Data course, I analyzed spotify data. In this instance, I created a KMeans cluster to group a songs popularity (0 to 100) against its dancability (0 to 1)"
     },
     {
         "title": "Magni amet laborum deleniti!",
-        "image": "https://vis-society.github.io/labs/2/images/empty.svg",
-        "description": "Voluptatibus ipsum consectetur vitae, corrupti pariatur sequi maiores perferendis exercitationem quia, odit eaque, quasi fuga dolor illo. Autem sed repudiandae explicabo? Nisi cumque debitis sed provident dolores incidunt blanditiis eius."
+        "image": "https://alhayslip.github.io/portfolio/images/linear.png",
+        "description": "I worked on a side project by analzying the following dataset https://www.kaggle.com/datasets/gregorut/videogamesales. I performed a linear regression model and learned that the correlation between the North American Sales for a video game as well the global sales for a video games is 85.0%"
     },
     {
-        "title": "Laudantium sequi similique aut!",
+        "title": "Video Games Sales Simple Linear Regression of NA and Global Sales",
         "image": "https://vis-society.github.io/labs/2/images/empty.svg",
         "description": "Harum ut nemo explicabo. Aperiam quam porro facilis facere, doloremque qui totam obcaecati omnis animi. Nesciunt pariatur, excepturi, eaque quo nam ratione incidunt officia maiores consequatur, cum ex repudiandae iure."
     },
