@@ -82,9 +82,10 @@ form button{
 }
 
 .projects {
-  margin: 1rem auto;   /* was 2rem — reduces vertical whitespace */
-  padding: 0.5rem;     /* was 1rem — reduces internal whitespace */
-  gap: 2em;            /* optional — tighter spacing between cards */
+  grid-template-columns: repeat(3, 1fr);
+  margin: 1rem auto;   
+  padding: 0.5rem;    
+  gap: 1em;           
 }
 
 .projects article{
