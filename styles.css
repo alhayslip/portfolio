@@ -81,12 +81,14 @@ form button{
   padding: 1.5em 2em;
 }
 
-.projects {
+.projects{
+  display: grid;
   grid-template-columns: repeat(3, 1fr);
-  margin: 1rem auto;   
-  padding: 0.5rem;    
-  gap: 1em;           
-}
+  gap: 3em;
+  justify-items: center;
+  margin: 2rem auto;
+  padding: 1rem;
+  max-width: 1400px;
 
 .projects article{
   background-color: #f0f0f0;
