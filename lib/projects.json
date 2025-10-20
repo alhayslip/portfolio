@@ -2,27 +2,27 @@
     {
         "title": "DSC 209 Project 1 Final Submission",
         "image": "https://alhayslip.github.io/portfolio/images/project_1_final.png",
-        "description": "This histogram was used to visualize organic products at Whole Foods by their food processing score"
+        "description": "This visualization was created from the grocery db csv file that can be found here: https://dsc-courses.github.io/dsc209r-2025-fa/projects/project1/#data-grocery-store-foods. This histogram was used to visualize organic products at Whole Foods by their food processing score"
     },
     {
         "title": "DSC 209 Project 2 Proposition",
         "image": "https://alhayslip.github.io/portfolio/images/lineplot.png",
-        "description": "This line graph showcases that neighborhood policing in New York resulting in an increase in complaints filed"
+        "description": "This visualization was created from the Civilian Complaints Against New York City Police Officers dataset, which can be found here https://dsc-courses.github.io/dsc209r-2025-fa/projects/project2/#datasets. This line graph showcases that neighborhood policing in New York resulting in an increase in complaints filed"
     },
     {
         "title": "DSC 209 Project 2 2015 Neighborhood Policing Bar Plot",
         "image": "https://alhayslip.github.io/portfolio/images/2015_barplot.png",
-        "description": "This barplot indicates that the implementation in neighborhood policing in 2015 increased the number of complaints filed."
+        "description": "This visualization was created from the Civilian Complaints Against New York City Police Officers dataset, which can be found here https://dsc-courses.github.io/dsc209r-2025-fa/projects/project2/#datasets. This barplot indicates that the implementation in neighborhood policing in 2015 increased the number of complaints filed."
     },
     {
         "title": "DSC 209 Project 2 Precinct 75 Pie Chart Before and After Neighborhood Policing",
         "image": "https://alhayslip.github.io/portfolio/images/pie_chart.png",
-        "description": "This pie chart indicates the distribution of complaints filed from January 2011 to December in Precinct 75 by whether it occurred before or after neighborhood policing"
+        "description": "This visualization was created from the Civilian Complaints Against New York City Police Officers dataset, which can be found here https://dsc-courses.github.io/dsc209r-2025-fa/projects/project2/#datasets. I created a pie chart to indicate the distribution of complaints filed from January 2011 to December in Precinct 75 by whether it occurred before or after neighborhood policing was implemented in New York City."
     },
     {
-        "title": "Nostrum facilis deserunt consequuntur!",
-        "image": "https://vis-society.github.io/labs/2/images/empty.svg",
-        "description": "Omnis rem suscipit blanditiis similique quidem ducimus nam ex deserunt sapiente, animi dolorum veniam enim rerum voluptatibus molestiae distinctio, vel quas a ipsum aut. A dolorum iure consequuntur consectetur velit!"
+        "title": "DSC 207 Mini Project Boxplot of Happiness by Country",
+        "image": "https://alhayslip.github.io/portfolio/images/boxplots.png",
+        "description": "For my DSC 207 Python course, I was tasking with analyzing happiness scores by country, which can be found here https://www.kaggle.com/datasets/bhanupratapbiswas/world-happiness-2016. This boxplot visualizes the distribution of life expectancy for region that is referenced in the dataset."
     },
     {
         "title": "Veritatis placeat distinctio ea.",
