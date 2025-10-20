@@ -191,7 +191,7 @@ nav a.current {
 }
 
 article img {
-  width: 200px;    
+  width: 500px;    
   height: auto;    
   object-fit: contain; 
   display: block;
