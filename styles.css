@@ -172,3 +172,20 @@ nav a.current {
   color: aquamarine;
   text-decoration: underline;
 }
+
+#profile-stats dl {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  text-align: center;
+  gap: 1rem;
+}
+
+#profile-stats dt {
+  font-weight: bold;
+  grid-row: 1;
+}
+
+#profile-stats dd {
+  grid-row: 2;
+  margin: 0;
+}
