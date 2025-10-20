@@ -40,23 +40,23 @@
         "description": "I worked on a side project by analzying the following dataset https://www.kaggle.com/datasets/gregorut/videogamesales. I performed a linear regression model and learned that the correlation between the North American Sales for a video game as well the global sales for a video games is 85.0%"
     },
     {
-        "title": "Ipsam autem veritatis perspiciatis.",
-        "image": "https://vis-society.github.io/labs/2/images/empty.svg",
-        "description": "Harum ut nemo explicabo. Aperiam quam porro facilis facere, doloremque qui totam obcaecati omnis animi. Nesciunt pariatur, excepturi, eaque quo nam ratione incidunt officia maiores consequatur, cum ex repudiandae iure."
+        "title": "Lamar Jackson Passing Completions and Passing Yards Cluster (2018 to 2022)",
+        "image": "https://alhayslip.github.io/portfolio/images/lamarjacksoncluster.png",
+        "description": "I worked on a side project by analzying the passing statistics of football quarterback Lamar Jackson. I performed a KMeans cluster analysis and categorized the performance of Lamar Jackson in terms of completions and passing yards into three distinct clusters"
     },
     {
-        "title": "Ipsam autem veritatis perspiciatis.",
-        "image": "https://vis-society.github.io/labs/2/images/empty.svg",
-        "description": "Accusamus quo dolorum ut rem, incidunt ducimus molestiae consectetur perspiciatis accusantium aspernatur nemo quod dignissimos, voluptates minus iusto nobis iste soluta. Libero illum et nemo distinctio blanditiis id dicta totam."
+        "title": "Distribution of Shopping Sales By Season",
+        "image": "https://alhayslip.github.io/portfolio/images/salespiechart.png",
+        "description": "This pie chart depicts the sales of fashion items as depicted in this dataset: https://www.kaggle.com/datasets/iamsouravbanerjee/customer-shopping-trends-dataset. I create this pie chart to display the visualization of total sales by season."
     },
     {
-        "title": "Deleniti eum recusandae ex.",
-        "image": "https://vis-society.github.io/labs/2/images/empty.svg",
-        "description": "Aliquid reprehenderit, assumenda temporibus alias ex, laborum fuga recusandae suscipit aspernatur sequi rerum. Ratione possimus unde veritatis assumenda, reprehenderit rem excepturi error deserunt eos ab totam illo eligendi beatae saepe?"
+        "title": "Countplot of Position Players Who Played for the Colorado Rockies By Position",
+        "image": "https://alhayslip.github.io/portfolio/images/rockies_batting.png",
+        "description": "This barplot was generated from a dataset about position players who played for the Colorado Rockies MLB franchise. This shows that the majority of position players who have played for the rockies are catchers."
     },
     {
-        "title": "Incidunt quas sit dolores!",
-        "image": "https://vis-society.github.io/labs/2/images/empty.svg",
-        "description": "Exercitationem, veniam libero voluptates nihil quidem ullam dicta cum magnam aliquam odio tempora beatae consequatur minus. Molestias ab amet esse veniam rem. Necessitatibus veniam perspiciatis quo alias nesciunt consequatur porro?"
+        "title": "Scatterplot of EarnedRuns Allowed Allowed and Earned Run Average for Pitchers who played for the Colorado Rockies",
+        "image": "https://alhayslip.github.io/portfolio/images/scatterplot.png",
+        "description": "This scatterplot visualizes the performance of Colorado Rockies pitchers by the number of earned runs allowed on the x axis and the earned run average on the y axis."
     }
 ]
