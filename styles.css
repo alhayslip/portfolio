@@ -231,3 +231,7 @@ article img {
   color: #333;
   margin-top: 0.5rem;
 }
+
+.projects article:nth-child(-n+6) img {
+  height: 440px; 
+}
