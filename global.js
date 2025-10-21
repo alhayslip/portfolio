@@ -38,6 +38,7 @@ for (let p of pages) {
       { url: "projects/project1.html", title: "Project 1" },
       { url: "projects/project2.html", title: "Project 2" },
       { url: "projects/project3.html", title: "Project 3" },
+      { url: "projects/project4.html", title: "Project 4" }
     ];
 
     for (let sp of subpages) {
