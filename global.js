@@ -21,18 +21,50 @@ let nav = document.createElement("nav");
 document.body.prepend(nav);
 
 for (let p of pages) {
-  let url = !p.url.startsWith("http") ? BASE_PATH + p.url : p.url;
-  let a = document.createElement("a");
-  a.href = url;
-  a.textContent = p.title;
+  if (p.title === "Academic Projects") {
+    const dropdown = document.createElement("div");
+    dropdown.classList.add("dropdown");
 
-  a.classList.toggle(
-    "current",
-    a.host === location.host && a.pathname === location.pathname
-  );
+    const button = document.createElement("button");
+    button.classList.add("dropbtn");
+    button.textContent = "Academic Projects ▾";
+    dropdown.append(button);
 
-  a.toggleAttribute("target", a.host !== location.host);
-  nav.append(a);
+    const dropdownContent = document.createElement("div");
+    dropdownContent.classList.add("dropdown-content");
+
+   const subpages = [
+      { url: "projects/index.html", title: "All Projects" },
+      { url: "projects/project1.html", title: "Project 1" },
+      { url: "projects/project2.html", title: "Project 2" },
+      { url: "projects/project3.html", title: "Project 3" },
+    ];
+
+    for (let sp of subpages) {
+      const link = document.createElement("a");
+      link.href = BASE_PATH + sp.url;
+      link.textContent = sp.title;
+      dropdownContent.append(link);
+    }
+
+    dropdown.append(dropdownContent);
+    nav.append(dropdown);
+  } 
+
+  else {
+    let url = !p.url.startsWith("http") ? BASE_PATH + p.url : p.url;
+    let a = document.createElement("a");
+    a.href = url;
+    a.textContent = p.title;
+
+    a.classList.toggle(
+      "current",
+      a.host === location.host && a.pathname === location.pathname
+    );
+
+    a.toggleAttribute("target", a.host !== location.host);
+    nav.append(a);
+  }
 }
 
 document.body.insertAdjacentHTML(
