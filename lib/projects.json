@@ -15,7 +15,7 @@
         "description": "This visualization was created from the Civilian Complaints Against New York City Police Officers dataset, which can be found here https://dsc-courses.github.io/dsc209r-2025-fa/projects/project2/#datasets. This barplot indicates that the implementation in neighborhood policing in 2015 increased the number of complaints filed."
     },
     {
-        "title": "DSC 209 Project 2 Precinct 75 Pie Chart Before and After Neighborhood Policing",
+        "title": "DSC 209 Project 2 Barplot with Number of Complaints filed for excessive force by ethnicity group",
         "image": "https://alhayslip.github.io/portfolio/images/force.png",
         "description": "This visualization was created from the Civilian Complaints Against New York City Police Officers dataset, which can be found here https://dsc-courses.github.io/dsc209r-2025-fa/projects/project2/#datasets. I created this barplot to visualize the effect of neighborhood policing on reducing complaints filed for excessive force by New York Citizens categorized by their ethnicity."
     },
