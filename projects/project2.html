@@ -1,58 +1,64 @@
+<!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-   
-  <h1<>Project 2 – Persusaive or Deceptive Visualization?</h1>
-   <p>Alex Hayslip - alhayslip@ucsd.edu</p>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Project 2 – Persuasive or Deceptive Visualization?</title>
+  <link rel="stylesheet" href="../styles.css">
+</head>
+
 <body>
-    <script src="../global.js" type="module"></script>
+  <!-- Navigation bar (same tabs as homepage) -->
+  <script src="../global.js" type="module"></script>
+
+  <h1>Project 2 – Persuasive or Deceptive Visualization?</h1>
+  <p>Alex Hayslip – alhayslip@ucsd.edu</p>
+
   <section>
     <h2>Proposition: Despite the introduction of Neighborhood Policing in 2015, the number of complaints filed did not decrease.</h2>
-      <img src="https://alhayslip.github.io/portfolio/images/lineplot.png" 
-       alt="This image is a line graph of complaints flied in New York City from June 2015 to December 2019, after neighborhood policing was implemented." 
-       width="600">   
-  </section> 
+    <img src="https://alhayslip.github.io/portfolio/images/lineplot.png" 
+         alt="Line graph of complaints filed in New York City from June 2015 to December 2019, after neighborhood policing was implemented."
+         width="600">
+  </section>
 
   <section>
     <h2>For the Proposition</h2>
-    <img src="https://alhayslip.github.io/portfolio/images/2015_barplot.png" 
-       alt="This barplot visualizes the number of complaints that were filed in the year of 2015 before and after neighborhood policing was applied in New York City." 
-       width="600">
+    <img src="https://alhayslip.github.io/portfolio/images/2015_barplot.png"
+         alt="Barplot showing complaints filed in 2015 before and after neighborhood policing was applied in NYC."
+         width="600">
     <ul>
-      <li>Rationale 1: I created the new binary column "After Neighborhood Policing" to determine if an incident was filed in the New York City after neighborhood policing was implemented. This decision was made to ensure that the records in the 2015 dataframe can be analyzed by whether it occurred after neighborhood policing was implemented.</li>
-      <li>Rationale 2: I filtered for a dataframe that contained data on complaints in 2015. This was used to capture data for complaints that were filed in 2015, as I was interested in visualizing these records.</li>
-      <li>Rationale 3: I created a variable titled "month_order", which is a list of all months contained in ascending order. This helps order each month that occurred in 2015 on the x axis to help the user follow along.</li>
-      <li>Rationale 4: I assigned the hue argument of "After Neighborhood Policing" for the sns.countplot. This decision was made to distinguish whether the month on the x axis occurred before or after the implementation of Neighborhood Policing in New York City. This decision was made to help the user understand the difference in complaints filed in 2015 before and after neighborhood policing was applied.</li>
-      <li>Rationale 5: I assigned the plt.legend argument to visualize the distinction between the true and false values listed in the After Neighborhood Policing column. This helps distinguish which months contained data before and after neighborhood policing was implemented.</li>
-    
+      <li>Rationale 1: I created the new binary column "After Neighborhood Policing" to determine if an incident was filed after the program’s implementation in NYC.</li>
+      <li>Rationale 2: I filtered for a dataframe containing data on complaints in 2015 to visualize only that year.</li>
+      <li>Rationale 3: I created a "month_order" list to order the months in ascending order on the x-axis.</li>
+      <li>Rationale 4: I used the hue argument “After Neighborhood Policing” in sns.countplot to separate data before and after the program.</li>
+      <li>Rationale 5: I added plt.legend to distinguish True/False values of “After Neighborhood Policing.”</li>
     </ul>
   </section>
 
   <section>
     <h2>Against the Proposition</h2>
-    <img src="https://alhayslip.github.io/portfolio/images/force.png" 
-    alt="This barplot visualizes the number of complaints that were filed against New York City Policers for use of excessive force by ethnicity of the complaint before and after neighborhood policing was implemented." 
-    width="600">
+    <img src="https://alhayslip.github.io/portfolio/images/force.png"
+         alt="Barplot showing complaints filed for use of excessive force by ethnicity before and after neighborhood policing was implemented."
+         width="600">
     <ul>
-      <li>Rationale 1: I created a new column in the original dataset titled "force", which is a binary column which represents whether the complaints that was filed was for excessive force. I am interested in seeing if neighborhood policing reduced the amount of complaints filed for excessive force</li>
-      <li>Rationale 2: I created a new dataframe titled force, which accounts for all of the records in the original data frame where the force column is set to true</li>
-      <li>Rationale 3: I filtered for a data frame that captures data on complaints between 2011 and 2019. This was done to visualize the number of complaints that were filed from January 2011 to December 2019. The data captured from January 2011 to May 2015 occurred before neighborhood policing was implemented. Additionally, the data captured from June 2015 to December 2019 refers to all of the records that occurred after neighborhood policing was implemented in New York City.</li>
-      <li>Rationale 4: I assigned the hue argument of "After Neighborhood Policing" for the sns.countplot. This was made to distinguish the differences in complaints filed for force by people of different ethnic groups before and after neighborhood policing was implemented.</li>
-      <li>Rationale 5: I assigned the plt.legend argument to visualize the distinction between the true and false values listed in the After Neighborhood Policing column. This helps distinguish which months contained data before and after neighborhood policing was implemented.</li>
-    
+      <li>Rationale 1: I created a binary column “force” indicating whether a complaint was for excessive force.</li>
+      <li>Rationale 2: I created a new dataframe `force` containing only records where “force” is True.</li>
+      <li>Rationale 3: I filtered for complaints between 2011 and 2019 to compare before (Jan 2011–May 2015) and after (June 2015–Dec 2019) neighborhood policing.</li>
+      <li>Rationale 4: I used the hue argument “After Neighborhood Policing” in sns.countplot to compare differences across ethnic groups.</li>
+      <li>Rationale 5: I used plt.legend to clearly label True/False distinctions for “After Neighborhood Policing.”</li>
     </ul>
   </section>
 
-    <section>
+  <section>
     <h2>Final Reflection</h2>
     <ul>
-      <li>All the decisions that I made in the design process were contingent on the steps taken in the data cleaning section to make appropriate transformations and filtering to the data. My design process involved understanding the type of question I wanted to visualize, identifying the segments of data required to capture the data I wanted to see, and deciding on the visualization I wanted to use to showcase the trends in the data effectively.</li>
-      <li>The most challenging part was completing the prerequisite steps necessary to filter for the records in the orginal dataframe where a complaint filed for force was implemented. I used an np.where statement with the str contains argument to generate the force column in the original dataframe. Then I filtered for all records in the orginal dataframe where "force" is true; this means that the record contains a complaint filed for excessive force. Lastly, I used the isin argument to filter the force dataframe to reduce the amount of records used within the years of 2011 and 2019.</li>
-      <li>I was surprised to see that the number of complaints filed by force among ethnicity decreased among complaints who are black and hispanic. I created a similar visualization for the number of complaints by ethnicity before and after the implementation of neighborhood policing and did not see a noticable decrease of complaints by ethnicity. Perhaps I saw a decrease of the number of complaints filed for force by ethnicity due to a smaller sample size after filtering for all records between January 2011 to December 2019 where there was a complaint filed for force.</li>
-      <li>The barplot that was generated which supported the proposition was more convincing and persuasive as compared to the visuaization that countered the proposition. What I learned from generating the visualization for the year of 2015 was that the number of complaints actually increased after neighborhood policing was implemented as compared to the months that preceded the implementation of neighborhood policing in 2015. Although the number of complaints for excessive force filed by citizens who are black and Hispanic decreased after the implementation of neighborhood policing, this does not indicate that the implementation of enigborhood policing reduced the number of complaints flied by citizens across the board.</li>
-      <li>I define ethical analysis and visualization as understanding how to appropriately clean, filter, and visualize data in a way that effectively demonstrates trends and patterns without a hidden agenda. The bounds to distinguish acceptable and misleading decisions are very blurred, but I use the criteria of understanding what type of decision you are going to make and what the implications of that are to determine an ethical decision against a misleading decision. </li>
+      <li>My design process began with cleaning and transforming the data to answer specific questions visually.</li>
+      <li>The most challenging step was filtering the data correctly for complaints about excessive force.</li>
+      <li>I was surprised to find that force-related complaints among Black and Hispanic citizens decreased after implementation, though overall complaints didn’t drop.</li>
+      <li>The 2015 barplot was more persuasive, showing an increase in total complaints after implementation.</li>
+      <li>Ethical visualization requires filtering and presenting data truthfully without manipulating reader perception.</li>
     </ul>
   </section>
 
-
 </body>
+</html>
