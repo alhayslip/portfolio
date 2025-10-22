@@ -1,13 +1,16 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Project 2 – Persusaive or Deceptive Visualization?</title>
-    <p>Alex Hayslip - alhayslip@ucsd.edu</p>
+   
+  <h1<>Project 2 – Persusaive or Deceptive Visualization?</h1>
+   <p>Alex Hayslip - alhayslip@ucsd.edu</p>
 
+  <section>
     <h2>Proposition: From June 2015 to December 2019, the implementation of Neighborhood Policing techniques in New York City did not decrease the number of complaints filed. </h2>
       <img src="https://alhayslip.github.io/portfolio/images/lineplot.png" 
        alt="This image is a line graph of complaints flied in New York City from June 2015 to December 2019, after neighborhood policing was implemented." 
-       width="600">
+       width="600">   
+  </section> 
 
   <section>
     <h2>For the Proposition</h2>
@@ -15,9 +18,10 @@
        alt="This barplot visualizes the number of complaints that were filed in the year of 2015 before and after neighborhood policing was applied in New York City." 
        width="600">
     <ul>
-      <li>Rationale 1: I filtered for a dataframe that contained data on complaints in 2015. This was used to capture data for complaints that were filed in 2015, as I was interested in visualizing these records.</li>
-      <li>Rationale 2: I created a variable titled "month_order", which is a list of all months contained in ascending order. This helps order each month that occurred in 2015 on the x axis to help the user follow along.</li>
-      <li>Rationale 3: I assigned the hue argument of "After Neighborhood Policing" for the sns.countplot. This decision was made to distinguish whether the month on the x axis occurred before or after the implementation of Neighborhood Policing in New York City. This decision was made to help the user understand the difference in complaints filed in 2015 before and after neighborhood policing was applied.</li>
+      <li>Rationale 1: I created the new binary column "After Neighborhood Policing" to determine if an incident was filed in the New York City after neighborhood policing was implemented. This decision was made to ensure that the records in the 2015 dataframe can be analyzed by whether it occurred after neighborhood policing was implemented.</li>
+      <li>Rationale 2: I filtered for a dataframe that contained data on complaints in 2015. This was used to capture data for complaints that were filed in 2015, as I was interested in visualizing these records.</li>
+      <li>Rationale 3: I created a variable titled "month_order", which is a list of all months contained in ascending order. This helps order each month that occurred in 2015 on the x axis to help the user follow along.</li>
+      <li>Rationale 4: I assigned the hue argument of "After Neighborhood Policing" for the sns.countplot. This decision was made to distinguish whether the month on the x axis occurred before or after the implementation of Neighborhood Policing in New York City. This decision was made to help the user understand the difference in complaints filed in 2015 before and after neighborhood policing was applied.</li>
     </ul>
   </section>
 
@@ -27,9 +31,10 @@
     alt="This barplot visualizes the number of complaints that were filed in the year of 2015 before and after neighborhood policing was applied in New York City." 
     width="600">
     <ul>
-      <li>Rationale 1: I filtered for a data frame that captures data on complaints between 2011 and 2019. This was done to visualize the number of complaints that were filed from January 2011 to December 2019. The data captured from January 2011 to May 2015 occurred before neighborhood policing was implemented. Additionally, the data captured from June 2015 to December 2019 refers to all of the records that occurred after neighborhood policing was implemented in New York City.</li>
-      <li>Rationale 2: I created a new dataframe Precinct75Counts, which is a value all the records between 2011 and 2019 where the complaint occurred specifically in Precinct 75. This was chosen was I wanted to analyze the complaints that occurred in Precinct 75, where the majority of complaints occurred.</li>
-      <li>Rationale 3: I used the legend argumnet to move the legend into the upper right hand corner and distinguish the difference between the true and false values for the After Neighborhood Policing column</li>
+      <li>Rationale 1: I created the new binary column "After Neighborhood Policing" to determine if an incident was filed in the New York City after neighborhood policing was implemented. This decision was made to ensure that the records in the 2015 dataframe can be analyzed by whether it occurred after neighborhood policing was implemented.</li>
+      <li>Rationale 2: I filtered for a data frame that captures data on complaints between 2011 and 2019. This was done to visualize the number of complaints that were filed from January 2011 to December 2019. The data captured from January 2011 to May 2015 occurred before neighborhood policing was implemented. Additionally, the data captured from June 2015 to December 2019 refers to all of the records that occurred after neighborhood policing was implemented in New York City.</li>
+      <li>Rationale 3: I created a new dataframe Precinct75Counts, which is a value all the records between 2011 and 2019 where the complaint occurred specifically in Precinct 75. This was chosen was I wanted to analyze the complaints that occurred in Precinct 75, where the majority of complaints occurred.</li>
+      <li>Rationale 4: I used the legend argumnet to move the legend into the upper right hand corner and distinguish the difference between the true and false values for the After Neighborhood Policing column</li>
     </ul>
   </section>
 

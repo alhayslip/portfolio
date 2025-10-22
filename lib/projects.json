@@ -16,8 +16,8 @@
     },
     {
         "title": "DSC 209 Project 2 Precinct 75 Pie Chart Before and After Neighborhood Policing",
-        "image": "https://alhayslip.github.io/portfolio/images/pie_chart.png",
-        "description": "This visualization was created from the Civilian Complaints Against New York City Police Officers dataset, which can be found here https://dsc-courses.github.io/dsc209r-2025-fa/projects/project2/#datasets. I created a pie chart to indicate the distribution of complaints filed from January 2011 to December in Precinct 75 by whether it occurred before or after neighborhood policing was implemented in New York City."
+        "image": "https://alhayslip.github.io/portfolio/images/force.png",
+        "description": "This visualization was created from the Civilian Complaints Against New York City Police Officers dataset, which can be found here https://dsc-courses.github.io/dsc209r-2025-fa/projects/project2/#datasets. I created this barplot to visualize the effect of neighborhood policing on reducing complaints filed for excessive force by New York Citizens categorized by their ethnicity."
     },
     {
         "title": "DSC 207 Mini Project Boxplot of Happiness by Country",
