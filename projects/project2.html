@@ -8,24 +8,40 @@
 </head>
 
 <body>
-  <!-- Navigation bar (same tabs as homepage) -->
   <script src="../global.js" type="module"></script>
 
   <h1>Project 2 – Persuasive or Deceptive Visualization?</h1>
   <p>Alex Hayslip – alhayslip@ucsd.edu</p>
 
   <section>
-    <h2>Proposition: Despite the introduction of Neighborhood Policing in 2015, the number of complaints filed did not decrease.</h2>
-    <img src="https://alhayslip.github.io/portfolio/images/lineplot.png" 
+    <h2>Proposition: Despite the introduction of Neighborhood Policing in June 2015, the number of complaints filed did not decrease.</h2>
+    
+    <figure>
+      <img src="https://alhayslip.github.io/portfolio/images/lineplot.png" 
          alt="Line graph of complaints filed in New York City from June 2015 to December 2019, after neighborhood policing was implemented."
          width="600">
+        <figcaption>
+      Figure 1. Line graph of complaints filed in New York City (June 2015 – December 2019) after the introduction of Neighborhood Policing.
+    </figcaption>
+    </figure>
   </section>
 
   <section>
     <h2>For the Proposition</h2>
+
+      <figure>
     <img src="https://alhayslip.github.io/portfolio/images/2015_barplot.png"
-         alt="Barplot showing complaints filed in 2015 before and after neighborhood policing was applied in NYC."
+         alt="Barplot showing complaints filed in 2015 before and after neighborhood policing was applied in New York City."
          width="600">
+        <figcaption>
+     Barplot showing complaints filed in 2015 before and after neighborhood policing was applied in New York City.
+    </figcaption>
+  </figure>
+</section>
+    
+    <h3>Rationale for Design Decisions</h3>
+    <p>Design Decisions and Rationale</p>
+    
     <ul>
       <li>Rationale 1: I created a new binary column, “After Neighborhood Policing,” to determine if an incident was filed when Neighborhood Policing was established in New York City. I set the date range from June 2015 to December 2019. This decision renders a score of -1; it is deceptive, as the dates I chose for this column were selected based on independent research I did on when Neighborhood Policing was implemented in New York.</li>
       <li>Rationale 2: I filtered for a data frame that captures data on complaints in 2015. This decision allocates a score of -2; it is deceptive mainly because I cherry-picked a year’s worth of data to determine if there is a difference in the number of complaints by month in 2015.</li>
@@ -38,9 +54,20 @@
 
   <section>
     <h2>Against the Proposition</h2>
+
+      <figure>
     <img src="https://alhayslip.github.io/portfolio/images/force.png"
          alt="Barplot showing complaints filed for use of excessive force by ethnicity before and after neighborhood policing was implemented."
          width="600">
+    <figcaption>
+      Barplot showing complaints filed for use of excessive force by ethnicity before and after neighborhood policing was implemented
+    </figcaption>
+  </figure>
+</section>
+    
+  <h3>Rationale for Design Designs</h3>
+  <p>Design Decisions and Rationale</p>
+
     <ul>
       <li>Rationale 1: I created a new binary column, “After Neighborhood Policing,” to determine if an incident was filed when Neighborhood Policing was established in New York City. I set the date range from June 2015 to December 2019. This decision renders a score of -1; it is deceptive, as the dates I chose for this column were selected based on independent research I did on when Neighborhood Policing was implemented in New York.</li>
       <li>Rationale 2: I created a binary column “force” indicating whether a complaint was for excessive force. This is a neutral decision (score of 0), as I was interested in creating a new column to showcase whether a complaint was filed due to an excessive use of force.</li>
@@ -55,13 +82,15 @@
     <h2>Final Reflection</h2>
     <ul>
       <p>All the decisions that I made in the design process were contingent on performing the follownig data cleaning steps. My design process involved understanding the type of question I wanted to visualize, identifying the segments of data required to capture the data I wanted to see, and deciding on the visualization I wanted to use to showcase the trends in the data effectively.</p>
+      <ul>
         <li>I replaced the numerical content in the Month When Complaint Was Received and Month was Complaint was Closed columns with the name of the month (2 was replaced with February, etc.)</li>
         <li>I changed the data type for the precinct column from object to int64</li>
         <li>I dropped the null records and duplicate records from the original dataframe which contained all of the allegations</li>
         <li>I combined the the Month When Complaint Was Received and Year When Complaint Was Received columns into one column, allegation month and year.</li>
         <li>I converted the allegation month and year column into a date time format using the pd.to_datetime argument for the allegation month and year column.</li>
         <li>I wrote an np.where statement to define a binary column After Neighborhood Policing, which defined whether the record occurred before or after neighborhood policing was implemented in June 2015.</li>
-        
+      </ul>
+
         <p>The most challenging part of this analysis was filtering the original data frame to ensure that the column for force was created. The intention of doing this was to initiate an np.where statement to create a boolean value based on whether the column "Specific Category of Compliant" contained the phrase force. Then, I created a new data frame titled force, which filtered for all records where the Specific Category and Complaint was set to true. Additionally, I used the isin argument to filter the force data frame even further to segment for all records between 2011 to 2019. I chose those years to account for the four years before neighborhood policing and the four years after neighborhood policing was implemented.</p>
         
         <p> My conclusion that a stronger argument can be made that neigborhood policing was not effective in reducing the number of complaints filed. The visualization used in the proposition highlighted that the number of complaints filed increased after neighborhood policing was implemented. The bar plot for the number of complaints in 2015 showed that the number of complaints increased in the months preceding the implementation of neighborhood policing. There is evidence that the implementation of Neighborhood Policing reduced the number of complaints filed for excessive force by black and hispanic citizens. However, the data does not indicate that the implementation of neighborhood policing decreased the amount of complaints filed by citizens across the board.</p>
