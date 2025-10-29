@@ -21,7 +21,10 @@ loadProjects();
 import * as d3 from 'https://cdn.jsdelivr.net/npm/d3@7.9.0/+esm';
 
 const svg = d3.select('#projects-pie-plot');
+console.log('SVG node:', svg.node());
+
 const radius = 50;
+
 
 let data = [
   {value: 1, label:'Hamburgers'},

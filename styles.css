@@ -283,7 +283,7 @@ article img {
   font-family: Baskerville, serif;
   font-size: 0.9rem;
   font-variant-numeric: oldstyle-nums;
-  color: rgb(120, 120, 120); /* gray */
+  color: rgb(120, 120, 120); 
 }
 
 #projects-pie-plot {
@@ -292,7 +292,7 @@ article img {
   max-width: 20em;
   margin-block: 2em;
   overflow: visible;
-  border: 1px solid red; /* debug border */
+  border: 1px solid red; 
 }
 
 .pie-container {
