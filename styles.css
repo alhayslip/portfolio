@@ -272,3 +272,16 @@ article img {
 .dropdown-content a:hover {
   background-color: lightgray;
 }
+
+.project-text {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.project-year {
+  font-family: Baskerville, serif;
+  font-size: 0.9rem;
+  font-variant-numeric: oldstyle-nums;
+  color: rgb(120, 120, 120); /* gray */
+}

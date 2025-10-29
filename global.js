@@ -172,3 +172,16 @@ export async function fetchGitHubData(username) {
   }
   return response.json();
 }
+
+export function renderProject(project) {
+  return `
+    <div class="project">
+      <img src="${project.image}" alt="${project.title}">
+      <div class="project-text">
+        <h3>${project.title}</h3>
+        <p>${project.description}</p>
+        <p class="project-year">${project.year}</p>
+      </div>
+    </div>
+  `;
+}

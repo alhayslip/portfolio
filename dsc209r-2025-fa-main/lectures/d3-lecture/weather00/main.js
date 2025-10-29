@@ -22,6 +22,8 @@
 //   .then((response) => response.json())
 //   .then((data) => console.log(data));
 
+import * as d3 from 'https://cdn.jsdelivr.net/npm/d3@7.9.0/+esm';
+
 async function loadWeatherData() {
   try {
     const response = await fetch('./weather-data.json');
@@ -35,17 +37,48 @@ async function loadWeatherData() {
 const weatherData = await loadWeatherData();
 console.log(weatherData);
 
-const svg = document.querySelector('#weather-plot');
+const svg = d3.select('#weather-plot');
 
-svg.setAttribute('width', 1000);
-svg.setAttribute('height', 500);
+const width = 1000;
+const height = 300; 
+const margin = {top: 20, right: 20, bottom: 30, left: 40};
 
-// Our very first "plot"!
-weatherData.hourly.temperature_2m.forEach((temp, index) => {
-  const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
-  text.setAttribute('x', index * 5);
-  text.setAttribute('y', 500 - temp * 6);
+svg.attr('width', width);
+svg.attr('height', height);
 
-  text.textContent = temp;
-  svg.appendChild(text);
-});
+const xScale = d3.scaleTime()
+.domain([
+  new Date(weatherData.hourly.time[0]),
+  new Date(weatherData.hourly.time[weatherData.hourly.time.length - 1])
+])
+.range([margin.left, width - margin.right]);
+
+const yScale = d3
+.scaleLinear()
+.domain([
+  d3.min(weatherData.hourly.temperature_2m),
+  d3.max(weatherData.hourly.temperature_2m),
+])
+.range([height - margin.bottom, margin.top]);
+
+const xAxis = d3.axisBottom(xScale);
+const yAxis = d3.axisLeft(yScale);
+
+svg
+  .append('g')
+  .attr('class', 'x axis')
+  .attr('transform', `translate(0, ${height - margin.bottom})`)
+  .call(xAxis);
+
+svg
+  .append('g')
+  .attr('class', 'y axis')
+  .attr('transform', `translate(${margin.left}, 0)`)
+  .call(yAxis);
+
+svg.selectAll('circle')
+.data(weatherData.hourly.temperature_2m)
+.join('circle')
+.attr('cx', (temp, index) => xScale(new Date(weatherData.hourly.time[index])))
+.attr('cy', (temp) => yScale(temp))
+.attr('r', 2);
