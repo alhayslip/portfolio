@@ -21,16 +21,17 @@ loadProjects();
 import * as d3 from 'https://cdn.jsdelivr.net/npm/d3@7.9.0/+esm';
 
 const svg = d3.select('#projects-pie-plot');
+const radius = 50;
 
 let data = [
-  {value: 1, label:'2025'},
-  {value: 2, label:'2024'},
-  {value: 3, label:'2023'}
+  {value: 1, label:'Hamburgers'},
+  {value: 2, label:'Potatoes'},
+  {value: 3, label:'Fries'}
 ];
 
 let arcGenerator = d3.arc()
   .innerRadius(0)
-  .outerRadius(50);
+  .outerRadius(radius);
 
 let sliceGenerator = d3.pie().value((d) => d.value);
 
@@ -44,6 +45,14 @@ arcs.forEach((arc, i) => {
   svg.append('path')
     .attr('d', arc)
     .attr('fill', colors(i));
+});
+
+let legend = d3.select('.legend');
+
+data.forEach((d, i) => {
+  legend.append('li')
+    .attr('style', `--color:${colors(i)}`)
+    .html(`<span class="swatch"></span> ${d.label} <em>(${d.value})</em>`);
 });
 
 
