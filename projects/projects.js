@@ -18,45 +18,51 @@ async function loadProjects() {
 
 loadProjects();
 
-import * as d3 from 'https://cdn.jsdelivr.net/npm/d3@7.9.0/+esm';
+document.addEventListener("DOMContentLoaded", () => {
+  import('https://cdn.jsdelivr.net/npm/d3@7.9.0/+esm').then((d3) => {
 
-const svg = d3.select('#projects-pie-plot');
-console.log('SVG node:', svg.node());
+    const svg = d3.select('#projects-pie-plot');
+    const legend = d3.select('.legend');
 
-const radius = 50;
+    console.log('SVG exists?', svg.node());
 
+    if (svg.empty()) {
+      console.error("SVG not found in DOM yet.");
+      return;
+    }
 
-let data = [
-  {value: 1, label:'Hamburgers'},
-  {value: 2, label:'Potatoes'},
-  {value: 3, label:'Fries'}
-];
+    let data = [
+      { value: 1, label: 'Hamburgers' },
+      { value: 2, label: 'Potatoes' },
+      { value: 3, label: 'Fries' }
+    ];
 
-let arcGenerator = d3.arc()
-  .innerRadius(0)
-  .outerRadius(radius);
+    let radius = 50;
 
-let sliceGenerator = d3.pie().value((d) => d.value);
+    let arcGenerator = d3.arc()
+      .innerRadius(0)
+      .outerRadius(radius);
 
-let arcData = sliceGenerator(data);
+    let sliceGenerator = d3.pie().value(d => d.value);
 
-let arcs = arcData.map(d => arcGenerator(d));
+    let arcData = sliceGenerator(data);
 
-let colors = d3.scaleOrdinal(d3.schemeTableau10);
+    let colors = d3.scaleOrdinal(d3.schemeTableau10);
 
-arcs.forEach((arc, i) => {
-  svg.append('path')
-    .attr('d', arc)
-    .attr('fill', colors(i));
+    svg.selectAll('path')
+      .data(arcData)
+      .enter()
+      .append('path')
+        .attr('d', arcGenerator)
+        .attr('fill', (d, i) => colors(i));
+
+    legend.selectAll('li')
+      .data(data)
+      .enter()
+      .append('li')
+        .attr('style', (d, i) => `--color:${colors(i)}`)
+        .html(d => `<span class="swatch"></span> ${d.label} <em>(${d.value})</em>`);
+  });
 });
-
-let legend = d3.select('.legend');
-
-data.forEach((d, i) => {
-  legend.append('li')
-    .attr('style', `--color:${colors(i)}`)
-    .html(`<span class="swatch"></span> ${d.label} <em>(${d.value})</em>`);
-});
-
 
 
