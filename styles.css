@@ -287,7 +287,8 @@ article img {
 }
 
 #projects-pie-plot {
+  width: 350px;
+  height: 350px;
   max-width: 20em;
   margin-block: 2em;
-  overflow: visible;
 }
