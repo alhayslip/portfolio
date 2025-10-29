@@ -285,3 +285,9 @@ article img {
   font-variant-numeric: oldstyle-nums;
   color: rgb(120, 120, 120); /* gray */
 }
+
+#projects-pie-plot {
+  max-width: 20em;
+  margin-block: 2em;
+  overflow: visible;
+}
