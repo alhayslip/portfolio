@@ -11,6 +11,8 @@ async function loadProjects() {
     if (projectsTitle) {
       projectsTitle.textContent = `${projects.length} Projects`;
     }
+    drawPieChart(projects);
+
   } catch (error) {
     console.error('Error loading projects:', error);
   }
@@ -18,51 +20,47 @@ async function loadProjects() {
 
 loadProjects();
 
-document.addEventListener("DOMContentLoaded", () => {
-  import('https://cdn.jsdelivr.net/npm/d3@7.9.0/+esm').then((d3) => {
+async function drawPieChart(projects) {
+  const d3 = await import('https://cdn.jsdelivr.net/npm/d3@7.9.0/+esm');
 
-    const svg = d3.select('#projects-pie-plot');
-    const legend = d3.select('.legend');
+  const svg = d3.select('#projects-pie-plot');
+  const legend = d3.select('.legend');
+  const radius = 50;
 
-    console.log('SVG exists?', svg.node());
+let rolledData = d3.rollups(
+  projects,
+  v => v.length,
+  d => d.year   
+  );
 
-    if (svg.empty()) {
-      console.error("SVG not found in DOM yet.");
-      return;
-    }
+  let data = rolledData.map(([year, count]) => ({
+    value: count,
+    label: year
+  }));
 
-    let data = [
-      { value: 1, label: 'Hamburgers' },
-      { value: 2, label: 'Potatoes' },
-      { value: 3, label: 'Fries' }
-    ];
+  let arcGenerator = d3.arc()
+    .innerRadius(0)
+    .outerRadius(radius);
 
-    let radius = 50;
+  let sliceGenerator = d3.pie()
+    .value(d => d.value);
 
-    let arcGenerator = d3.arc()
-      .innerRadius(0)
-      .outerRadius(radius);
+  let arcData = sliceGenerator(data);
 
-    let sliceGenerator = d3.pie().value(d => d.value);
+  let colors = d3.scaleOrdinal(d3.schemeTableau10);
 
-    let arcData = sliceGenerator(data);
+  svg.selectAll('path')
+    .data(arcData)
+    .enter()
+    .append('path')
+      .attr('d', arcGenerator)
+      .attr('fill', (d, i) => colors(i));
 
-    let colors = d3.scaleOrdinal(d3.schemeTableau10);
-
-    svg.selectAll('path')
-      .data(arcData)
-      .enter()
-      .append('path')
-        .attr('d', arcGenerator)
-        .attr('fill', (d, i) => colors(i));
-
-    legend.selectAll('li')
-      .data(data)
-      .enter()
-      .append('li')
-        .attr('style', (d, i) => `--color:${colors(i)}`)
-        .html(d => `<span class="swatch"></span> ${d.label} <em>(${d.value})</em>`);
-  });
-});
-
+  legend.selectAll('li')
+    .data(data)
+    .enter()
+    .append('li')
+      .attr('style', (d, i) => `--color:${colors(i)}`)
+      .html(d => `<span class="swatch"></span> ${d.label} <em>(${d.value})</em>`);
+}
 
