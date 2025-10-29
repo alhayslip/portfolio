@@ -22,13 +22,17 @@ import * as d3 from 'https://cdn.jsdelivr.net/npm/d3@7.9.0/+esm';
 
 const svg = d3.select('#projects-pie-plot');
 
-let data = [1, 2, 3];
+let data = [
+  {value: 1, label:'2025'},
+  {value: 2, label:'2024'},
+  {value: 3, label:'2023'}
+];
 
 let arcGenerator = d3.arc()
   .innerRadius(0)
   .outerRadius(50);
 
-let sliceGenerator = d3.pie();
+let sliceGenerator = d3.pie().value((d) => d.value);
 
 let arcData = sliceGenerator(data);
 
