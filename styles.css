@@ -287,6 +287,7 @@ article img {
 }
 
 #projects-pie-plot {
+  flex: 0 0 auto; 
   width: 300px;
   height: 300px;
   max-width: 20em;
@@ -302,21 +303,25 @@ article img {
 
 .pie-container {
   display: flex;
-  gap: 1.5rem;
-  align-items: center;
-  justify-content: center;
+  align-items: flex-start; 
+  justify-content: center; 
+  gap: 2rem;
+  flex-wrap: wrap; 
   margin-bottom: 2rem;
 }
 
 .legend {
+  flex: 0 0 auto;
   list-style: none;
-  padding: 1rem;
   margin: 0;
+  padding: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 8px;
   display: grid;
   gap: 0.6rem;
-  grid-template-columns: repeat(auto-fill, minmax(9em, 1fr));
-  border: 2px solid #ccc;
-  border-radius: 8px;
+  grid-template-columns: 1fr; 
+  background-color: white;
+  font-size: 0.9rem;
 }
 
 .legend li {
