@@ -290,7 +290,7 @@ article img {
   flex: 0 0 auto; 
   width: 800px;
   height: 900px;
-  max-width: 20em;
+  max-width: 100%;
   margin-block: 2em;
   overflow: visible;
   cursor: pointer;
@@ -306,6 +306,8 @@ article img {
   display: flex;
   align-items: flex-start;
   justify-content: flex-start;
+  flex-direction: column;
+  align-items: center;
   gap: 3rem;                
   margin-bottom: 3rem;     
   margin-top: 1rem;      
@@ -316,18 +318,22 @@ article img {
 }
 
 .legend {
+  margin-top: 1rem;
   flex: 1;
   list-style: none;
   margin: 9rem 0 0 0;        
   padding: 1.2rem 1.6rem;
   border: 2px solid #ccc;
   border-radius: 10px;
+  list-style: none;
   display: grid;
   gap: 0.8rem;
   grid-template-columns: repeat(auto-fill, minmax(10em, 1fr));
   background-color: white;
   font-size: 0.9rem;
   box-shadow: 0 3px 6px rgba(0, 0, 0, 0.08);
+  width: 90%;
+  max-width: 800px;
 }
 
 .legend li {
@@ -383,4 +389,11 @@ article img {
     align-items: center; 
     gap: 1.5rem;
   }
+}
+
+.projects-title {
+  text-align: center;
+  font-size: 2.5rem; 
+  margin-bottom: 0.5rem;
+  margin-top: 0; 
 }
