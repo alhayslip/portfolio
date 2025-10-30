@@ -296,6 +296,10 @@ article img {
   transition: opacity 360ms, fill 450ms;
 }
 
+#projects-pie-plot:has(path:hover) path:not(:hover) {
+  opacity: 0.5;
+}
+
 .pie-container {
   display: flex;
   gap: 1.5rem;
