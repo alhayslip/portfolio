@@ -7,6 +7,8 @@ let searchInput;
 let projectsContainer;
 let projectsTitle;
 let selectedIndex = -1;
+let currentPieData = [];
+let color; 
 
 async function loadProjects() {
   try {
@@ -17,7 +19,7 @@ async function loadProjects() {
     renderProjects(projects, projectsContainer, 'h2');
     if (projectsTitle) projectsTitle.textContent = `${projects.length} Projects`;
 
-    drawPieChart(projects);
+    drawPieChart(projects); 
   } catch (error) {
     console.error('Error loading projects:', error);
   }
@@ -36,17 +38,14 @@ function updateFilteredView() {
     Object.values(p).join('\n').toLowerCase().includes(query)
   );
 
-
   if (selectedIndex !== -1 && currentPieData.length > selectedIndex) {
     let selectedYear = currentPieData[selectedIndex].label;
     filteredBySearch = filteredBySearch.filter((p) => p.year === selectedYear);
   }
 
   renderProjects(filteredBySearch, projectsContainer, 'h2');
-  drawPieChart(filteredBySearch);
+  drawPieChart(projects);
 }
-
-let currentPieData = [];
 
 function drawPieChart(projectsGiven) {
   const svg = d3.select('#projects-pie-plot');
@@ -64,61 +63,59 @@ function drawPieChart(projectsGiven) {
 
   const pie = d3.pie().value((d) => d.value);
   const arc = d3.arc().innerRadius(0).outerRadius(radius);
-  const color = d3.scaleOrdinal(d3.schemeSet2);
+  color = d3.scaleOrdinal(d3.schemeSet2);
   const arcs = pie(data);
 
-  const paths = svg
+  svg
     .attr('viewBox', [-radius * 2, -radius * 2, radius * 4, radius * 4])
     .selectAll('path')
-    .data(arcs, (d) => d.data.label);
-
-  paths
-    .join(
-      (enter) =>
-        enter
-          .append('path')
-          .attr('fill', (d) => color(d.data.label))
-          .attr('d', arc)
-          .attr('opacity', 0)
-          .call((enter) =>
-            enter
-              .transition()
-              .duration(500)
-              .attr('opacity', 1)
-          ),
-      (update) =>
-        update.call((update) =>
-          update
-            .transition()
-            .duration(500)
-            .attr('fill', (d) => color(d.data.label))
-            .attr('d', arc)
-        ),
-      (exit) =>
-        exit.call((exit) =>
-          exit
-            .transition()
-            .duration(300)
-            .attr('opacity', 0)
-            .remove()
-        )
+    .data(arcs)
+    .join('path')
+    .attr('fill', (d) => color(d.data.label))
+    .attr('d', arc)
+    .attr('opacity', (_, i) =>
+      selectedIndex === -1 || selectedIndex === i ? 1 : 0.4
     )
     .attr('class', (_, i) => (i === selectedIndex ? 'selected' : null))
     .on('click', function (event, d) {
       const idx = d3.select(this).datum().index;
       selectedIndex = selectedIndex === idx ? -1 : idx;
-      updateFilteredView();
+
+      svg.selectAll('path').attr('opacity', (_, j) =>
+        selectedIndex === -1 || selectedIndex === j ? 1 : 0.4
+      );
+
+      legend.selectAll('li').attr('class', (_, j) =>
+        j === selectedIndex ? 'selected' : null
+      );
+
+      updateFilteredView(); 
     });
+
 
   legend
     .selectAll('li')
     .data(data)
     .join('li')
-    .text((d) => `${d.label}: ${d.value}`)
+    .html(
+      (d, i) =>
+        `<span class="swatch" style="background-color:${color(
+          d.label
+        )}"></span>${d.label}: ${d.value}`
+    )
     .attr('class', (_, i) => (i === selectedIndex ? 'selected' : null))
     .on('click', (event, d) => {
       const idx = data.findIndex((a) => a.label === d.label);
       selectedIndex = selectedIndex === idx ? -1 : idx;
+
+      svg.selectAll('path').attr('opacity', (_, j) =>
+        selectedIndex === -1 || selectedIndex === j ? 1 : 0.4
+      );
+
+      legend.selectAll('li').attr('class', (_, j) =>
+        j === selectedIndex ? 'selected' : null
+      );
+
       updateFilteredView();
     });
 }
