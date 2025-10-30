@@ -288,8 +288,8 @@ article img {
 
 #projects-pie-plot {
   flex: 0 0 auto; 
-  width: 800px;
-  height: 900px;
+  width: 500px;
+  height: 600px;
   max-width: 100%;
   margin-block: 2em;
   overflow: visible;
@@ -304,14 +304,13 @@ article img {
 }
 
 .pie-container {
-  display: flex;
-  align-items: flex-start;
-  justify-content: center; 
-  gap: 3rem;               
-  margin-inline: auto;
-  margin-bottom: 2rem;     
-  max-width: 1000px;
-  flex-wrap: wrap;     
+  display: flex;                
+  align-items: flex-start;      
+  justify-content: center;     
+  gap: 3rem;                   
+  margin: 2rem auto 3rem auto;  
+  max-width: 1000px;           
+  flex-wrap: wrap;              
 }
 
 .legend {
@@ -399,6 +398,12 @@ article img {
 }
 
   #projects-pie-plot {
-    width: 700px;
-    height: 750px;
+    width: 280px;
+    height: 280px;
+  }
+
+  .legend {
+    flex: none;
+    max-width: 90%;
+    grid-template-columns: repeat(2, 1fr);
   }
