@@ -295,6 +295,7 @@ article img {
   overflow: visible;
   cursor: pointer;
   margin-top: 0.6rem;
+  display: block;
   transition: opacity 360ms, fill 450ms;
 }
 
@@ -305,36 +306,28 @@ article img {
 .pie-container {
   display: flex;
   align-items: flex-start;
-  justify-content: flex-start;
-  flex-direction: column;
-  align-items: center;
-  gap: 3rem;                
-  margin-bottom: 3rem; 
-  margin: 2rem auto 3rem;    
-  margin-top: 1rem;      
-  max-width: 1000px;
+  justify-content: center; 
+  gap: 3rem;               
   margin-inline: auto;
-  flex-wrap: wrap;
-  position: relative;
+  margin-bottom: 2rem;     
+  max-width: 1000px;
+  flex-wrap: wrap;     
 }
 
 .legend {
-  margin-top: 1rem;
   flex: 1;
   list-style: none;
-  margin: 9rem 0 0 0;        
-  padding: 1.2rem 1.6rem;
+  margin: 2rem 0 0 0; 
+  padding: 1rem 1.5rem;
   border: 2px solid #ccc;
-  border-radius: 10px;
-  list-style: none;
+  border-radius: 8px;
+  background-color: white;
   display: grid;
   gap: 0.8rem;
-  grid-template-columns: repeat(auto-fill, minmax(10em, 1fr));
-  background-color: white;
+  grid-template-columns: 1fr;
   font-size: 0.9rem;
   box-shadow: 0 3px 6px rgba(0, 0, 0, 0.08);
-  width: 90%;
-  max-width: 800px;
+  max-width: 250px;
 }
 
 .legend li {
@@ -368,7 +361,12 @@ article img {
 }
 
 .projects {
-  margin-bottom: 3rem;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
+  justify-items: center;
+  margin: 0 auto 3rem auto;
+  max-width: 1200px;
 }
 
 .selected {
@@ -394,7 +392,13 @@ article img {
 
 .projects-title {
   text-align: center;
-  font-size: 2.5rem; 
-  margin-bottom: 0.5rem;
-  margin-top: 0; 
+  font-size: 2.5rem;
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+  font-weight: 700;
 }
+
+  #projects-pie-plot {
+    width: 700px;
+    height: 750px;
+  }
