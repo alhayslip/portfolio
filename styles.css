@@ -292,6 +292,8 @@ article img {
   max-width: 20em;
   margin-block: 2em;
   overflow: visible;
+  cursor: pointer;
+  transition: opacity 360ms, fill 450ms;
 }
 
 .pie-container {
@@ -345,4 +347,17 @@ article img {
 
 .projects {
   margin-bottom: 3rem;
+}
+
+.selected {
+  --color: oklch(60% 45% 0) !important;
+}
+
+.selected:is(path) {
+  fill: var(--color);
+}
+
+.selected:is(li) {
+  font-weight: bold;
+  color: var(--color);
 }
