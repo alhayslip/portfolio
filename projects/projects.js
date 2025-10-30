@@ -20,15 +20,32 @@ async function loadProjects() {
 
 loadProjects();
 
+let query = '';
+let searchInput = document.querySelector('.searchBar');
+
+searchInput.addEventListener('input', (event) => {
+  query = event.target.value;
+
+  let filteredProjects = projects.filter((project) => {
+    let values = Object.values(project).join('\n').toLowerCase();
+    return values.includes(query.toLowerCase());
+  });
+
+  renderProjects(filteredProjects, projectsContainer, 'h2');
+  renderPieChart(filteredProjects);
+});
+
 async function drawPieChart(projects) {
   const d3 = await import('https://cdn.jsdelivr.net/npm/d3@7.9.0/+esm');
-
   const svg = d3.select('#projects-pie-plot');
   const legend = d3.select('.legend');
   const radius = 50;
 
+  svg.selectAll('*').remove();
+  legend.selectAll('*').remove();
+
 let rolledData = d3.rollups(
-  projects,
+  projectsGiven,
   v => v.length,
   d => d.year   
   );
@@ -38,29 +55,24 @@ let rolledData = d3.rollups(
     label: year
   }));
 
-  let arcGenerator = d3.arc()
-    .innerRadius(0)
-    .outerRadius(radius);
+  if (data.length === 0) return;
 
-  let sliceGenerator = d3.pie()
-    .value(d => d.value);
+  const pie = d3.pie().value(d => d.count);
+  const arc = d3.arc().innerRadius(0).outerRadius(radius);
+  const color = d3.ScaleOrdinal(d3.schemeSet2);
 
-  let arcData = sliceGenerator(data);
+  svg
+    .attr('viewBox', [-radius * 2, -radius * 2, radius * 4, radius * 4])
+    .selectAll('path')
+    .data(pie(data))
+    .join('path')
+    .attr('fill', d => color(d.data.year))
+    .attr('d', arc);
 
-  let colors = d3.scaleOrdinal(d3.schemeTableau10);
-
-  svg.selectAll('path')
-    .data(arcData)
-    .enter()
-    .append('path')
-      .attr('d', arcGenerator)
-      .attr('fill', (d, i) => colors(i));
-
-  legend.selectAll('li')
+  legend
+    .selectAll('div')
     .data(data)
-    .enter()
-    .append('li')
-      .attr('style', (d, i) => `--color:${colors(i)}`)
-      .html(d => `<span class="swatch"></span> ${d.label} <em>(${d.value})</em>`);
+    .join('div')
+    .text(d => `${d.year}: ${d.count}`);
 }
 
