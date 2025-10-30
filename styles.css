@@ -327,3 +327,14 @@ article img {
   background-color: var(--color);
   border-radius: 4px;
 }
+
+.searchBar {
+  display: block;
+  margin: 1.5rem auto;
+  padding: 0.6rem 1rem;
+  font-size: 1rem;
+  border-radius: 0.5rem;
+  border: 1px solid oklch(80% 3% 200);
+  width: 80%;
+  max-width: 400px;
+}

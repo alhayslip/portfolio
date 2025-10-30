@@ -1,18 +1,24 @@
 import { fetchJSON, renderProjects } from '../global.js';
 
+let projects = [];
+let query = '';
+let searchInput;
+let projectsContainer;
+let projectsTitle;
+
 async function loadProjects() {
   try {
-    const projects = await fetchJSON('../lib/projects.json');
-    const projectsContainer = document.querySelector('.projects');
-    const projectsTitle = document.querySelector('.projects-title');
+    projects = await fetchJSON('../lib/projects.json');
+    projectsContainer = document.querySelector('.projects');
+    projectsTitle = document.querySelector('.projects-title');
 
     renderProjects(projects, projectsContainer, 'h2');
 
     if (projectsTitle) {
       projectsTitle.textContent = `${projects.length} Projects`;
     }
-    drawPieChart(projects);
 
+    drawPieChart(projects);
   } catch (error) {
     console.error('Error loading projects:', error);
   }
@@ -20,8 +26,7 @@ async function loadProjects() {
 
 loadProjects();
 
-let query = '';
-let searchInput = document.querySelector('.searchBar');
+searchInput = document.querySelector('.searchBar');
 
 searchInput.addEventListener('input', (event) => {
   query = event.target.value;
@@ -32,10 +37,10 @@ searchInput.addEventListener('input', (event) => {
   });
 
   renderProjects(filteredProjects, projectsContainer, 'h2');
-  renderPieChart(filteredProjects);
+  drawPieChart(filteredProjects);
 });
 
-async function drawPieChart(projects) {
+async function drawPieChart(projectsGiven) {
   const d3 = await import('https://cdn.jsdelivr.net/npm/d3@7.9.0/+esm');
   const svg = d3.select('#projects-pie-plot');
   const legend = d3.select('.legend');
@@ -44,35 +49,33 @@ async function drawPieChart(projects) {
   svg.selectAll('*').remove();
   legend.selectAll('*').remove();
 
-let rolledData = d3.rollups(
-  projectsGiven,
-  v => v.length,
-  d => d.year   
-  );
+  if (!projectsGiven || projectsGiven.length === 0) return;
+
+  let rolledData = d3.rollups(projectsGiven, v => v.length, d => d.year);
 
   let data = rolledData.map(([year, count]) => ({
-    value: count,
-    label: year
+    label: year,
+    value: count
   }));
 
   if (data.length === 0) return;
 
-  const pie = d3.pie().value(d => d.count);
+  const pie = d3.pie().value(d => d.value);
   const arc = d3.arc().innerRadius(0).outerRadius(radius);
-  const color = d3.ScaleOrdinal(d3.schemeSet2);
+  const color = d3.scaleOrdinal(d3.schemeSet2);
 
   svg
     .attr('viewBox', [-radius * 2, -radius * 2, radius * 4, radius * 4])
     .selectAll('path')
     .data(pie(data))
     .join('path')
-    .attr('fill', d => color(d.data.year))
+    .attr('fill', d => color(d.data.label))
     .attr('d', arc);
 
   legend
-    .selectAll('div')
+    .selectAll('li')
     .data(data)
-    .join('div')
-    .text(d => `${d.year}: ${d.count}`);
+    .join('li')
+    .text(d => `${d.label}: ${d.value}`);
 }
 
