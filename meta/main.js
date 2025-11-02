@@ -1,14 +1,18 @@
-import * as d3 from "https://cdn.jsdelivr.net/npm/d3@7.9.0/+esm";
-
 async function loadData() {
-  const data = await d3.csv("loc.csv", (row) => ({
-    ...row,
-    line: +row.line,
-    depth: +row.depth,
-    length: +row.length,
-    date: new Date(row.date + "T00:00" + row.timezone),
-    datetime: new Date(row.datetime),
-  }));
+  const data = await d3.csv("loc.csv", (row) => {
+    const parsedDate = row.datetime
+      ? new Date(row.datetime)
+      : new Date(row.date + "T" + (row.time || "00:00:00") + (row.timezone || ""));
+    return {
+      ...row,
+      line: +row.line,
+      depth: +row.depth,
+      length: +row.length,
+      date: new Date(row.date + "T00:00" + (row.timezone || "")),
+      datetime: parsedDate,
+    };
+  });
+  console.log("Loaded rows:", data.length);
   return data;
 }
 
@@ -129,6 +133,14 @@ function renderScatterPlot(data, commits) {
     .append("svg")
     .attr("viewBox", `0 0 ${width} ${height}`)
     .style("overflow", "visible");
+
+  svg.append("rect")
+  .attr("x", margin.left)
+  .attr("y", margin.top)
+  .attr("width", width - margin.left - margin.right)
+  .attr("height", height - margin.top - margin.bottom)
+  .attr("fill", "none")
+  .attr("stroke", "red");
 
   const xScale = d3
     .scaleTime()
