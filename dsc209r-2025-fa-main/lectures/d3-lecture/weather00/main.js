@@ -76,9 +76,69 @@ svg
   .attr('transform', `translate(${margin.left}, 0)`)
   .call(yAxis);
 
-svg.selectAll('circle')
-.data(weatherData.hourly.temperature_2m)
-.join('circle')
-.attr('cx', (temp, index) => xScale(new Date(weatherData.hourly.time[index])))
-.attr('cy', (temp) => yScale(temp))
-.attr('r', 2);
+const tooltip = d3
+  .select('body')
+  .append('div')
+  .attr('class', 'tooltip')
+  .style('position', 'absolute')
+  .style('visibility', 'hidden')
+  .style('bkacground-color', 'white')
+  .style('border', '1px solid #dd')
+  .style('padding', '5px')
+  .style('border-radius', '3px');
+
+const verticalLine = svg
+  .append('line')
+  .attr('class', 'vertical-line')
+  .attr('y1', margin.top)
+  .attr('y2', height - margin.bottom)
+  .style('stroke', '#999')
+  .style('stroke-width', 1)
+  .style('visibility', 'hidden');
+
+const overlay = svg
+  .append('rect')
+  .attr('class', 'overlay')
+  .attr('x', margin.left)
+  .attr('width', width - margin.left - margin.right)
+  .attr('height', height - margin.top - margin.bottom)
+  .style('fill', 'none')
+  .style('pointer-events', 'all');
+
+overlay
+  .on('mouseover', function(event){
+    verticalLine.style('visibility', 'visible');
+    tooltip.style('visibility', 'visible');
+  })
+
+.on('mouseout', function (event){
+    verticalLine.style('visibility', 'hidden');
+    tooltip.style('visibility', 'hidden');
+})
+
+.on('mousemove', function (event){
+  const mouseX = d3.pointer(event)[0];
+  const xDate = xScale.invert(mouseX);
+
+  const bisect = d3.bisector((d) => new Date(d)).left;
+  const index = bisect(weatherData.hourly.time, xDate);
+  const temp = weatherData.hourly.temperature_2m[index];
+  const time = new Date(weatherData.hourly.time[index]);
+
+verticalLine.attr('x1', xScale(time)).atr('x2', xScale(time));
+
+tooltip
+  .style('top', event.pageY - 10 + 'px')
+  .style('left', event.pageX + 10 + 'px')
+  .html(`${temp.toFixed(1)}°F<br>${time.toLocaleTimeString()}`);
+
+  svg.selectAll('circle').attr('r', (d) => (d == temp ? 4 : 2));
+});
+
+svg
+  .selectAll('circle')
+  .data(weatherData.hourly.temperature_2m)
+  .join('circle')
+  .attr('cx', (d, i) => xScale(new Date(weatherData.hourly.time[i])))
+  .attr('cy', (d) => yScale(d))
+  .attr('r', 2);

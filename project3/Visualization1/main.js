@@ -1,28 +1,3 @@
-
-// See original API call:
-// https://open-meteo.com/en/docs#latitude=32.87765&longitude=-117.237396&current=&minutely_15=&hourly=temperature_2m&daily=&temperature_unit=fahrenheit&wind_speed_unit=mph&precipitation_unit=inch&timezone=America%2FLos_Angeles&models=
-
-// Note from Sam: I ran this code to get the data for the weather at Center
-// Hall, then saved the JSON as a file called weather-data.json.
-
-// const params = {
-//   latitude: 32.87765,
-//   longitude: -117.237396,
-//   hourly: 'temperature_2m',
-//   temperature_unit: 'fahrenheit',
-//   wind_speed_unit: 'mph',
-//   precipitation_unit: 'inch',
-//   timezone: 'America/Los_Angeles',
-// };
-// const url = 'https://api.open-meteo.com/v1/forecast';
-
-// const queryString = new URLSearchParams(params).toString();
-// const fullUrl = `${url}?${queryString}`;
-
-// fetch(fullUrl)
-//   .then((response) => response.json())
-//   .then((data) => console.log(data));
-
 import * as d3 from 'https://cdn.jsdelivr.net/npm/d3@7.9.0/+esm';
 
 async function createHistogram(columnName) {
@@ -53,9 +28,9 @@ async function createHistogram(columnName) {
 
   const bins = histogram(selectedValues);
 
-  const color = d3.scaleOrdinal()
-    .domain(bins.map(d => `${d.x0}-${d.x1 - 1}`))
-    .range(d3.schemeTableau10);
+const color = d3.scaleSequential()
+  .domain([0, bins.length - 1])  
+  .interpolator(d3.interpolateGreens); 
 
   const x = d3.scaleLinear()
     .domain([20, 61])
@@ -73,7 +48,7 @@ async function createHistogram(columnName) {
     .attr("width", d => Math.max(0, x(d.x1) - x(d.x0) - 1))
     .attr("y", d => y(d.length))
     .attr("height", d => height - y(d.length))
-    .attr("fill", d => color(`${d.x0}-${d.x1 - 1}`));
+    .attr("fill", (d, i) => color(i));
 
   svg.append("g")
     .attr("transform", `translate(0, ${height})`)
@@ -113,14 +88,14 @@ legend.append("text")
   .style("text-anchor", "right")
   .text("Age Groups of Police Officers");
 
-  bins.forEach((d, i) => {
-    const group = legend.append("g")
-      .attr("transform", `translate(0, ${i * 22})`);
+bins.forEach((d, i) => {
+  const group = legend.append("g")
+    .attr("transform", `translate(0, ${i * 22})`);
 
-    group.append("rect")
-      .attr("width", 14)
-      .attr("height", 14)
-      .attr("fill", color(`${d.x0}-${d.x1 - 1}`));
+group.append("rect")
+  .attr("width", 14)
+  .attr("height", 14)
+  .attr("fill", color(i));
 
         const tooltip = d3.select("body")
     .append("div")
@@ -153,12 +128,12 @@ legend.append("text")
       tooltip.style("display", "none");
     });
 
-    group.append("text")
-      .attr("x", 20)
-      .attr("y", 11)
-      .style("font-size", "14px")
-      .text(`${d.x0}–${d.x1 - 1}`);
-  });
+  group.append("text")
+    .attr("x", 20)
+    .attr("y", 11)
+    .style("font-size", "14px")
+    .text(`${d.x0}–${d.x1 - 1}`);
+});
 }
 
 createHistogram("mos_age_incident");
