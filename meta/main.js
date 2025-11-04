@@ -1,24 +1,28 @@
 import * as d3 from "https://cdn.jsdelivr.net/npm/d3@7.9.0/+esm";
 
 async function loadData() {
-  const data = await d3.csv("../data/loc.csv", (row) => {
+  const data = await d3.csv("loc.csv", (row) => {
     const parsedDate = row.datetime
       ? new Date(row.datetime)
-      : new Date(row.date + "T" + (row.time || "00:00:00") + (row.timezone || ""));
+      : new Date(
+          row.date + "T" + (row.time || "00:00:00") + (row.timezone || "")
+        );
     return {
       ...row,
       line: +row.line,
       depth: +row.depth,
       length: +row.length,
-      datetime: parsedDate
+      datetime: parsedDate,
     };
   });
-  console.log("Loaded rows:", data.length);
+
+  console.log("✅ Loaded rows:", data.length);
+  if (data.length === 0) console.warn("⚠️ No rows found in loc.csv!");
   return data;
 }
 
 function processCommits(data) {
-  return d3.groups(data, d => d.commit).map(([commit, lines]) => {
+  return d3.groups(data, (d) => d.commit).map(([commit, lines]) => {
     const first = lines[0];
     const { author, datetime } = first;
     return {
@@ -26,17 +30,33 @@ function processCommits(data) {
       author,
       datetime,
       hourFrac: datetime.getHours() + datetime.getMinutes() / 60,
-      totalLines: lines.length
+      totalLines: lines.length,
     };
   });
 }
 
 function renderCommitInfo(data, commits) {
   const dl = d3.select("#stats").append("dl").attr("class", "stats");
-  dl.append("dt").text("Total lines of code");
+
+  dl.append("dt").html('Total <abbr title="Lines of Code">LOC</abbr>');
   dl.append("dd").text(data.length);
+
   dl.append("dt").text("Total commits");
   dl.append("dd").text(commits.length);
+
+  const numFiles = d3.groups(data, (d) => d.file).length;
+  dl.append("dt").text("Number of files");
+  dl.append("dd").text(numFiles);
+
+  const avgDepth = d3.mean(data, (d) => d.depth)?.toFixed(2);
+  dl.append("dt").text("Average depth");
+  dl.append("dd").text(avgDepth ?? "N/A");
+
+  const avgLineLength = d3.mean(data, (d) => d.length)?.toFixed(2);
+  dl.append("dt").text("Average line length");
+  dl.append("dd").text(avgLineLength ?? "N/A");
+
+  console.log("✅ Rendered summary statistics");
 }
 
 function renderScatterPlot(data, commits) {
@@ -50,7 +70,7 @@ function renderScatterPlot(data, commits) {
     bottom: height - margin.bottom,
     left: margin.left,
     width: width - margin.left - margin.right,
-    height: height - margin.top - margin.bottom
+    height: height - margin.top - margin.bottom,
   };
 
   const svg = d3
@@ -61,7 +81,7 @@ function renderScatterPlot(data, commits) {
 
   const xScale = d3
     .scaleTime()
-    .domain(d3.extent(commits, d => d.datetime))
+    .domain(d3.extent(commits, (d) => d.datetime))
     .range([usableArea.left, usableArea.right])
     .nice();
 
@@ -70,19 +90,20 @@ function renderScatterPlot(data, commits) {
     .domain([0, 24])
     .range([usableArea.bottom, usableArea.top]);
 
-  const gridlines = svg
+  svg
     .append("g")
     .attr("class", "gridlines")
     .attr("transform", `translate(${usableArea.left},0)`)
     .call(d3.axisLeft(yScale).tickFormat("").tickSize(-usableArea.width));
 
-  const dots = svg.append("g").attr("class", "dots");
-  dots
+  svg
+    .append("g")
+    .attr("class", "dots")
     .selectAll("circle")
     .data(commits)
     .join("circle")
-    .attr("cx", d => xScale(d.datetime))
-    .attr("cy", d => yScale(d.hourFrac))
+    .attr("cx", (d) => xScale(d.datetime))
+    .attr("cy", (d) => yScale(d.hourFrac))
     .attr("r", 5)
     .attr("fill", "steelblue")
     .attr("opacity", 0.8);
@@ -90,7 +111,7 @@ function renderScatterPlot(data, commits) {
   const xAxis = d3.axisBottom(xScale);
   const yAxis = d3
     .axisLeft(yScale)
-    .tickFormat(d => String(d % 24).padStart(2, "0") + ":00");
+    .tickFormat((d) => String(d % 24).padStart(2, "0") + ":00");
 
   svg
     .append("g")
@@ -101,11 +122,16 @@ function renderScatterPlot(data, commits) {
     .append("g")
     .attr("transform", `translate(${usableArea.left},0)`)
     .call(yAxis);
+
+  console.log("✅ Rendered scatterplot");
 }
 
 loadData().then((data) => {
+  if (!data || data.length === 0) return;
   const commits = processCommits(data);
   renderCommitInfo(data, commits);
   renderScatterPlot(data, commits);
 });
+
+
 
