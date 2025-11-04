@@ -31,6 +31,39 @@ function processCommits(data) {
   });
 }
 
+function renderTooltipContent(commit) {
+  const link = document.getElementById("commit-link");
+  const date = document.getElementById("commit-date");
+  const time = document.getElementById("commit-time");
+  const author = document.getElementById("commit-author");
+  const lines = document.getElementById("commit-lines");
+
+  if (!commit || Object.keys(commit).length === 0) {
+    link.textContent = "";
+    link.removeAttribute("href");
+    date.textContent = "";
+    time.textContent = "";
+    author.textContent = "";
+    lines.textContent = "";
+    return;
+  }
+
+  link.href = commit.url;
+  link.textContent = commit.id.slice(0, 7);
+  date.textContent = commit.datetime?.toLocaleDateString("en", {
+    weekday: "long",
+    month: "short",
+    day: "numeric",
+    year: "numeric",
+  });
+  time.textContent = commit.datetime?.toLocaleTimeString("en", {
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+  author.textContent = commit.author ?? "Unknown";
+  lines.textContent = commit.totalLines ?? "0";
+}
+
 function renderCommitInfo(data, commits) {
   const dl = d3.select("#stats").append("dl").attr("class", "stats");
 
@@ -56,9 +89,8 @@ function renderCommitInfo(data, commits) {
 function renderScatterPlot(data, commits) {
   const width = 1200;
   const height = 768;
-
   const margin = { top: 40, right: 40, bottom: 60, left: 60 };
-  
+
   const usableArea = {
     left: margin.left,
     right: width - margin.right,
@@ -90,16 +122,14 @@ function renderScatterPlot(data, commits) {
     .append("g")
     .attr("class", "gridlines")
     .attr("transform", `translate(${usableArea.left},0)`)
-    .call(
-      d3.axisLeft(yScale).tickFormat("").tickSize(-usableArea.width)
-    )
+    .call(d3.axisLeft(yScale).tickFormat("").tickSize(-usableArea.width))
     .selectAll("line")
     .attr("stroke", "#ccc")
     .attr("stroke-opacity", 0.6);
 
-  svg
-    .append("g")
-    .attr("class", "dots")
+  const dots = svg.append("g").attr("class", "dots");
+
+  dots
     .selectAll("circle")
     .data(commits)
     .join("circle")
@@ -107,7 +137,19 @@ function renderScatterPlot(data, commits) {
     .attr("cy", (d) => yScale(d.hourFrac))
     .attr("r", 5)
     .attr("fill", "steelblue")
-    .attr("opacity", 0.8);
+    .attr("opacity", 0.8)
+    .on("mouseenter", (event, commit) => {
+      renderTooltipContent(commit);
+      d3.select(event.currentTarget)
+        .attr("fill", "orange")
+        .attr("r", 7);
+    })
+    .on("mouseleave", (event) => {
+      d3.select(event.currentTarget)
+        .attr("fill", "steelblue")
+        .attr("r", 5);
+      renderTooltipContent({});
+    });
 
   const xAxis = d3
     .axisBottom(xScale)
@@ -130,6 +172,7 @@ function renderScatterPlot(data, commits) {
     .append("g")
     .attr("transform", `translate(${usableArea.left},0)`)
     .call(yAxis);
+
   svg
     .append("text")
     .attr("x", width / 2)

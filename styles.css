@@ -436,3 +436,45 @@ article img {
   stroke-opacity: 0.5;
 }
 
+.gridlines path {
+  stroke-width: 0;
+}
+
+dl.info {
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  gap: 0.25em 1em;
+  margin: 0;
+}
+
+dl.info dt {
+  color: #555;
+  font-weight: 600;
+}
+
+dl.info dd {
+  margin: 0;
+  font-weight: 400;
+}
+
+.tooltip {
+  position: fixed;
+  top: 1em;
+  left: 1em;
+  background: white;
+  border: 1px solid #ccc;
+  border-radius: 0.5em;
+  padding: 0.75em 1em;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  max-width: 250px;
+}
+
+circle {
+  transition: 200ms;
+  transform-origin: center;
+  transform-box: fill-box;
+}
+
+circle:hover {
+  transform: scale(1.5);
+}
