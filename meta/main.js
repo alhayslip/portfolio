@@ -4,9 +4,7 @@ async function loadData() {
   const data = await d3.csv("loc.csv", (row) => {
     const parsedDate = row.datetime
       ? new Date(row.datetime)
-      : new Date(
-          row.date + "T" + (row.time || "00:00:00") + (row.timezone || "")
-        );
+      : new Date(row.date + "T" + (row.time || "00:00:00") + (row.timezone || ""));
     return {
       ...row,
       line: +row.line,
@@ -15,9 +13,7 @@ async function loadData() {
       datetime: parsedDate,
     };
   });
-
   console.log("✅ Loaded rows:", data.length);
-  if (data.length === 0) console.warn("⚠️ No rows found in loc.csv!");
   return data;
 }
 
@@ -55,20 +51,19 @@ function renderCommitInfo(data, commits) {
   const avgLineLength = d3.mean(data, (d) => d.length)?.toFixed(2);
   dl.append("dt").text("Average line length");
   dl.append("dd").text(avgLineLength ?? "N/A");
-
-  console.log("✅ Rendered summary statistics");
 }
 
 function renderScatterPlot(data, commits) {
-  const width = 1000;
-  const height = 600;
-  const margin = { top: 10, right: 10, bottom: 30, left: 50 };
+  const width = 1200;
+  const height = 768;
 
+  const margin = { top: 40, right: 40, bottom: 60, left: 60 };
+  
   const usableArea = {
-    top: margin.top,
-    right: width - margin.right,
-    bottom: height - margin.bottom,
     left: margin.left,
+    right: width - margin.right,
+    top: margin.top,
+    bottom: height - margin.bottom,
     width: width - margin.left - margin.right,
     height: height - margin.top - margin.bottom,
   };
@@ -77,7 +72,8 @@ function renderScatterPlot(data, commits) {
     .select("#chart")
     .append("svg")
     .attr("viewBox", `0 0 ${width} ${height}`)
-    .style("overflow", "visible");
+    .style("font-family", "sans-serif")
+    .style("background-color", "white");
 
   const xScale = d3
     .scaleTime()
@@ -94,7 +90,12 @@ function renderScatterPlot(data, commits) {
     .append("g")
     .attr("class", "gridlines")
     .attr("transform", `translate(${usableArea.left},0)`)
-    .call(d3.axisLeft(yScale).tickFormat("").tickSize(-usableArea.width));
+    .call(
+      d3.axisLeft(yScale).tickFormat("").tickSize(-usableArea.width)
+    )
+    .selectAll("line")
+    .attr("stroke", "#ccc")
+    .attr("stroke-opacity", 0.6);
 
   svg
     .append("g")
@@ -108,7 +109,11 @@ function renderScatterPlot(data, commits) {
     .attr("fill", "steelblue")
     .attr("opacity", 0.8);
 
-  const xAxis = d3.axisBottom(xScale);
+  const xAxis = d3
+    .axisBottom(xScale)
+    .ticks(d3.timeDay.every(2))
+    .tickFormat(d3.timeFormat("%a %d"));
+
   const yAxis = d3
     .axisLeft(yScale)
     .tickFormat((d) => String(d % 24).padStart(2, "0") + ":00");
@@ -116,22 +121,39 @@ function renderScatterPlot(data, commits) {
   svg
     .append("g")
     .attr("transform", `translate(0,${usableArea.bottom})`)
-    .call(xAxis);
+    .call(xAxis)
+    .selectAll("text")
+    .attr("transform", "rotate(-15)")
+    .style("text-anchor", "end");
 
   svg
     .append("g")
     .attr("transform", `translate(${usableArea.left},0)`)
     .call(yAxis);
+  svg
+    .append("text")
+    .attr("x", width / 2)
+    .attr("y", height - 15)
+    .attr("text-anchor", "middle")
+    .attr("font-size", "14px")
+    .text("Date");
 
-  console.log("✅ Rendered scatterplot");
+  svg
+    .append("text")
+    .attr("transform", "rotate(-90)")
+    .attr("x", -height / 2)
+    .attr("y", 20)
+    .attr("text-anchor", "middle")
+    .attr("font-size", "14px")
+    .text("Time of Day");
 }
 
 loadData().then((data) => {
-  if (!data || data.length === 0) return;
   const commits = processCommits(data);
   renderCommitInfo(data, commits);
   renderScatterPlot(data, commits);
 });
+
 
 
 
