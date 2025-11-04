@@ -1,7 +1,7 @@
 import * as d3 from "https://cdn.jsdelivr.net/npm/d3@7.9.0/+esm";
 
 async function loadData() {
-  const data = await d3.csv("loc.csv", (row) => {
+  const data = await d3.csv("../data/loc.csv", (row) => {
     const parsedDate = row.datetime
       ? new Date(row.datetime)
       : new Date(row.date + "T" + (row.time || "00:00:00") + (row.timezone || ""));
