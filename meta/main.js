@@ -112,11 +112,7 @@ function renderScatterPlot(data, commits) {
     .range([usableArea.bottom, usableArea.top]);
 
   const [minLines, maxLines] = d3.extent(commits, (d) => d.totalLines);
-  const rScale = d3
-    .scaleSqrt()
-    .domain([minLines, maxLines])
-    .range([2, 30]); 
-
+  const rScale = d3.scaleSqrt().domain([minLines, maxLines]).range([2, 30]);
   const sortedCommits = d3.sort(commits, (d) => -d.totalLines);
 
   svg
@@ -128,9 +124,10 @@ function renderScatterPlot(data, commits) {
     .attr("stroke", "#ccc")
     .attr("stroke-opacity", 0.6);
 
-  const dots = svg.append("g").attr("class", "dots");
-
-  dots
+  // --- Dots ---
+  svg
+    .append("g")
+    .attr("class", "dots")
     .selectAll("circle")
     .data(sortedCommits)
     .join("circle")
@@ -145,9 +142,7 @@ function renderScatterPlot(data, commits) {
       updateTooltipVisibility(true);
       updateTooltipPosition(event);
     })
-    .on("mousemove", (event) => {
-      updateTooltipPosition(event);
-    })
+    .on("mousemove", (event) => updateTooltipPosition(event))
     .on("mouseleave", (event) => {
       d3.select(event.currentTarget).style("fill-opacity", 0.7);
       updateTooltipVisibility(false);
@@ -157,7 +152,6 @@ function renderScatterPlot(data, commits) {
     .axisBottom(xScale)
     .ticks(d3.timeDay.every(2))
     .tickFormat(d3.timeFormat("%a %d"));
-
   const yAxis = d3
     .axisLeft(yScale)
     .tickFormat((d) => String(d % 24).padStart(2, "0") + ":00");
@@ -170,11 +164,9 @@ function renderScatterPlot(data, commits) {
     .attr("transform", "rotate(-15)")
     .style("text-anchor", "end");
 
-  svg
-    .append("g")
-    .attr("transform", `translate(${usableArea.left},0)`)
-    .call(yAxis);
+  svg.append("g").attr("transform", `translate(${usableArea.left},0)`).call(yAxis);
 
+  // --- Labels ---
   svg
     .append("text")
     .attr("x", width / 2)
@@ -182,7 +174,6 @@ function renderScatterPlot(data, commits) {
     .attr("text-anchor", "middle")
     .attr("font-size", "14px")
     .text("Date");
-
   svg
     .append("text")
     .attr("transform", "rotate(-90)")
@@ -191,6 +182,68 @@ function renderScatterPlot(data, commits) {
     .attr("text-anchor", "middle")
     .attr("font-size", "14px")
     .text("Time of Day");
+
+  function isCommitSelected(selection, commit) {
+    if (!selection) return false;
+    const [[x0, y0], [x1, y1]] = selection;
+    const x = xScale(commit.datetime);
+    const y = yScale(commit.hourFrac);
+    return x0 <= x && x <= x1 && y0 <= y && y <= y1;
+  }
+
+  function renderSelectionCount(selection) {
+    const selectedCommits = selection
+      ? commits.filter((d) => isCommitSelected(selection, d))
+      : [];
+    const countElement = document.querySelector("#selection-count");
+    countElement.textContent = `${
+      selectedCommits.length || "No"
+    } commits selected`;
+    return selectedCommits;
+  }
+
+  function renderLanguageBreakdown(selection) {
+    const selectedCommits = selection
+      ? commits.filter((d) => isCommitSelected(selection, d))
+      : [];
+    const container = document.getElementById("language-breakdown");
+    if (!selectedCommits.length) {
+      container.innerHTML = "";
+      return;
+    }
+
+    const lines = selectedCommits.flatMap((d) => d.lines || []);
+    if (lines.length === 0) {
+      container.innerHTML = "<p>No language data available</p>";
+      return;
+    }
+
+    const breakdown = d3.rollup(
+      lines,
+      (v) => v.length,
+      (d) => d.type
+    );
+
+    container.innerHTML = "";
+    for (const [language, count] of breakdown) {
+      const proportion = count / lines.length;
+      const formatted = d3.format(".1~%")(proportion);
+      container.innerHTML += `<dt>${language}</dt><dd>${count} lines (${formatted})</dd>`;
+    }
+  }
+
+  function brushed(event) {
+    const selection = event.selection;
+    d3.selectAll("circle").classed("selected", (d) =>
+      isCommitSelected(selection, d)
+    );
+    renderSelectionCount(selection);
+    renderLanguageBreakdown(selection);
+  }
+
+
+  svg.call(d3.brush().on("start brush end", brushed));
+  svg.selectAll(".dots, .overlay ~ *").raise();
 }
 
 loadData().then((data) => {
