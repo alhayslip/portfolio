@@ -459,14 +459,21 @@ dl.info dd {
 
 .tooltip {
   position: fixed;
-  top: 1em;
-  left: 1em;
-  background: white;
-  border: 1px solid #ccc;
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(0, 0, 0, 0.15);
   border-radius: 0.5em;
   padding: 0.75em 1em;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  max-width: 250px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  color: #222;
+  font-size: 0.9rem;
+  pointer-events: none;
+  z-index: 1000;
+  transition: opacity 300ms ease;
+}     
+
+.tooltip.hidden {
+  display: none;
 }
 
 circle {
@@ -477,4 +484,14 @@ circle {
 
 circle:hover {
   transform: scale(1.5);
+}
+
+dl.info {
+  transition-duration: 500ms;
+  transition-property: opacity, visibility;
+}
+
+dl.info[hidden]:not(:hover, :focus-within) {
+  opacity: 0;
+  visibility: hidden;
 }

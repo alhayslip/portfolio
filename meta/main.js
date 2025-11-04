@@ -31,6 +31,20 @@ function processCommits(data) {
   });
 }
 
+function updateTooltipVisibility(isVisible) {
+  const tooltip = document.getElementById("commit-tooltip");
+  tooltip.hidden = !isVisible;
+}
+
+function updateTooltipPosition(event) {
+  const tooltip = document.getElementById("commit-tooltip");
+  const offset = 15; // distance from cursor
+  const x = event.pageX + offset;
+  const y = event.pageY + offset;
+  tooltip.style.left = `${x}px`;
+  tooltip.style.top = `${y}px`;
+}
+
 function renderTooltipContent(commit) {
   const link = document.getElementById("commit-link");
   const date = document.getElementById("commit-date");
@@ -38,15 +52,8 @@ function renderTooltipContent(commit) {
   const author = document.getElementById("commit-author");
   const lines = document.getElementById("commit-lines");
 
-  if (!commit || Object.keys(commit).length === 0) {
-    link.textContent = "";
-    link.removeAttribute("href");
-    date.textContent = "";
-    time.textContent = "";
-    author.textContent = "";
-    lines.textContent = "";
-    return;
-  }
+
+  if (!commit || Object.keys(commit).length === 0) return;
 
   link.href = commit.url;
   link.textContent = commit.id.slice(0, 7);
