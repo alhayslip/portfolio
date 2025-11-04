@@ -3,37 +3,105 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Meta-analysis</title>
-    <link rel="stylesheet" href="../styles.css">
+    <title>Meta-analysis: Commits by Time of Day</title>
+    <link rel="stylesheet" href="../styles.css" />
+    <style>
+
+      body {
+        font-family: system-ui, sans-serif;
+        margin: 2rem;
+        background: #f6f6f6;
+      }
+
+      h1 {
+        font-size: 1.8rem;
+        margin-bottom: 1rem;
+      }
+
+      #chart {
+        margin-top: 1rem;
+      }
+
+      #stats dl.stats {
+        display: grid;
+        grid-template-columns: max-content auto;
+        gap: 0.4rem 1.2rem;
+        font-size: 0.95rem;
+        margin-bottom: 1rem;
+      }
+
+      #selection-count {
+        font-weight: bold;
+        margin-top: 1.5rem;
+        margin-bottom: 0.5rem;
+      }
+
+      #language-breakdown {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 0.2rem 1rem;
+        font-size: 1.1rem;
+        font-weight: 500;
+      }
+
+      #language-breakdown dt {
+        grid-column: span 1;
+        text-align: left;
+      }
+
+      #language-breakdown dd {
+        grid-column: span 2;
+        margin: 0;
+      }
+
+      #commit-tooltip {
+        position: absolute;
+        background: rgba(255, 255, 255, 0.95);
+        border: 1px solid #ccc;
+        border-radius: 6px;
+        padding: 0.6rem 1rem;
+        pointer-events: none;
+        font-size: 0.9rem;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+      }
+
+      circle.selected {
+        fill: #e15759;
+        fill-opacity: 0.9;
+      }
+
+      .brush .selection {
+        fill: #e0e0e0;
+        fill-opacity: 0.4;
+        stroke: #555;
+        stroke-dasharray: 4;
+      }
+    </style>
   </head>
   <body>
     <script src="../global.js" type="module"></script>
 
-    <h1>Meta-analysis: Summary Stats</h1>
+    <h1>Commits by time of day</h1>
+
     <div id="stats"></div>
 
-    <h2>Commits by time of day</h2>
     <div id="chart"></div>
 
-    <dl id="commit-tooltip" class="info tooltip" hidden>
-      <dt>Commit</dt>
-      <dd>
-        <a href="" id="commit-link" target="_blank"></a>
-      </dd>
+    <p id="selection-count">No commits selected</p>
+    <dl id="language-breakdown"></dl>
 
-      <dt>Date</dt>
-      <dd id="commit-date"></dd>
+    <div id="commit-tooltip" hidden>
+      <p>
+        <strong>Commit:</strong>
+        <a id="commit-link" href="#" target="_blank"></a>
+      </p>
+      <p><strong>Date:</strong> <span id="commit-date"></span></p>
+      <p><strong>Time:</strong> <span id="commit-time"></span></p>
+      <p><strong>Author:</strong> <span id="commit-author"></span></p>
+      <p><strong>Lines:</strong> <span id="commit-lines"></span></p>
+    </div>
 
-      <dt>Time</dt>
-      <dd id="commit-time"></dd>
-
-      <dt>Author</dt>
-      <dd id="commit-author"></dd>
-
-      <dt>Lines edited</dt>
-      <dd id="commit-lines"></dd>
-    </dl>
-
+    <!-- Main JavaScript visualization -->
     <script type="module" src="./main.js"></script>
   </body>
 </html>
