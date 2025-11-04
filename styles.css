@@ -493,3 +493,15 @@ dl.info[hidden]:not(:hover, :focus-within) {
   opacity: 0;
   visibility: hidden;
 }
+
+circle.selected {
+  fill: #e15759;
+  fill-opacity: 0.9;
+}
+
+.brush .selection {
+  fill: #e0e0e0;
+  fill-opacity: 0.4;
+  stroke: #555;
+  stroke-dasharray: 4;
+}

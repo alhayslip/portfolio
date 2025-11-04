@@ -32,29 +32,32 @@ function updateTooltipVisibility(isVisible) {
   tooltip.hidden = !isVisible;
 }
 
+function updateTooltipPosition(event) {
+  const tooltip = document.getElementById("commit-tooltip");
+  if (!tooltip) return;
+  const [x, y] = d3.pointer(event);
+  tooltip.style.left = `${x + 20}px`;
+  tooltip.style.top = `${y + 20}px`;
+}
+
 function renderTooltipContent(commit) {
-  const link = document.getElementById("commit-link");
-  const date = document.getElementById("commit-date");
-  const time = document.getElementById("commit-time");
-  const author = document.getElementById("commit-author");
-  const lines = document.getElementById("commit-lines");
-
   if (!commit || Object.keys(commit).length === 0) return;
-
-  link.href = commit.url;
-  link.textContent = commit.id.slice(0, 7);
-  date.textContent = commit.datetime?.toLocaleDateString("en", {
-    weekday: "long",
-    month: "short",
-    day: "numeric",
-    year: "numeric",
-  });
-  time.textContent = commit.datetime?.toLocaleTimeString("en", {
-    hour: "2-digit",
-    minute: "2-digit",
-  });
-  author.textContent = commit.author ?? "Unknown";
-  lines.textContent = commit.totalLines ?? "0";
+  document.getElementById("commit-link").textContent = commit.id?.slice(0, 7);
+  document.getElementById("commit-date").textContent =
+    commit.datetime?.toLocaleDateString("en", {
+      weekday: "short",
+      month: "short",
+      day: "numeric",
+    }) ?? "";
+  document.getElementById("commit-time").textContent =
+    commit.datetime?.toLocaleTimeString("en", {
+      hour: "2-digit",
+      minute: "2-digit",
+    }) ?? "";
+  document.getElementById("commit-author").textContent =
+    commit.author ?? "Unknown";
+  document.getElementById("commit-lines").textContent =
+    commit.totalLines ?? "0";
 }
 
 function renderCommitInfo(data, commits) {
@@ -112,7 +115,7 @@ function renderScatterPlot(data, commits) {
     .range([usableArea.bottom, usableArea.top]);
 
   const [minLines, maxLines] = d3.extent(commits, (d) => d.totalLines);
-  const rScale = d3.scaleSqrt().domain([minLines, maxLines]).range([2, 30]);
+  const rScale = d3.scaleSqrt().domain([minLines, maxLines]).range([3, 15]);
   const sortedCommits = d3.sort(commits, (d) => -d.totalLines);
 
   svg
@@ -124,10 +127,19 @@ function renderScatterPlot(data, commits) {
     .attr("stroke", "#ccc")
     .attr("stroke-opacity", 0.6);
 
-  // --- Dots ---
-  svg
-    .append("g")
-    .attr("class", "dots")
+  const brush = d3
+    .brush()
+    .extent([
+      [usableArea.left, usableArea.top],
+      [usableArea.right, usableArea.bottom],
+    ])
+    .on("start brush end", brushed);
+
+  svg.append("g").attr("class", "brush").call(brush);
+
+  const dotsGroup = svg.append("g").attr("class", "dots");
+
+  dotsGroup
     .selectAll("circle")
     .data(sortedCommits)
     .join("circle")
@@ -152,9 +164,11 @@ function renderScatterPlot(data, commits) {
     .axisBottom(xScale)
     .ticks(d3.timeDay.every(2))
     .tickFormat(d3.timeFormat("%a %d"));
+
   const yAxis = d3
     .axisLeft(yScale)
-    .tickFormat((d) => String(d % 24).padStart(2, "0") + ":00");
+    .tickValues(d3.range(0, 25, 2))
+    .tickFormat((d) => String(d).padStart(2, "0") + ":00");
 
   svg
     .append("g")
@@ -164,9 +178,11 @@ function renderScatterPlot(data, commits) {
     .attr("transform", "rotate(-15)")
     .style("text-anchor", "end");
 
-  svg.append("g").attr("transform", `translate(${usableArea.left},0)`).call(yAxis);
+  svg
+    .append("g")
+    .attr("transform", `translate(${usableArea.left},0)`)
+    .call(yAxis);
 
-  // --- Labels ---
   svg
     .append("text")
     .attr("x", width / 2)
@@ -174,6 +190,7 @@ function renderScatterPlot(data, commits) {
     .attr("text-anchor", "middle")
     .attr("font-size", "14px")
     .text("Date");
+
   svg
     .append("text")
     .attr("transform", "rotate(-90)")
@@ -196,9 +213,10 @@ function renderScatterPlot(data, commits) {
       ? commits.filter((d) => isCommitSelected(selection, d))
       : [];
     const countElement = document.querySelector("#selection-count");
-    countElement.textContent = `${
-      selectedCommits.length || "No"
-    } commits selected`;
+    if (countElement)
+      countElement.textContent = `${
+        selectedCommits.length || "No"
+      } commits selected`;
     return selectedCommits;
   }
 
@@ -207,6 +225,7 @@ function renderScatterPlot(data, commits) {
       ? commits.filter((d) => isCommitSelected(selection, d))
       : [];
     const container = document.getElementById("language-breakdown");
+    if (!container) return;
     if (!selectedCommits.length) {
       container.innerHTML = "";
       return;
@@ -234,16 +253,19 @@ function renderScatterPlot(data, commits) {
 
   function brushed(event) {
     const selection = event.selection;
-    d3.selectAll("circle").classed("selected", (d) =>
-      isCommitSelected(selection, d)
-    );
+    const circles = svg.selectAll("circle");
+
+    if (!selection) {
+      circles.classed("selected", false);
+      renderSelectionCount(null);
+      renderLanguageBreakdown(null);
+      return;
+    }
+
+    circles.classed("selected", (d) => isCommitSelected(selection, d));
     renderSelectionCount(selection);
     renderLanguageBreakdown(selection);
   }
-
-
-  svg.call(d3.brush().on("start brush end", brushed));
-  svg.selectAll(".dots, .overlay ~ *").raise();
 }
 
 loadData().then((data) => {
