@@ -36,22 +36,12 @@ function updateTooltipVisibility(isVisible) {
   tooltip.hidden = !isVisible;
 }
 
-function updateTooltipPosition(event) {
-  const tooltip = document.getElementById("commit-tooltip");
-  const offset = 15; // distance from cursor
-  const x = event.pageX + offset;
-  const y = event.pageY + offset;
-  tooltip.style.left = `${x}px`;
-  tooltip.style.top = `${y}px`;
-}
-
 function renderTooltipContent(commit) {
   const link = document.getElementById("commit-link");
   const date = document.getElementById("commit-date");
   const time = document.getElementById("commit-time");
   const author = document.getElementById("commit-author");
   const lines = document.getElementById("commit-lines");
-
 
   if (!commit || Object.keys(commit).length === 0) return;
 
@@ -136,27 +126,25 @@ function renderScatterPlot(data, commits) {
 
   const dots = svg.append("g").attr("class", "dots");
 
-  dots
-    .selectAll("circle")
-    .data(commits)
-    .join("circle")
-    .attr("cx", (d) => xScale(d.datetime))
-    .attr("cy", (d) => yScale(d.hourFrac))
-    .attr("r", 5)
-    .attr("fill", "steelblue")
-    .attr("opacity", 0.8)
-    .on("mouseenter", (event, commit) => {
-      renderTooltipContent(commit);
-      d3.select(event.currentTarget)
-        .attr("fill", "orange")
-        .attr("r", 7);
-    })
-    .on("mouseleave", (event) => {
-      d3.select(event.currentTarget)
-        .attr("fill", "steelblue")
-        .attr("r", 5);
-      renderTooltipContent({});
-    });
+dots
+  .selectAll("circle")
+  .data(commits)
+  .join("circle")
+  .attr("cx", (d) => xScale(d.datetime))
+  .attr("cy", (d) => yScale(d.hourFrac))
+  .attr("r", 5)
+  .attr("fill", "steelblue")
+  .on("mouseenter", (event, commit) => {
+    renderTooltipContent(commit);
+    updateTooltipVisibility(true);
+    updateTooltipPosition(event);
+  })
+  .on("mousemove", (event) => {
+    updateTooltipPosition(event); // continually update position
+  })
+  .on("mouseleave", () => {
+    updateTooltipVisibility(false);
+  });
 
   const xAxis = d3
     .axisBottom(xScale)
