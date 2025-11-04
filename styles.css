@@ -430,3 +430,9 @@ article img {
   text-align: right;
   color: #555;
 }
+
+.gridlines line {
+  stroke: #ccc;
+  stroke-opacity: 0.5;
+}
+
