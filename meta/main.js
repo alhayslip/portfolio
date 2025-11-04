@@ -18,17 +18,13 @@ async function loadData() {
 }
 
 function processCommits(data) {
-  return d3.groups(data, (d) => d.commit).map(([commit, lines]) => {
-    const first = lines[0];
-    const { author, datetime } = first;
-    return {
-      id: commit,
-      author,
-      datetime,
-      hourFrac: datetime.getHours() + datetime.getMinutes() / 60,
-      totalLines: lines.length,
-    };
-  });
+  return data.map(d => ({
+    id: d.commit,
+    author: d.author,
+    datetime: new Date(d.datetime),
+    hourFrac: new Date(d.datetime).getHours() + new Date(d.datetime).getMinutes() / 60,
+    totalLines: +d.totalLines || +d.line || 1,
+  }));
 }
 
 function updateTooltipVisibility(isVisible) {
