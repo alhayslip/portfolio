@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project 3</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/d3@7.9.0/+esm" type="module"></script>
+</head>
+<body>
+    <!--Header/Title-->
+    <h1>Project 3</h1>
+    <h1>Mapping Misconduct: Complaint Trends Across NYC Precincts</h1>
+    <h2>Team Name: Smooth JAZ</h2>
+
+    <!--yearSlider-->
+    <div class="controls">
+        <label for="yearSlider">Year: </label>
+        <input type="range" id="yearSlider" min="1985" max="2019" step="1" value="1985">
+        <span id="yearLabel">1985</span>
+    </div>
+
+    <!--heatmap-->
+    <svg id="heatmap" width="825" height="675"></svg>
+
+    <!-- Include Brush Info Panel (dynamically updated by JS) -->
+  <div id="brush-info">
+    <strong>Selected precincts:</strong> None<br />
+    <strong>Total complaints:</strong> 0
+  </div>
+
+    <!--Link to JS-->
+    <script type="module" src="visualization.js"></script>
+</body>
+</html>

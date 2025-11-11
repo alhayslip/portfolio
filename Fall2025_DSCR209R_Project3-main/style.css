@@ -1,0 +1,78 @@
+/* Enable dark mode */
+html {
+    color-scheme: light dark;
+
+    background-color: Canvas;
+    color: CanvasText
+}
+
+body {
+    /* Set line height to 1.5 times the font size and use the OS's UI font as the website font (from lab)*/
+    font: 100%/1.5 system-ui;
+    max-width: 100ch;
+    margin-inline: auto;
+    padding: 1.5rem 1rem;
+}
+
+h1 {
+    margin-bottom: 1em;
+}
+
+/* yearSlider formatting*/
+.controls {
+    margin-bottom: 1.5em;
+}
+
+/* heatmap svg object formatting */
+svg {
+    border: 1px solid #ccc;
+    background: #fff;
+}
+
+/* grid heatmap formatting (no longer used) */
+.square {
+    stroke: #000;
+    stroke-width: 1px;
+}
+
+.square:hover {
+    stroke: #222;
+    stroke-width: 2px;
+}
+
+/* geo heatmap precinct formatting */
+.precinct {
+    stroke: #000;
+    stroke-width: 1px;
+    cursor: pointer;
+}
+
+.precinct:hover {
+    stroke: #222;
+    stroke-width: 2px;
+}
+
+/* Legend formatting */
+.legend {
+    display: block;
+    margin: 20px auto;
+}
+
+/*arguments for brush stroke*/
+.precinct.selected {
+  stroke: black;
+  stroke-width: 2;
+  fill-opacity: 0.7;
+}
+
+.brush .selection {
+  stroke: #333;
+  fill: #777;
+  fill-opacity: 0.2;
+}
+
+#brush-info {
+  margin-top: 10px;
+  font-family: sans-serif;
+  line-height: 1.4;
+}

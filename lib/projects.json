@@ -24,6 +24,20 @@
         "year": 2025
     },
     {
+        "title": "DSC 209 Project 3 Visualizing Police Complaint Data by locality",
+        "image": "https://alhayslip.github.io/portfolio/images/mapping",
+        "description": "This map is created to visualize police complaint data by year in New York City by precinct",
+        "year": 2025
+    },
+
+    {
+        "title": "DSC 209 Lab 7 BikeWatching",
+        "image": "https://alhayslip.github.io/portfolio/images/bikewatching.png",
+        "description": "This visualization was created to create a mapbox combining csv and json data of bike lanes, trips and traffic within the city of Boston.",
+        "year": 2025
+    },
+
+    {
         "title": "DSC 207 Mini Project Boxplot of Happiness by Country",
         "image": "https://alhayslip.github.io/portfolio/images/boxplots.png",
         "description": "For my DSC 207 Python course, I was tasked with analyzing happiness scores by country, which can be found here https://www.kaggle.com/datasets/bhanupratapbiswas/world-happiness-2016. This boxplot visualizes the distribution of life expectancy for region that is referenced in the dataset.",
@@ -71,4 +85,5 @@
         "description": "This scatterplot visualizes the performance of Colorado Rockies pitchers by the number of earned runs allowed on the x axis and the earned run average on the y axis.",
         "year": 2025
     }
+
 ]

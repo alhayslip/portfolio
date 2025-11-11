@@ -143,13 +143,20 @@ export function renderProjects(projects, containerElement, headingLevel = "h2") 
     const image = project.image || "";
     const description = project.description || "";
     const year = project.year || "N/A";
+    const url = project.url || null;
 
+    // Build HTML content dynamically
     article.innerHTML = `
       <${headingLevel}>${title}</${headingLevel}>
       <img src="${image}" alt="${title}">
       <div class="project-text">
         <p>${description}</p>
         <p class="project-year">${year}</p>
+        ${
+          url
+            ? `<a href="${url}" target="_blank" class="project-link">View Project ↗</a>`
+            : ""
+        }
       </div>
     `;
 
