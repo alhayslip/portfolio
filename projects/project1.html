@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Project 2 – Persuasive or Deceptive Visualization?</title>
+  <link rel="stylesheet" href="../styles.css">
+</head>
+
+<body>
+  <script src="../global.js" type="module"></script>
+
+  <h1>Project 1 – </h1>
+  <div style="text-align:center;">
+  <p>Alex Hayslip – alhayslip@ucsd.edu</p>
+</div>
+
+  <section>
+    <h2>What is the distribution of organic products sold at Whole Foods by Their Food Processing Score?</h2>
+
+      <figure>
+    <img src="https://alhayslip.github.io/portfolio/images/histogram.png"
+         alt="This histogram food procesisng scores for all organic foods solds at Whole Foods."
+         width="600">
+        <figcaption>
+     Figure 1. This is a histogram of food procesisng scores for all organic foods solds at Whole Foods.
+    </figcaption>
+  </figure>
+</section>
+    
+    <h3>What data cleaning decisions were made?</h3>   
+    <ul>
+      <li>1.Write an np.where statement using the str.contains argument to create a new column: “Organic” in the food data frame</li>
+      <li>2.Create a new data frame, Organic, based on whether the value in the organic column is “Organic”.</li>
+      <li>3.Create a new data frame OrganicWholeFoods, which filters for all Organic products sold at Whole Foods.</li>
+      <li>4.Use np.linespace to define the range of values for the numeric values on the x-axis -axis. Use sns color palette to define the range of red colors that will be used. Use a for loop to define the range of values within each bin grouping.</li>
+    </ul>
+  </section>
+
+  </section>
+    
+    <h4>What observations were made?</h4>   
+    <ul>
+      <li>The outliers for this visualization populate in bin groups three through five, which contain food processing scores between 0.15 and 0.33. </li>
+      <li>The local minima for this visualization occur between the following range of values: 0.13-0.20; 0.40-0.47; 0.73-0.80; 0.93-1.00</li>
+      <li>The distribution of this histogram is multimodal with three distinct peaks. The second peak of the data, with food processing scores between 0.60 and 0.67, is that bin, which contains the highest numerical count of records within a bin group.</li>
+      <li>This histogram is skewed to the left, meaning that the mean of the numerical values is less than the numerical values. The bulk of the records contain food processing scores ranging from 0.0 to 0.60.</li>
+      <li>I noticed that the bins with the highest frequency count of records are between 0.60 and 0.67, as well as 0.87 and 0.93 on the right-hand side of the visualization, which is interesting, as most of the data is on the left-hand side of the histogram.</li> 
+    </ul>
+  </section>
+
+ <h5>Additional Observations</h5>   
+    <ul>
+      <li>I decided to remove the KDE plot from this visualization, as I thought it would be redundant, especially with the legend for the bins of Food Processing Scores being visualized on the right-hand side. </li>
+    </ul>
+  </section>
