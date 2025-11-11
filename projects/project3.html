@@ -17,21 +17,33 @@
 </div>
 
 <section>
-    <h2>Mapping Misconduct: Complaint Trends Across NYC Precincts</h2>
+    <h2>Mapping Misconduct: Heatmap of Complaint Trends Across NYC Precincts</h2>
 
-    <h3>Summary of the visualization</h3> 
+  <h3>Main Claim From Visualizaton</h3>
     <ul>
-      <li>This heatmap was created to visualize the number of complaints filed in each New York City precinct between 1985 to 2019 in the Civilian Complaints Against New York City Poice Officers. The dataset can be found here: https://projects.propublica.org/datastore/#civilian-complaints-against-new-york-city-police-officers</li>
+      <li>From 1985 to 2019, civilian complaints increased across New York City, but a smaller set of precincts accounted for the bulk of the increase. Brooklyn’s 75th precinct had the most significant spike in complaints, as it contained more than twice the number of complaints of any other precinct. The 75th precinct has remained a consistent hotspot over the decades of complaint data captured in this visualization.</li>
     </ul>
-    
+  </section>
+
     <figure>
       <img src="https://alhayslip.github.io/portfolio/images/mapping.png" 
          alt="This is a heatmap of total complaints per year by precincts in New York City"
-         width="600">
+         width="800">
         <figcaption>
       Figure 1. Heatmap of complaints in New York City Precincts from 1985 to 2019.
     </figcaption>
     </figure>
   </section>
+
+  <h3>Design Decisions</h3>
+    
+    <ul>
+      <li>Design Decision #1 Map: The core of the visualization is a map that translates the given precinct numbers into a geographic representation. The alternative was to simply group and report by precinct number using a bar chart. However, a map is the most effective visualization for this data because our claim is spatial. Precincts vary in size/shape and, without a map, it is not clear which precincts neighbor each other. It is also not clear which precincts belong to which New York City boroughs. The story we are trying to tell is related to spatial clustering and a map reveals that immediately and intuitively to readers.</li>
+      <li>Deisgn Decision #2 Color Scale: An important design decision was to use a color scale to represent the number of complaints per precinct. The alternative was to print the numeric values in the map or use something like a bar chart to show count by bar height. However, the goal is to help readers immediately see where complaints are low/high and this is best accomplished by a color hue transitioning from a “neutral-feeling” pale yellow to a “severe-feeling” dark red as the count increases.The const colorScale defines the color that is used for the legend, and the argument of d3.scaleSequential(d3.interpolateYlOrRd) defines the legend that highlights the precincts in New York from least to greatest, with the smaller values highlighted in yellow and the larger values highlighted in red. Another important design decision in this visualization was to apply a gray hue to all New York City precincts that had no complaints for an entire year. The motivation behind this decision was to quickly direct the reader’s attention to the precincts that did not have a complaint in a given year.The alternative was not to adjust the visual encoding at all, so that all precincts with zero total complaints display a light yellow shade similar to those with fewer than 50 complaints; however, this made the trends over time less clear. In the visualization.js code, the object of precinct paths was created to bin the polygons to the svg object. In the block of code for precinctPath.join, the attribute of stroke is defined and set to the rgb code of #444, which accounts for gray.</li>
+      <li>Design Decision #3 Brushing: Another critical decision was to implement the brushing technique in d3 to return the total number of complaints for the user-selected precincts. The output of this technique is a list of each selected precinct, along with a breakdown of complaints by precinct, and the percentage of total complaints that occurred in that precinct. Lastly, the total number of complaints is listed along with the rate of complaints accumulated in a given year. The alternative was to allow the user to hover over each precinct with their mouse, which would return the total number of complaints in that precinct for a selected year. However, we decided to implement brushing to return the aggregate totals for each precinct quickly. In the visualization.js code, the const infobox variable captures the selected precinct number and the total number of complaints. Additionally, the function brushes establishes the brushing behavior when the user selects multiple precincts at once and returns the elements captured in the infobox.</li>
+      <li>Design Decision #4 Slider: Another important design decision was to add a slider at the top of the screen to adjust the complaint year. The range of years in this slider spans from 1985 to 2019. The rationale for this decision was to allow the user to detect increases and decreases in complaints filed in New York City precincts over time. The constants of yearSlider and yearLabel (const yearSlider and const yearLabel) generate the slider mechanic as well as the years where the precinct complaint is documented. We did not consider any alternatives to the year-slider features, as we wanted the reader to see trends in complaints filed per precinct over time. </li>
+    </ul>
+  </section>
+
   </body>
 </html>
