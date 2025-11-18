@@ -18,24 +18,65 @@ h1 {
   font-size: 2rem;
 }
 
-/* Slider Row */
-#time-filter {
+#scrolly-1 {
+  position: relative;
   display: flex;
-  align-items: center;
   gap: 1rem;
-  margin-bottom: 1.5rem;
 }
 
-#commit-time {
-  margin-left: auto;
-  font-weight: 600;
+#scrolly-1 > * {
+  flex: 1;
 }
 
-/* File Unit Visualization */
+
+#scatter-story {
+  position: relative;
+}
+
+
+#scatter-plot {
+  position: sticky;
+  top: 0;
+  left: 0;
+  height: 50vh; 
+}
+
+
+.step {
+  padding-bottom: 80vh;
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
+#chart {
+  height: 600px;
+  margin-top: 2rem;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  padding: 1rem;
+}
+
+circle {
+  transition: r 0.3s ease, cx 0.3s ease, cy 0.3s ease;
+}
+
+#commit-tooltip {
+  position: fixed;
+  background: white;
+  border: 1px solid #ccc;
+  padding: 0.8rem 1rem;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  pointer-events: none;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+}
+
 #files {
   display: grid;
   grid-template-columns: 200px 1fr;
   row-gap: 1rem;
+  margin-top: 3rem;
 }
 
 #files > .file-row {
@@ -65,108 +106,33 @@ h1 {
   padding-top: 0.2em;
 }
 
-/* One dot per line */
 .loc {
   width: 0.45em;
   height: 0.45em;
   border-radius: 50%;
   background: var(--color, steelblue);
-  display: inline-block;
   opacity: 0;
   transform: scale(0.5);
   animation: fadeIn 0.3s ease forwards;
 }
 
 @keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: scale(0.2);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1);
-  }
+  from { opacity: 0; transform: scale(0.2); }
+  to { opacity: 1; transform: scale(1); }
 }
 
-/* Scatterplot container */
-#chart {
-  height: 600px;
-  margin-top: 2rem;
-  background: white;
-  border: 1px solid #ddd;
-  border-radius: 6px;
-  padding: 1rem;
-}
-
-/* Tooltip */
-#commit-tooltip {
-  position: fixed;
-  background: white;
-  border: 1px solid #ccc;
-  padding: 0.8rem 1rem;
-  border-radius: 6px;
-  font-size: 0.9rem;
-  pointer-events: none;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
-}
-
-/* Animated circles for scatterplot */
-circle {
-  transition: r 0.3s ease, cx 0.3s ease, cy 0.3s ease;
-
-  @starting-style {
-    r: 0;
-  }
-}
-
-#scrolly-1 {
-  position: relative;
+#time-filter {
   display: flex;
+  align-items: center;
   gap: 1rem;
+  margin-bottom: 1.5rem;
 }
 
-#scrolly-1 > * {
-  flex: 1;
+#commit-time {
+  margin-left: auto;
+  font-weight: 600;
 }
 
-#scatter-story {
-  position: relative;
-}
-
-#scatter-plot {
-  position: sticky;
-  top: 0;
-  left: 0;
-  height: 50vh;  
-}
-
-.step {
-  padding-bottom: 80vh;  
-  font-size: 1rem;
-  line-height: 1.5;
-}
-
-#scrolly-2 {
-  position: relative;
-  display: flex;
-  gap: 1rem;
-  margin-top: 3rem;
-}
-
-#scrolly-2 > * {
-  flex: 1;
-}
-
-#files-story {
-  position: relative;
-}
-
-#files-plot {
-  position: sticky;
-  top: 10vh;
-  height: 80vh;
-  overflow-y: auto;
-}
 
 
 

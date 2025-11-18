@@ -1,189 +1,109 @@
 import * as d3 from "https://cdn.jsdelivr.net/npm/d3@7.9.0/+esm";
 import scrollama from "https://cdn.jsdelivr.net/npm/scrollama@3.2.0/+esm";
 
-//Return the globals//
-let raw = [];
 let commits = [];
 let xScale, yScale;
 
-//Return the colors//
-const typeColor = {
-  js: "#1f77b4",
-  css: "#2ca02c",
-  html: "#ff7f0e",
-  json: "#9467bd",
-  other: "#7f7f7f"
-};
-
-
-//Load and process data//
+/* ------------------------------------------------------------------
+   LOAD + PROCESS DATA
+------------------------------------------------------------------ */
 async function loadData() {
-  const rows = await d3.csv("loc.csv", (row) => {
+  const rows = await d3.csv("loc.csv", row => {
     const dt = row.datetime
       ? new Date(row.datetime)
-      : new Date(row.date + "T" + (row.time || "00:00:00") + (row.timezone || ""));
+      : new Date(
+          row.date + "T" + (row.time || "00:00:00")
+        );
 
     return {
       ...row,
       datetime: dt,
       line: +row.line,
-      depth: +row.depth,
-      length: +row.length,
-      type: row.type || "other",
-      file: row.file
+      file: row.file,
+      commit: row.commit,
+      url: row.url,
+      type: row.type
     };
   });
 
-  return rows;
-}
-
-function processCommits(data) {
-  return d3.groups(data, d => d.commit)
+  // Group by commit → build commit-level objects
+  return d3.groups(rows, d => d.commit)
     .map(([id, rows]) => {
       const dt = new Date(rows[0].datetime);
       return {
         id,
-        author: rows[0].author,
         datetime: dt,
-        hourFrac: dt.getHours() + dt.getMinutes() / 60,
-        totalLines: d3.sum(rows, r => r.line || 0),
-        url: rows[0].url || "#",
-        lines: rows.map(r => ({
-          type: r.type || "other",
-          file: r.file,
-          line: r.line
-        }))
+        url: rows[0].url,
+        totalLines: d3.sum(rows, r => r.line),
+        lines: rows
       };
     })
-    .sort((a, b) => a.datetime - b.datetime);
+    .sort((a, b) => a.datetime - b.datetime);  // Ensure correct order
 }
 
-
-//scatterplot rendering//
+/* ------------------------------------------------------------------
+   SCATTERPLOT
+------------------------------------------------------------------ */
 function renderScatterPlot(commits) {
-  const width = 1200;
-  const height = 700;
+  const width = 900;
+  const height = 500;
   const margin = { top: 40, right: 40, bottom: 60, left: 60 };
 
-  const usable = {
-    left: margin.left,
-    right: width - margin.right,
-    top: margin.top,
-    bottom: height - margin.bottom
-  };
-
   const svg = d3.select("#chart")
-    .html("")
     .append("svg")
     .attr("viewBox", `0 0 ${width} ${height}`);
 
+  // X-axis: time
   xScale = d3.scaleTime()
     .domain(d3.extent(commits, d => d.datetime))
-    .range([usable.left, usable.right]);
+    .range([margin.left, width - margin.right]);
 
+  // Y-axis: commit index
   yScale = d3.scaleLinear()
-    .domain([0, 24])
-    .range([usable.bottom, usable.top]);
+    .domain([0, commits.length - 1])
+    .range([height - margin.bottom, margin.top]);
 
-  // Axes
+  // Draw axes
   svg.append("g")
-    .attr("class", "x-axis")
-    .attr("transform", `translate(0,${usable.bottom})`)
-    .call(
-      d3.axisBottom(xScale)
-        .ticks(d3.timeDay.every(2))
-        .tickFormat(d3.timeFormat("%a %d"))
-    );
+    .attr("transform", `translate(0,${height - margin.bottom})`)
+    .call(d3.axisBottom(xScale).ticks(d3.timeDay.every(2)));
 
   svg.append("g")
-    .attr("class", "y-axis")
-    .attr("transform", `translate(${usable.left},0)`)
-    .call(
-      d3.axisLeft(yScale)
-        .tickValues(d3.range(0, 25, 2))
-        .tickFormat(d => `${String(d).padStart(2, "0")}:00`)
-    );
+    .attr("transform", `translate(${margin.left},0)`)
+    .call(d3.axisLeft(yScale));
 
+  // Dot layer
   svg.append("g").attr("class", "dots");
 
+  // Draw initial plot (all commits)
   updateScatterPlot(commits);
 }
 
 function updateScatterPlot(subset) {
   const svg = d3.select("#chart svg");
-  if (svg.empty()) return;
 
-  // Dot radius scale
-  const extent = d3.extent(commits, d => d.totalLines);
-  const rScale = d3.scaleSqrt()
-    .domain(extent)
-    .range([3, 15]);
-
-  const update = svg.select(".dots")
+  const dots = svg.select(".dots")
     .selectAll("circle")
     .data(subset, d => d.id);
 
-  update.join(
+  dots.join(
     enter => enter.append("circle")
       .attr("cx", d => xScale(d.datetime))
-      .attr("cy", d => yScale(d.hourFrac))
-      .attr("r", 0)
+      .attr("cy", (_, i) => yScale(i))
+      .attr("r", 6)
       .attr("fill", "steelblue")
-      .style("opacity", 0.85)
-      .transition()
-      .duration(350)
-      .attr("r", d => rScale(d.totalLines)),
+      .style("opacity", 0.85),
     update => update
-      .transition()
-      .duration(350)
       .attr("cx", d => xScale(d.datetime))
-      .attr("cy", d => yScale(d.hourFrac))
-      .attr("r", d => rScale(d.totalLines))
+      .attr("cy", (_, i) => yScale(i)),
+    exit => exit.remove()
   );
 }
 
-
-//file unit visualization//
-function updateFileDisplay(commitArr) {
-  const lines = commitArr.flatMap(d => d.lines);
-
-  const files = d3.groups(lines, r => r.file)
-    .map(([name, lines]) => ({ name, lines }))
-    .sort((a, b) => b.lines.length - a.lines.length);
-
-  const rows = d3.select("#files")
-    .selectAll(".file-row")
-    .data(files, d => d.name)
-    .join(
-      enter => {
-        const row = enter.append("div").attr("class", "file-row");
-        row.append("dt");
-        row.append("dd");
-        return row;
-      },
-      update => update,
-      exit => exit.remove()
-    );
-
-  rows.select("dt").html(d =>
-    `<code>${d.name}</code><small>${d.lines.length} lines</small>`
-  );
-
-  rows.select("dd")
-    .selectAll(".loc")
-    .data(d => d.lines)
-    .join(
-      enter => enter.append("div")
-        .attr("class", "loc")
-        .style("--color", d => typeColor[d.type] || typeColor.other),
-      update => update,
-      exit => exit.remove()
-    );
-}
-
-
-//Return scrolly 1 visualization//
-function setupScatterScrolly() {
+/* ------------------------------------------------------------------
+   SCROLL STORY TEXT FOR STEP 3
+------------------------------------------------------------------ */
+function buildStory(commits) {
   d3.select("#scatter-story")
     .selectAll(".step")
     .data(commits)
@@ -191,12 +111,21 @@ function setupScatterScrolly() {
     .attr("class", "step")
     .html(d => `
       <p>
-        On <strong>${d.datetime.toLocaleString()}</strong>,
-        commit <code>${d.id.slice(0,7)}</code> modified
-        <strong>${d.totalLines}</strong> lines.
+        On ${d.datetime.toLocaleString("en", {
+          dateStyle: "full",
+          timeStyle: "short"
+        })},
+        I made <a href="${d.url}" target="_blank">a glorious commit</a>.
+        I edited ${d.totalLines} lines across
+        ${d3.rollups(d.lines, v => v.length, r => r.file).length} files.
       </p>
     `);
+}
 
+/* ------------------------------------------------------------------
+   SCROLLAMA — UPDATE SCATTERPLOT ON SCROLL
+------------------------------------------------------------------ */
+function setupScrollama(commits) {
   const scroller = scrollama();
 
   scroller.setup({
@@ -204,57 +133,26 @@ function setupScatterScrolly() {
     step: "#scrolly-1 .step",
     offset: 0.6
   })
-  .onStepEnter(resp => {
-    const commit = resp.element.__data__;
+  .onStepEnter(response => {
+    const commit = response.element.__data__;
+
+    // Show only the current commit as the “focus”
     updateScatterPlot([commit]);
   });
 }
 
-
-//REturn scrolly 2 file units//
-function setupFileScrolly() {
-
-  // Lab requirement: duplicate commit data for the second scrolly
-  const commitsCopy = commits.map(d => structuredClone(d));
-
-  d3.select("#files-story")
-    .selectAll(".step")
-    .data(commitsCopy)
-    .join("div")
-    .attr("class", "step")
-    .html(d => `
-      <p>
-        Commit <code>${d.id.slice(0,7)}</code> modified
-        <strong>${d.lines.length}</strong> lines across
-        <strong>${d3.groups(d.lines, r => r.file).length}</strong> files.
-      </p>
-    `);
-
-  const scroller = scrollama();
-
-  scroller.setup({
-    container: "#scrolly-2",
-    step: "#scrolly-2 .step",
-    offset: 0.6
-  })
-  .onStepEnter(resp => {
-    const commit = resp.element.__data__;
-    updateFileDisplay([commit]);
-  });
-}
-
-
-//bootsrap everything//
-loadData().then(rows => {
-  raw = rows;
-  commits = processCommits(rows);
+/* ------------------------------------------------------------------
+   BOOTSTRAP
+------------------------------------------------------------------ */
+loadData().then(data => {
+  commits = data;
 
   renderScatterPlot(commits);
-  setupScatterScrolly();
-
-  updateFileDisplay(commits);
-  setupFileScrolly();
+  buildStory(commits);
+  setupScrollama(commits);
 });
+
+
 
 
 
