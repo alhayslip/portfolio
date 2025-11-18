@@ -1,15 +1,13 @@
-//import d3 and scrollrama//
 import * as d3 from "https://cdn.jsdelivr.net/npm/d3@7.9.0/+esm";
 import scrollama from "https://cdn.jsdelivr.net/npm/scrollama@3.2.0/+esm";
 
-//Return the Globals//
 let data = [];
 let commits = [];
 
 let xScale, yScale;
 let colors = d3.scaleOrdinal(d3.schemeTableau10);
 
-//Load and Process the Data//
+
 async function loadData() {
   const rows = await d3.csv("loc.csv", (row) => {
     const dt = row.datetime
@@ -30,7 +28,6 @@ async function loadData() {
     };
   });
 
-  console.log("Loaded rows:", rows.length);
   return rows;
 }
 
@@ -39,7 +36,6 @@ function processCommits(data) {
     .groups(data, (d) => d.commit)
     .map(([id, rows]) => {
       const dt = new Date(rows[0].datetime);
-
       return {
         id,
         author: rows[0].author,
@@ -48,6 +44,7 @@ function processCommits(data) {
         totalLines: d3.sum(rows, (r) => r.line || 0),
         url: rows[0].url || "#",
 
+        // line-level details per commit
         lines: rows.map((r) => ({
           type: r.type || "other",
           line: r.line || 0,
@@ -55,10 +52,9 @@ function processCommits(data) {
         }))
       };
     })
-    .sort((a, b) => a.datetime - b.datetime); // SORT BY TIME
+    .sort((a, b) => a.datetime - b.datetime);
 }
 
-//draw the scatterplot//
 function renderScatterPlot(commits) {
   const width = 1200;
   const height = 700;
@@ -100,7 +96,7 @@ function renderScatterPlot(commits) {
     .call(
       d3.axisLeft(yScale)
         .tickValues(d3.range(0, 25, 2))
-        .tickFormat((d) => `${String(d).padStart(2, "0")}:00`)
+        .tickFormat(d => `${String(d).padStart(2, "0")}:00`)
     );
 
   svg.append("g").attr("class", "dots");
@@ -127,7 +123,7 @@ function updateScatterPlot(commits) {
 
   dots
     .selectAll("circle")
-    .data(commits, (d) => d.id) // STABLE KEY
+    .data(commits, (d) => d.id)
     .join("circle")
     .attr("cx", (d) => xScale(d.datetime))
     .attr("cy", (d) => yScale(d.hourFrac))
@@ -136,7 +132,6 @@ function updateScatterPlot(commits) {
     .style("fill-opacity", 0.7);
 }
 
-//-FILE UNIT VISUALIZATION//
 function updateFileDisplay(commitList) {
   const lines = commitList.flatMap((d) => d.lines);
 
@@ -171,75 +166,76 @@ function updateFileDisplay(commitList) {
     });
 }
 
-//scrollytelling story telling//
 function setupScatterScrolly() {
   d3.select("#scatter-story")
     .selectAll(".step")
     .data(commits)
     .join("div")
     .attr("class", "step")
-    .html(
-      (d, i) => `
-        <p>On 
-        <strong>${d.datetime.toLocaleString("en", {
-          dateStyle: "full",
-          timeStyle: "short",
-        })}</strong>,
-        I made commit <code>${d.id.slice(0, 7)}</code> modifying 
-        <strong>${d.totalLines}</strong> lines.</p>
-      `
-    );
+    .html(d => `
+      <p>On 
+      <strong>${d.datetime.toLocaleString("en", {
+        dateStyle: "full",
+        timeStyle: "short",
+      })}</strong>,
+      I made commit <code>${d.id.slice(0, 7)}</code> modifying 
+      <strong>${d.totalLines}</strong> lines.</p>
+    `);
 
   const scroller1 = scrollama();
+
   scroller1
     .setup({
       container: "#scrolly-1",
       step: "#scrolly-1 .step",
+      offset: 0.6
     })
     .onStepEnter((response) => {
       const commit = response.element.__data__;
-      updateScatterPlot([commit]); // show only ONE commit
+      updateScatterPlot([commit]);
     });
 }
 
-//use scrollytelling for the file visualization//
 function setupFileScrolly() {
   d3.select("#files-story")
     .selectAll(".step")
     .data(commits)
     .join("div")
     .attr("class", "step")
-    .html(
-      (d) => `
-        <p>Commit <code>${d.id.slice(0,7)}</code> edited 
-        <strong>${d.lines.length}</strong> lines across
-        <strong>${d3.groups(d.lines, r => r.file).length}</strong> files.</p>
-      `
-    );
+    .html(d => `
+      <p>
+        Commit <code>${d.id.slice(0,7)}</code> modified
+        <strong>${d.lines.length}</strong> lines
+        across <strong>${d3.groups(d.lines, r => r.file).length}</strong> files.
+      </p>
+    `);
 
   const scroller2 = scrollama();
+
   scroller2
     .setup({
       container: "#scrolly-2",
       step: "#scrolly-2 .step",
+      offset: 0.6
     })
     .onStepEnter((response) => {
       const commit = response.element.__data__;
-      updateFileDisplay([commit]); // show only ONE commit
+      updateFileDisplay([commit]);
     });
 }
 
-//initalize the data//
 loadData().then((rows) => {
   data = rows;
   commits = processCommits(data);
 
+  // Scatterplot (Step 3)
   renderScatterPlot(commits);
-  updateFileDisplay(commits); // initial full view
-
   setupScatterScrolly();
-  setupFileScrolly();
+
+  updateFileDisplay(commits);  
+  setupFileScrolly();         
 });
+
 
 
 
