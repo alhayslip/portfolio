@@ -1,48 +1,69 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Repository Evolution</title>
-  <link rel="stylesheet" href="styles.css" />
-</head>
+  <head>
+    <meta charset="utf-8" />
+    <title>Repository Evolution</title>
+    <link rel="stylesheet" href="../global.css" />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <!-- your nav from global.js will prepend here -->
 
-<body>
-<main>
+    <main id="meta-root">
+      <!-- HEADER + SLIDER -->
+      <header id="meta-header">
+        <div id="slider-wrapper">
+          <label for="commitSlider">Show commits until:</label>
+          <input id="commitSlider" type="range" min="0" max="0" value="0" />
+        </div>
+        <div id="commitTime">Loading…</div>
+      </header>
 
-  <h1>Repository Evolution</h1>
+      <!-- FILE UNIT ROWS -->
+      <section id="files-section">
+        <dl id="filesList"></dl>
+      </section>
 
-  <!-- ============================
-       STEP 1.1 – FILTERING UI
-  ============================= -->
-  <div id="time-filter">
-    <label for="commit-progress">Show commits until:</label>
-    <input id="commit-progress" type="range" min="0" max="100" value="100" />
-    <time id="commit-time"></time>
-  </div>
+      <!-- STATS BAR -->
+      <section id="stats-section">
+        <div class="stat">
+          <div class="stat-label">COMMITS</div>
+          <div id="stat-commits" class="stat-value">–</div>
+        </div>
+        <div class="stat">
+          <div class="stat-label">FILES</div>
+          <div id="stat-files" class="stat-value">–</div>
+        </div>
+        <div class="stat">
+          <div class="stat-label">TOTAL LOC</div>
+          <div id="stat-loc" class="stat-value">–</div>
+        </div>
+        <div class="stat">
+          <div class="stat-label">MAX DEPTH</div>
+          <div id="stat-depth" class="stat-value">–</div>
+        </div>
+        <div class="stat">
+          <div class="stat-label">LONGEST LINE</div>
+          <div id="stat-longest" class="stat-value">–</div>
+        </div>
+        <div class="stat">
+          <div class="stat-label">MAX LINES</div>
+          <div id="stat-maxLines" class="stat-value">–</div>
+        </div>
+      </section>
 
-  <!-- Commit summary statistics -->
-  <section id="stats"></section>
+      <!-- TIME OF DAY SCATTER -->
+      <section id="time-section">
+        <h2>Commits by time of day</h2>
+        <svg id="time-chart" width="900" height="260"></svg>
+      </section>
+    </main>
 
-  <!-- ============================
-       STEP 3 – SCROLLYTELLING
-       Scatterplot lives inside #chart
-  ============================= -->
-  <div id="scrolly-1">
-    <div id="scatter-story"></div>
-    <div id="scatter-plot">
-      <section id="chart"></section>
-    </div>
-  </div>
-
-</main>
-
-<!-- STEP 2 – FILE UNIT VISUALIZATION (moved to end of body in Step 3) -->
-<dl id="files"></dl>
-
-<script src="main.js" type="module"></script>
-</body>
+    <script type="module" src="../global.js"></script>
+    <script type="module" src="main.js"></script>
+  </body>
 </html>
+
 
 
 
