@@ -1,14 +1,5 @@
 <h1>Repository Evolution</h1>
 
-<!-- Slider -->
-<div id="time-filter">
-  <label>
-    Show commits until:
-    <input type="range" id="commit-progress" min="0" max="100" value="100" />
-  </label>
-  <time id="commit-time"></time>
-</div>
-
 <!-- SCROLLY WRAPPER -->
 <div id="scrolly-1">
   <div id="scatter-story"></div>
@@ -18,11 +9,18 @@
   </div>
 </div>
 
-<!-- Commit summary -->
-<section id="stats"></section>
+<div id="scrolly-2">
+  <div id="files-story"></div>
+  <div id="files-plot">
+    <dl id="files"></dl>
+  </div>
+</div>
 
 <!-- Moved to the very end (lab requirement) -->
 <dl id="files"></dl>
+
+<!-- Commit summary -->
+<section id="stats"></section>
 
 <!-- Tooltip -->
 <div id="commit-tooltip" hidden>

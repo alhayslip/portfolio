@@ -132,6 +132,28 @@ circle {
   line-height: 1.5;
 }
 
+#scrolly-2 {
+  position: relative;
+  display: flex;
+  gap: 1rem;
+  margin-top: 3rem;
+}
+
+#scrolly-2 > * {
+  flex: 1;
+}
+
+#files-story {
+  position: relative;
+}
+
+#files-plot {
+  position: sticky;
+  top: 0;
+  height: 60vh;
+  overflow-y: auto;
+}
+
 
 
 
