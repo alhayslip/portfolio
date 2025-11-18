@@ -12,13 +12,13 @@ main {
 }
 
 h1 {
-  font-size: 2rem;
-  font-weight: 600;
-  margin-bottom: 1.5rem;
   text-align: center;
+  margin-bottom: 1.5rem;
+  font-weight: 600;
+  font-size: 2rem;
 }
 
-/* Slider row */
+/* Slider Row */
 #time-filter {
   display: flex;
   align-items: center;
@@ -26,38 +26,58 @@ h1 {
   margin-bottom: 1.5rem;
 }
 
-#time-filter label {
-  font-size: 1.1rem;
-  font-weight: 500;
-}
-
 #commit-time {
   margin-left: auto;
-  font-size: 1.1rem;
   font-weight: 600;
 }
 
-/* Stats section */
-#stats {
-  margin: 1.5rem 0;
-}
-
-#stats dl {
+/* File Unit Visualization */
+#files {
   display: grid;
-  grid-template-columns: auto auto;
-  row-gap: 0.4rem;
-  column-gap: 1rem;
-  font-size: 1rem;
+  grid-template-columns: 200px 1fr;
+  row-gap: 1rem;
 }
 
-#stats dt {
-  font-weight: 600;
+#files > .file-row {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: subgrid;
+}
+
+#files dt {
+  grid-column: 1;
+  font-family: monospace;
+  font-size: 0.95rem;
+}
+
+#files dt small {
+  display: block;
+  opacity: 0.6;
+  font-size: 0.8rem;
+}
+
+#files dd {
+  grid-column: 2;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.2em;
+  margin: 0;
+  padding-top: 0.2em;
+}
+
+/* One dot per line */
+.loc {
+  width: 0.55em;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: var(--color, steelblue);
+  display: inline-block;
 }
 
 /* Scatterplot container */
 #chart {
   height: 600px;
-  margin-top: 1rem;
+  margin-top: 2rem;
   background: white;
   border: 1px solid #ddd;
   border-radius: 6px;
@@ -73,65 +93,18 @@ h1 {
   border-radius: 6px;
   font-size: 0.9rem;
   pointer-events: none;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
 }
 
-/* Circle transitions (Step 1.4) */
+/* Animated circles for scatterplot */
 circle {
   transition: r 0.3s ease, cx 0.3s ease, cy 0.3s ease;
+
   @starting-style {
     r: 0;
   }
 }
 
-/* File list + unit visualization (Steps 2.1 + 2.2) */
-#files {
-  display: grid;
-  grid-template-columns: auto 1fr;
-  row-gap: 0.75rem;
-  margin-bottom: 1.5rem;
-}
 
-#files > .file-row {
-  grid-column: 1 / -1;
-  display: grid;
-  grid-template-columns: subgrid;
-}
-
-#files dt {
-  grid-column: 1;
-}
-
-#files dt code {
-  font-family: monospace;
-  font-size: 0.95rem;
-}
-
-#files dt small {
-  display: block;
-  font-size: 0.8rem;
-  opacity: 0.7;
-  margin-top: 0.25em;
-}
-
-#files dd {
-  grid-column: 2;
-  display: flex;
-  flex-wrap: wrap;
-  align-items: flex-start;
-  align-content: flex-start;
-  gap: 0.2em;
-  margin: 0;
-  padding-top: 0.25em;
-}
-
-/* One dot per line */
-.loc {
-  width: 0.55em;
-  aspect-ratio: 1;
-  border-radius: 50%;
-  background: var(--color, steelblue);  
-  display: inline-block;
-}
 
 
