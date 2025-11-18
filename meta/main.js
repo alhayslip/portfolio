@@ -56,6 +56,7 @@ function processCommits(data) {
       lines: rows.map((r) => ({
         type: r.type,
         line: r.line || 0,
+        file: r.file,          // ← ADD THIS
       })),
     };
   });
