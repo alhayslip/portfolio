@@ -255,29 +255,33 @@ function updateFileDisplay(filteredCommits) {
   const files = d3.groups(lines, d => d.file)
     .map(([name, lines]) => ({ name, lines }));
 
-  const filesContainer = d3
-    .select("#files")
-    .selectAll("div")
-    .data(files, (d) => d.name)
-    .join(enter => {
-      const div = enter.append("div");
-      div.append("dt");
-      div.append("dd");
-      return div;
-    });
+  const container = d3.select("#files")
+    .selectAll("div.file-row")
+    .data(files, d => d.name)
+    .join(
+      enter => {
+        const row = enter.append("div").attr("class", "file-row");
 
-  // Filename + line count (in <small>)
-  filesContainer.select("dt").html(d =>
+        row.append("dt");
+        row.append("dd");
+
+        return row;
+      }
+    );
+
+
+  container.select("dt").html(d =>
     `<code>${d.name}</code><small>${d.lines.length} lines</small>`
   );
 
-    filesContainer
-    .select("dd")
-    .selectAll("div")
+
+  container.select("dd")
+    .selectAll("div.loc")
     .data(d => d.lines)
     .join("div")
-    .attr("class", "loc");
+    .attr("class", d => `loc type-${d.type || "other"}`);
 }
+
 
 const timeSlider = document.getElementById("commit-progress");
 const timeDisplay = document.getElementById("commit-time");

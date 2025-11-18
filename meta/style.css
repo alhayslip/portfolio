@@ -85,11 +85,9 @@ circle {
 }
 
 #files {
-  margin-top: 1rem;
-  margin-bottom: 1.5rem;
   display: grid;
-  grid-template-columns: 1fr 4fr;
-  row-gap: 0.4rem;
+  grid-template-columns: auto 1fr;
+  row-gap: 0.75rem;
 }
 
 #files > div {
@@ -160,11 +158,11 @@ circle {
 }
 
 .loc {
-  display: flex;
-  width: 0.5em;
+  width: 0.55em;
   aspect-ratio: 1;
-  background: steelblue;
   border-radius: 50%;
+  background: steelblue;
+  display: inline-block;
 }
 
 #files dd {
@@ -173,20 +171,28 @@ circle {
   flex-wrap: wrap;
   align-items: start;
   align-content: start;
-  gap: 0.15em;
-  padding-top: 0.6em;
-  margin-left: 0;
+  gap: 0.2em;
+  margin: 0;
+  padding-top: 0.25em;
 }
+
 
 #files dt code {
   font-family: monospace;
-  font-size: 0.95rem;
+  font-size: 1rem;
 }
 
 #files dt small {
   display: block;
   font-size: 0.8rem;
   opacity: 0.7;
+  margin-top: 0.25em;
+}
+
+#files > .file-row {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: subgrid;
 }
 
 
