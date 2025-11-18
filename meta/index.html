@@ -8,8 +8,7 @@
 
   <body>
     <main>
-
-      <!--Return the title-->
+      <!-- Title -->
       <h1>Repository Evolution</h1>
 
       <!-- Slider + Time Label -->
@@ -28,21 +27,20 @@
         <time id="commit-time"></time>
       </div>
 
+      <!-- File unit visualization (unit dots per line) -->
       <dl id="files"></dl>
 
-<section id="file-lines"></section>
-
-      <!-- Return the commit summary statistics -->
+      <!-- Commit summary statistics -->
       <section id="stats"></section>
 
-      <!-- Return the scatterplot -->
+      <!-- Scatterplot -->
       <section id="chart"></section>
 
-      <!-- Return the tooltip -->
+      <!-- Tooltip for commits -->
       <div id="commit-tooltip" hidden>
         <p><strong>Commit:</strong> <span id="commit-link"></span></p>
         <p><strong>Date:</strong> <span id="commit-date"></span></p>
-        <p><strong>Time:</strong> <span id="commit-time"></span></p>
+        <p><strong>Time:</strong> <span id="commit-time-tooltip"></span></p>
         <p><strong>Author:</strong> <span id="commit-author"></span></p>
         <p><strong>Lines:</strong> <span id="commit-lines"></span></p>
       </div>
@@ -51,3 +49,4 @@
     </main>
   </body>
 </html>
+
