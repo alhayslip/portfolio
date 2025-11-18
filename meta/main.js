@@ -1,6 +1,17 @@
 import * as d3 from "https://cdn.jsdelivr.net/npm/d3@7.9.0/+esm";
 
-const LOC_CSV_PATH = "loc.csv";
+// ------------------------------------------------------
+// FIX: AUTOMATIC PATH RESOLUTION FOR GitHub Pages
+// ------------------------------------------------------
+//
+// If running locally → "loc.csv"
+// If running on GitHub Pages → "/portfolio/meta/loc.csv"
+//
+const isGithub = location.hostname.includes("github.io");
+
+const LOC_CSV_PATH = isGithub
+  ? "/portfolio/meta/loc.csv"
+  : "loc.csv";
 
 // ------------------------------------------------------
 // MAP RAW ROWS EXACTLY TO YOUR CSV STRUCTURE
@@ -8,11 +19,11 @@ const LOC_CSV_PATH = "loc.csv";
 function mapRow(d) {
   return {
     commitId: d.commit,
-    file: d.file.replace(/\\/g, "/"), // fix windows backslashes
+    file: d.file.replace(/\\/g, "/"), // normalize windows paths
     line: +d.line,
     length: +d.length,
     depth: +d.depth,
-    datetime: new Date(d.datetime), // ISO stamp → real Date
+    datetime: new Date(d.datetime), // parses "2025-11-17T20:11:45-08:00"
     type: d.type
   };
 }
@@ -21,25 +32,28 @@ function mapRow(d) {
 // MAIN LOAD + PROCESS
 // ------------------------------------------------------
 d3.csv(LOC_CSV_PATH).then(raw => {
+  if (!raw || raw.length === 0) {
+    console.error("ERROR: loc.csv did not load. Check LOC_CSV_PATH:", LOC_CSV_PATH);
+  }
+
   const rows = raw.map(mapRow).filter(d => !isNaN(d.datetime));
 
   // Group rows by commit
   const commitsGrouped = d3.group(rows, d => d.commitId);
 
-  // Build commit objects
   let commits = [];
 
   for (const [commitId, rowsInCommit] of commitsGrouped) {
-    // group by file
+
     const filesGrouped = d3.group(rowsInCommit, d => d.file);
 
     const files = [];
 
     for (const [file, lines] of filesGrouped) {
-      const totalLoc = d3.sum(lines, r => r.length); // sum line lengths
+      const totalLoc = d3.sum(lines, r => r.length);
       const maxDepth = d3.max(lines, r => r.depth);
       const longestLine = d3.max(lines, r => r.length);
-      const maxLines = d3.max(lines, r => r.line); // highest line number
+      const maxLines = d3.max(lines, r => r.line);
 
       files.push({
         file,
@@ -183,7 +197,7 @@ d3.csv(LOC_CSV_PATH).then(raw => {
       dotsContainer.selectAll("*").remove();
 
       const loc = d.loc;
-      const maxDots = 18; // max points like screenshot
+      const maxDots = 18; // nice limit, like screenshot
       const dotCount = Math.max(1, Math.round((loc / current.totalLoc) * maxDots));
 
       dotsContainer
@@ -195,7 +209,7 @@ d3.csv(LOC_CSV_PATH).then(raw => {
         .style("--dot-color", color(d.file));
     });
 
-    // TIME OF DAY SCATTER (all seen commits)
+    // TIME OF DAY SCATTER
     const dots = g.selectAll(".time-dot").data(seen, d => d.commitId);
 
     dots
@@ -215,18 +229,12 @@ d3.csv(LOC_CSV_PATH).then(raw => {
     dots.exit().remove();
   }
 
-  // initial render
   render(+slider.value);
 
   slider.addEventListener("input", () => {
     render(+slider.value);
   });
 });
-
-
-
-
-
 
 
 
