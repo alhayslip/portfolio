@@ -1,50 +1,45 @@
 import * as d3 from "https://cdn.jsdelivr.net/npm/d3@7.9.0/+esm";
 
 // ------------------------------------------------------
-// FIX: AUTOMATIC PATH RESOLUTION FOR GitHub Pages
+// AUTO PATH for GitHub Pages vs localhost
 // ------------------------------------------------------
-//
-// If running locally → "loc.csv"
-// If running on GitHub Pages → "/portfolio/meta/loc.csv"
-//
 const isGithub = location.hostname.includes("github.io");
-
 const LOC_CSV_PATH = isGithub
   ? "/portfolio/meta/loc.csv"
   : "loc.csv";
 
 // ------------------------------------------------------
-// MAP RAW ROWS EXACTLY TO YOUR CSV STRUCTURE
+// MAP ROWS EXACTLY TO YOUR CSV
 // ------------------------------------------------------
 function mapRow(d) {
   return {
     commitId: d.commit,
-    file: d.file.replace(/\\/g, "/"), // normalize windows paths
+    file: d.file.replace(/\\/g, "/"),  // normalize windows paths
     line: +d.line,
     length: +d.length,
     depth: +d.depth,
-    datetime: new Date(d.datetime), // parses "2025-11-17T20:11:45-08:00"
+    datetime: new Date(d.datetime),    // ISO format from elocuent
     type: d.type
   };
 }
 
 // ------------------------------------------------------
-// MAIN LOAD + PROCESS
+// LOAD + PROCESS DATA
 // ------------------------------------------------------
 d3.csv(LOC_CSV_PATH).then(raw => {
   if (!raw || raw.length === 0) {
-    console.error("ERROR: loc.csv did not load. Check LOC_CSV_PATH:", LOC_CSV_PATH);
+    console.error("loc.csv NOT FOUND at:", LOC_CSV_PATH);
   }
 
   const rows = raw.map(mapRow).filter(d => !isNaN(d.datetime));
 
-  // Group rows by commit
+  // group by commit
   const commitsGrouped = d3.group(rows, d => d.commitId);
 
   let commits = [];
 
   for (const [commitId, rowsInCommit] of commitsGrouped) {
-
+    // group by file inside commit
     const filesGrouped = d3.group(rowsInCommit, d => d.file);
 
     const files = [];
@@ -60,7 +55,7 @@ d3.csv(LOC_CSV_PATH).then(raw => {
         loc: totalLoc,
         depth: maxDepth,
         maxLineLength: longestLine,
-        maxLines: maxLines
+        maxLines
       });
     }
 
@@ -77,21 +72,22 @@ d3.csv(LOC_CSV_PATH).then(raw => {
     });
   }
 
-  // Sort chronologically
+  // sort chronologically
   commits.sort((a, b) => d3.ascending(a.date, b.date));
 
-  // Add index + time-of-day
+  // add index + time-of-day
   commits = commits.map((c, i) => ({
     ...c,
     index: i,
-    timeOfDay:
+    timeOfDay: (
       c.date.getHours() +
       c.date.getMinutes() / 60 +
       c.date.getSeconds() / 3600
+    )
   }));
 
   // ------------------------------------------------------
-  // DOM references
+  // DOM REFERENCES
   // ------------------------------------------------------
   const slider = document.getElementById("commitSlider");
   const commitTimeLabel = document.getElementById("commitTime");
@@ -105,13 +101,13 @@ d3.csv(LOC_CSV_PATH).then(raw => {
   const statMaxLines = document.getElementById("stat-maxLines");
 
   // ------------------------------------------------------
-  // TIME OF DAY CHART SETUP
+  // TIME OF DAY CHART WITH **DATE ON X AXIS**
   // ------------------------------------------------------
   const svg = d3.select("#time-chart");
   const width = +svg.attr("width");
   const height = +svg.attr("height");
 
-  const margin = { top: 20, right: 20, bottom: 30, left: 50 };
+  const margin = { top: 20, right: 20, bottom: 40, left: 60 };
   const innerWidth = width - margin.left - margin.right;
   const innerHeight = height - margin.top - margin.bottom;
 
@@ -119,33 +115,42 @@ d3.csv(LOC_CSV_PATH).then(raw => {
     .append("g")
     .attr("transform", `translate(${margin.left},${margin.top})`);
 
-  const yTime = d3
-    .scaleLinear()
+  // y = time of day
+  const yTime = d3.scaleLinear()
     .domain([0, 24])
     .range([innerHeight, 0]);
 
   g.append("g")
     .attr("class", "axis-y")
     .call(
-      d3.axisLeft(yTime).ticks(13).tickFormat(h =>
-        d3.timeFormat("%H:%M")(new Date(2000, 0, 1, h))
-      )
+      d3.axisLeft(yTime)
+        .ticks(13)
+        .tickFormat(h =>
+          d3.timeFormat("%H:%M")(new Date(2000, 0, 1, h))
+        )
     );
 
-  const xTime = d3.scaleLinear().range([0, innerWidth]);
+  // x = date scale
+  const xTime = d3.scaleTime()
+    .domain(d3.extent(commits, d => d.date))
+    .range([0, innerWidth]);
 
-  g.append("g")
+  const xAxisGroup = g.append("g")
     .attr("class", "axis-x")
     .attr("transform", `translate(0,${innerHeight})`);
 
-  const xAxis = d3.axisBottom(xTime).ticks(0).tickSize(0);
-  xTime.domain([0, commits.length - 1]);
-  g.select(".axis-x").call(xAxis);
+  xAxisGroup.call(
+    d3.axisBottom(xTime)
+      .ticks(d3.timeDay.every(4))         // one tick per day
+      .tickFormat(d3.timeFormat("%b %d")) // "Oct 21"
+  );
 
-  const formatCommitTime = d3.timeFormat("%B %-d, %Y at %-I:%M %p");
+  const formatCommitTime = d3.timeFormat(
+    "%B %-d, %Y at %-I:%M %p"
+  );
 
   // ------------------------------------------------------
-  // SETUP SLIDER
+  // SLIDER SETUP
   // ------------------------------------------------------
   slider.min = 0;
   slider.max = commits.length - 1;
@@ -159,8 +164,10 @@ d3.csv(LOC_CSV_PATH).then(raw => {
     const current = commits[i];
     const seen = commits.slice(0, i + 1);
 
+    // update commit timestamp
     commitTimeLabel.textContent = formatCommitTime(current.date);
 
+    // update stats
     statCommits.textContent = seen.length;
     statFiles.textContent = current.files.length;
     statLoc.textContent = current.totalLoc;
@@ -168,11 +175,12 @@ d3.csv(LOC_CSV_PATH).then(raw => {
     statLongest.textContent = current.longestLine ?? "–";
     statMaxLines.textContent = current.maxLines ?? "–";
 
+    // ------------------------------------------------------
     // FILE ROWS
+    // ------------------------------------------------------
     filesList.selectAll("*").remove();
 
-    const color = d3
-      .scaleOrdinal()
+    const color = d3.scaleOrdinal()
       .domain(current.files.map(f => f.file))
       .range(d3.schemeTableau10);
 
@@ -183,13 +191,18 @@ d3.csv(LOC_CSV_PATH).then(raw => {
       .append("div")
       .attr("class", "file-row");
 
-    // left side
+    // left column
     const left = rowsSel.append("div");
 
-    left.append("div").attr("class", "file-path").text(d => d.file);
-    left.append("div").attr("class", "file-lines").text(d => `${d.loc} lines`);
+    left.append("div")
+      .attr("class", "file-path")
+      .text(d => d.file);
 
-    // right side: dots
+    left.append("div")
+      .attr("class", "file-lines")
+      .text(d => `${d.loc} lines`);
+
+    // right column: unit dots
     const right = rowsSel.append("div").attr("class", "file-dots");
 
     right.each(function (d) {
@@ -197,8 +210,11 @@ d3.csv(LOC_CSV_PATH).then(raw => {
       dotsContainer.selectAll("*").remove();
 
       const loc = d.loc;
-      const maxDots = 18; // nice limit, like screenshot
-      const dotCount = Math.max(1, Math.round((loc / current.totalLoc) * maxDots));
+      const maxDots = 18;
+      const dotCount = Math.max(
+        1,
+        Math.round((loc / current.totalLoc) * maxDots)
+      );
 
       dotsContainer
         .selectAll("span")
@@ -209,32 +225,36 @@ d3.csv(LOC_CSV_PATH).then(raw => {
         .style("--dot-color", color(d.file));
     });
 
-    // TIME OF DAY SCATTER
-    const dots = g.selectAll(".time-dot").data(seen, d => d.commitId);
+    // ------------------------------------------------------
+    // TIME-OF-DAY SCATTER (DATE on X)
+    // ------------------------------------------------------
+    const dots = g.selectAll(".time-dot")
+      .data(seen, d => d.commitId);
 
-    dots
-      .enter()
+    dots.enter()
       .append("circle")
       .attr("class", "time-dot")
-      .attr("r", 11)
-      .attr("cx", d => xTime(d.index))
+      .attr("r", 10)
+      .attr("cx", d => xTime(d.date))
       .attr("cy", d => yTime(d.timeOfDay))
       .attr("fill", "#60a5fa")
       .merge(dots)
       .transition()
       .duration(150)
-      .attr("cx", d => xTime(d.index))
+      .attr("cx", d => xTime(d.date))
       .attr("cy", d => yTime(d.timeOfDay));
 
     dots.exit().remove();
   }
 
+  // initial render
   render(+slider.value);
 
   slider.addEventListener("input", () => {
     render(+slider.value);
   });
 });
+
 
 
 
