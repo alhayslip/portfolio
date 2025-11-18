@@ -1,36 +1,57 @@
-<h1>Repository Evolution</h1>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Repository Evolution</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
 
-<!-- SCROLLY WRAPPER -->
-<div id="scrolly-1">
-  <div id="scatter-story"></div>
+<body>
+<main>
 
-  <div id="scatter-plot">
-    <section id="chart"></section>
+  <h1>Repository Evolution</h1>
+
+  <div id="scrolly-1">
+
+    <div id="scatter-story"></div>
+
+
+    <div id="scatter-plot">
+      <section id="chart"></section>
+    </div>
   </div>
-</div>
 
-<div id="scrolly-2">
-  <div id="files-story"></div>
-  <div id="files-plot">
-    <dl id="files"></dl>
+  <div id="scrolly-2">
+
+    <div id="files-story"></div>
+
+
+    <div id="files-plot">
+
+      <dl id="files"></dl>
+    </div>
+
   </div>
-</div>
 
-<!-- Moved to the very end (lab requirement) -->
-<dl id="files"></dl>
 
-<!-- Commit summary -->
-<section id="stats"></section>
+  <!-- Commit summary (optional) -->
+  <section id="stats"></section>
 
-<!-- Tooltip -->
-<div id="commit-tooltip" hidden>
-  <p><strong>Commit:</strong> <span id="commit-link"></span></p>
-  <p><strong>Date:</strong> <span id="commit-date"></span></p>
-  <p><strong>Time:</strong> <span id="commit-time-tooltip"></span></p>
-  <p><strong>Author:</strong> <span id="commit-author"></span></p>
-  <p><strong>Lines:</strong> <span id="commit-lines"></span></p>
-</div>
+  <!-- Commit Hover Tooltip -->
+  <div id="commit-tooltip" hidden>
+    <p><strong>Commit:</strong> <span id="commit-link"></span></p>
+    <p><strong>Date:</strong> <span id="commit-date"></span></p>
+    <p><strong>Time:</strong> <span id="commit-time-tooltip"></span></p>
+    <p><strong>Author:</strong> <span id="commit-author"></span></p>
+    <p><strong>Lines:</strong> <span id="commit-lines"></span></p>
+  </div>
+
+</main>
 
 <script src="main.js" type="module"></script>
+</body>
+</html>
+
 
 
