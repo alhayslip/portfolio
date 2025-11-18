@@ -5,10 +5,12 @@
     <title>Repository Evolution</title>
 
     <!-- Meta page styling -->
-    <link rel="stylesheet" href="../styles.css" />
+    <link rel="stylesheet" href="style.css" />
   </head>
 
   <body>
+        <script type="module" src="../global.js"></script>
+
     <!-- global.js will automatically inject your navigation bar here -->
 
     <main id="meta-root">
@@ -41,8 +43,10 @@
 
     </main>
 
+    <!-- REQUIRED: global site-wide navigation + theme + layout -->
+    <script type="module" src="../global.js"></script>
+
     <!-- Meta page logic -->
-     <script src="../global.js" type="module"></script>
     <script type="module" src="main.js"></script>
   </body>
 </html>
