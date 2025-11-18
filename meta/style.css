@@ -130,9 +130,8 @@ circle {
   width: 0.55em;
   aspect-ratio: 1;
   border-radius: 50%;
-  background: steelblue;
+  background: var(--color, steelblue);  
   display: inline-block;
 }
-
 
 
