@@ -105,6 +105,33 @@ circle {
   }
 }
 
+#scrolly-1 {
+  position: relative;
+  display: flex;
+  gap: 1rem;
+}
+
+#scrolly-1 > * {
+  flex: 1;
+}
+
+#scatter-story {
+  position: relative;
+}
+
+#scatter-plot {
+  position: sticky;
+  top: 0;
+  left: 0;
+  height: 50vh;  
+}
+
+.step {
+  padding-bottom: 80vh;  
+  font-size: 1rem;
+  line-height: 1.5;
+}
+
 
 
 

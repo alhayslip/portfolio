@@ -1,52 +1,38 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <title>Meta Analysis</title>
-    <link rel="stylesheet" href="style.css" />
-  </head>
+<h1>Repository Evolution</h1>
 
-  <body>
-    <main>
+<!-- Slider -->
+<div id="time-filter">
+  <label>
+    Show commits until:
+    <input type="range" id="commit-progress" min="0" max="100" value="100" />
+  </label>
+  <time id="commit-time"></time>
+</div>
 
-      <h1>Repository Evolution</h1>
+<!-- SCROLLY WRAPPER -->
+<div id="scrolly-1">
+  <div id="scatter-story"></div>
 
-      <!-- Slider + Time Label -->
-      <div id="time-filter">
-        <label>
-          Show commits until:
-          <input
-            type="range"
-            id="commit-progress"
-            min="0"
-            max="100"
-            value="100"
-          />
-        </label>
+  <div id="scatter-plot">
+    <section id="chart"></section>
+  </div>
+</div>
 
-        <time id="commit-time"></time>
-      </div>
+<!-- Commit summary -->
+<section id="stats"></section>
 
-      <!-- File Unit Visualization -->
-      <dl id="files"></dl>
+<!-- Moved to the very end (lab requirement) -->
+<dl id="files"></dl>
 
-      <!-- Commit Summary Stats -->
-      <section id="stats"></section>
+<!-- Tooltip -->
+<div id="commit-tooltip" hidden>
+  <p><strong>Commit:</strong> <span id="commit-link"></span></p>
+  <p><strong>Date:</strong> <span id="commit-date"></span></p>
+  <p><strong>Time:</strong> <span id="commit-time-tooltip"></span></p>
+  <p><strong>Author:</strong> <span id="commit-author"></span></p>
+  <p><strong>Lines:</strong> <span id="commit-lines"></span></p>
+</div>
 
-      <!-- Scatterplot -->
-      <section id="chart"></section>
+<script src="main.js" type="module"></script>
 
-      <!-- Tooltip -->
-      <div id="commit-tooltip" hidden>
-        <p><strong>Commit:</strong> <span id="commit-link"></span></p>
-        <p><strong>Date:</strong> <span id="commit-date"></span></p>
-        <p><strong>Time:</strong> <span id="commit-time-tooltip"></span></p>
-        <p><strong>Author:</strong> <span id="commit-author"></span></p>
-        <p><strong>Lines:</strong> <span id="commit-lines"></span></p>
-      </div>
-
-      <script src="main.js" type="module"></script>
-    </main>
-  </body>
-</html>
 
