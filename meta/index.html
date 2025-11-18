@@ -4,14 +4,19 @@
     <meta charset="utf-8" />
     <title>Repository Evolution</title>
 
-    <!-- Correct GitHub Pages paths -->
-    <link rel="stylesheet" href="/portfolio/global.css" />
-    <link rel="stylesheet" href="/portfolio/meta/style.css" />
+    <!-- Load global site styling (navbar, theme, fonts, layout) -->
+    <link rel="stylesheet" href="/global.css" />
+
+    <!-- Meta page styling -->
+    <link rel="stylesheet" href="style.css" />
   </head>
 
   <body>
 
+    <!-- global.js injects the navigation bar automatically -->
+
     <main id="meta-root">
+
       <header id="meta-header">
         <div id="slider-wrapper">
           <label for="commitSlider">Show commits until:</label>
@@ -37,14 +42,16 @@
         <h2>Commits by time of day</h2>
         <svg id="time-chart" width="900" height="260"></svg>
       </section>
+
     </main>
 
-    <!-- Correct GitHub Pages paths -->
-    <script type="module" src="/portfolio/global.js"></script>
-    <script type="module" src="/portfolio/meta/main.js"></script>
+    <!-- Load global navbar + theme + layout JS -->
+    <script type="module" src="../global.js"></script>
+
+    <!-- Meta page logic -->
+    <script type="module" src="main.js"></script>
 
   </body>
 </html>
-
 
 
