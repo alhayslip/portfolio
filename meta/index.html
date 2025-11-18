@@ -4,13 +4,17 @@
     <meta charset="utf-8" />
     <title>Repository Evolution</title>
 
-    <!-- FIXED: use absolute paths so GitHub Pages can find the files -->
+    <!-- Global site styling -->
+    <link rel="stylesheet" href="../global.css" />
+
+    <!-- Meta-page specific styling -->
     <link rel="stylesheet" href="style.css" />
   </head>
 
   <body>
-    <main id="meta-root">
+    <!-- Navbar added by global.js -->
 
+    <main id="meta-root">
       <header id="meta-header">
         <div id="slider-wrapper">
           <label for="commitSlider">Show commits until:</label>
@@ -24,43 +28,27 @@
       </section>
 
       <section id="stats-section">
-        <div class="stat">
-          <div class="stat-label">COMMITS</div>
-          <div id="stat-commits" class="stat-value">–</div>
-        </div>
-        <div class="stat">
-          <div class="stat-label">FILES</div>
-          <div id="stat-files" class="stat-value">–</div>
-        </div>
-        <div class="stat">
-          <div class="stat-label">TOTAL LOC</div>
-          <div id="stat-loc" class="stat-value">–</div>
-        </div>
-        <div class="stat">
-          <div class="stat-label">MAX DEPTH</div>
-          <div id="stat-depth" class="stat-value">–</div>
-        </div>
-        <div class="stat">
-          <div class="stat-label">LONGEST LINE</div>
-          <div id="stat-longest" class="stat-value">–</div>
-        </div>
-        <div class="stat">
-          <div class="stat-label">MAX LINES</div>
-          <div id="stat-maxLines" class="stat-value">–</div>
-        </div>
+        <div class="stat"><div class="stat-label">COMMITS</div><div id="stat-commits" class="stat-value">–</div></div>
+        <div class="stat"><div class="stat-label">FILES</div><div id="stat-files" class="stat-value">–</div></div>
+        <div class="stat"><div class="stat-label">TOTAL LOC</div><div id="stat-loc" class="stat-value">–</div></div>
+        <div class="stat"><div class="stat-label">MAX DEPTH</div><div id="stat-depth" class="stat-value">–</div></div>
+        <div class="stat"><div class="stat-label">LONGEST LINE</div><div id="stat-longest" class="stat-value">–</div></div>
+        <div class="stat"><div class="stat-label">MAX LINES</div><div id="stat-maxLines" class="stat-value">–</div></div>
       </section>
 
       <section id="time-section">
         <h2>Commits by time of day</h2>
         <svg id="time-chart" width="900" height="260"></svg>
       </section>
-
     </main>
 
-    <!-- FIXED -->
-    <script type="module" src="..//global.js"></script>
+    <!-- global.js must use an absolute path -->
+    <script type="module" src="../global.js"></script>
+
+    <!-- meta JavaScript -->
     <script type="module" src="main.js"></script>
   </body>
 </html>
+
 
 

@@ -1,0 +1,134 @@
+/* Layout */
+#meta-root {
+  max-width: 960px;
+  margin: 2rem auto 4rem;
+  padding: 0 1.5rem 3rem;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text",
+    "Helvetica Neue", Arial, sans-serif;
+}
+
+/* Header + slider */
+#meta-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+#slider-wrapper {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 0.9rem;
+}
+
+#commitSlider {
+  flex: 1;
+}
+
+#commitTime {
+  font-size: 0.85rem;
+  color: #555;
+  white-space: nowrap;
+}
+
+/* Files unit rows */
+#files-section {
+  margin-bottom: 1.75rem;
+}
+
+#filesList {
+  margin: 0;
+  padding: 0;
+}
+
+.file-row {
+  display: grid;
+  grid-template-columns: 220px minmax(0, 1fr);
+  column-gap: 1.5rem;
+  row-gap: 0.15rem;
+  margin-bottom: 0.75rem;
+}
+
+.file-path {
+  font-size: 0.9rem;
+}
+
+.file-lines {
+  font-size: 0.8rem;
+  color: #666;
+}
+
+.file-dots {
+  align-self: center;
+  padding-top: 0.2rem;
+}
+
+.file-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 999px;
+  display: inline-block;
+  margin-right: 3px;
+  background-color: var(--dot-color, #888);
+}
+
+/* Stats bar */
+#stats-section {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 1rem;
+  margin: 1.5rem 0 2rem;
+  border-top: 1px solid #e5e7eb;
+  padding-top: 1rem;
+}
+
+.stat-label {
+  font-size: 0.7rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #6b7280;
+}
+
+.stat-value {
+  font-size: 1rem;
+  font-weight: 600;
+  margin-top: 0.25rem;
+}
+
+/* Time-of-day chart */
+#time-section h2 {
+  font-size: 1.1rem;
+  margin-bottom: 0.75rem;
+}
+
+/* Simple axis text styling */
+#time-chart text {
+  font-size: 0.8rem;
+  fill: #374151;
+}
+
+#time-chart .axis line,
+#time-chart .axis path {
+  stroke: #d1d5db;
+}
+
+#time-chart .time-dot {
+  opacity: 0.8;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
