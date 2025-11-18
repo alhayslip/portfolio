@@ -3,14 +3,14 @@
   <head>
     <meta charset="utf-8" />
     <title>Repository Evolution</title>
-    <link rel="stylesheet" href="../global.css" />
+
+    <!-- FIXED: use absolute paths so GitHub Pages can find the files -->
     <link rel="stylesheet" href="style.css" />
   </head>
-  <body>
-    <!-- your nav from global.js will prepend here -->
 
+  <body>
     <main id="meta-root">
-      <!-- HEADER + SLIDER -->
+
       <header id="meta-header">
         <div id="slider-wrapper">
           <label for="commitSlider">Show commits until:</label>
@@ -19,12 +19,10 @@
         <div id="commitTime">Loading…</div>
       </header>
 
-      <!-- FILE UNIT ROWS -->
       <section id="files-section">
         <dl id="filesList"></dl>
       </section>
 
-      <!-- STATS BAR -->
       <section id="stats-section">
         <div class="stat">
           <div class="stat-label">COMMITS</div>
@@ -52,28 +50,17 @@
         </div>
       </section>
 
-      <!-- TIME OF DAY SCATTER -->
       <section id="time-section">
         <h2>Commits by time of day</h2>
         <svg id="time-chart" width="900" height="260"></svg>
       </section>
+
     </main>
 
-    <script type="module" src="../global.js"></script>
+    <!-- FIXED -->
+    <script type="module" src="..//global.js"></script>
     <script type="module" src="main.js"></script>
   </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
 
 
