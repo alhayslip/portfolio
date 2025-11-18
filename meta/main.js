@@ -215,11 +215,11 @@ function updateScatterPlot(data, commits) {
 
   // update the dots on the scatterplot
   const dots = svg.select("g.dots");
-  const sorted = d3.sort(commits, (d) => -d.totalLines);
+  const sortedCommits = d3.sort(commits, (d) => -d.totalLines);
 
   dots
     .selectAll("circle")
-    .data(sorted, (d) => d.id)
+    .data(sortedCommits, (d) => d.id) // ★ STABLE KEY (Step 1.3)
     .join("circle")
     .attr("cx", (d) => xScale(d.datetime))
     .attr("cy", (d) => yScale(d.hourFrac))
