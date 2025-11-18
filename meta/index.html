@@ -2,124 +2,48 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Meta-analysis: Commits by Time of Day</title>
-    <link rel="stylesheet" href="../styles.css" />
-    <style>
-
-      body {
-        font-family: system-ui, sans-serif;
-        margin: 2rem;
-        background: #f6f6f6;
-      }
-
-      h1 {
-        font-size: 1.8rem;
-        margin-bottom: 1rem;
-      }
-
-      #chart {
-        margin-top: 1rem;
-      }
-
-      #stats dl.stats {
-        display: grid;
-        grid-template-columns: max-content auto;
-        gap: 0.4rem 1.2rem;
-        font-size: 0.95rem;
-        margin-bottom: 1rem;
-      }
-
-      #selection-count {
-        font-weight: bold;
-        margin-top: 1.5rem;
-        margin-bottom: 0.5rem;
-      }
-
-      #language-breakdown {
-        display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        gap: 0.2rem 1rem;
-        font-size: 1.1rem;
-        font-weight: 500;
-      }
-
-      #language-breakdown dt {
-        grid-column: span 1;
-        text-align: left;
-      }
-
-      #language-breakdown dd {
-        grid-column: span 2;
-        margin: 0;
-      }
-
-      #commit-tooltip {
-        position: absolute;
-        background: rgba(255, 255, 255, 0.95);
-        border: 1px solid #ccc;
-        border-radius: 6px;
-        padding: 0.6rem 1rem;
-        pointer-events: none;
-        font-size: 0.9rem;
-        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
-      }
-
-circle {
-  transition: r 0.3s ease, cx 0.3s ease, cy 0.3s ease;
-
-  @starting-style {
-    r: 0;
-  }
-}
-
-      .brush .selection {
-        fill: #e0e0e0;
-        fill-opacity: 0.4;
-        stroke: #555;
-        stroke-dasharray: 4;
-      }
-    </style>
+    <title>Meta Analysis</title>
+    <link rel="stylesheet" href="style.css" />
   </head>
+
   <body>
-    <script src="../global.js" type="module"></script>
+    <main>
 
-    <h1>Commits by time of day</h1>
+      <!--Return the title-->
+      <h1>Repository Evolution</h1>
 
-    <div id="time-filter" style="display: flex; align-items: baseline; gap: 1rem; margin-bottom: 1rem;">
-  <label>
-    Show commits until:
-    <input 
-      type="range"
-      id="commit-progress"
-      min="0"
-      max="100"
-      value="100"
-      style="vertical-align: middle;"
-    />
-  </label>
+      <!-- Slider + Time Label -->
+      <div id="time-filter">
+        <label>
+          Show commits until:
+          <input
+            type="range"
+            id="commit-progress"
+            min="0"
+            max="100"
+            value="100"
+          />
+        </label>
 
-  <time id="commit-time" style="margin-left: auto; font-weight: bold;"></time>
-</div>
+        <time id="commit-time"></time>
+      </div>
 
-    <div id="stats"></div>
+      <!-- Return the commit summary statistics -->
+      <section id="stats"></section>
 
-    <div id="chart"></div>
+      <!-- Return the scatterplot -->
+      <section id="chart"></section>
 
-    <p id="selection-count">No commits selected</p>
-    <dl id="language-breakdown"></dl>
+      <!-- Return the tooltip -->
+      <div id="commit-tooltip" hidden>
+        <p><strong>Commit:</strong> <span id="commit-link"></span></p>
+        <p><strong>Date:</strong> <span id="commit-date"></span></p>
+        <p><strong>Time:</strong> <span id="commit-time"></span></p>
+        <p><strong>Author:</strong> <span id="commit-author"></span></p>
+        <p><strong>Lines:</strong> <span id="commit-lines"></span></p>
+      </div>
 
-    <div id="commit-tooltip" hidden>
-      <p>
-        <strong>Commit:</strong>
-        <a id="commit-link" href="#" target="_blank"></a>
-      </p>
-      <p><strong>Date:</strong> <span id="commit-date"></span></p>
-      <p><strong>Time:</strong> <span id="commit-time"></span></p>
-      <p><strong>Author:</strong> <span id="commit-author"></span></p>
-      <p><strong>Lines:</strong> <span id="commit-lines"></span></p>
-    </div>
-
-    <script type="module" src="./main.js"></script>
+      <script src="main.js" type="module"></script>
+    </main>
   </body>
 </html>
