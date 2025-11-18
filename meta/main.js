@@ -300,7 +300,6 @@ function onTimeSliderChange() {
   updateScatterPlot(data, filteredCommits);
   renderCommitInfo(data, filteredCommits);
   updateFileDisplay(filteredCommits); 
-  updateUnitVisualization(filteredCommits);
 }
 
 let data;
@@ -321,7 +320,6 @@ loadData().then((rows) => {
   renderCommitInfo(data, commits);
   renderScatterPlot(data, commits);
   updateFileDisplay(commits);
-  updateUnitVisualization(commits);
 
  //here are the slider events
   timeSlider.addEventListener("input", onTimeSliderChange);
