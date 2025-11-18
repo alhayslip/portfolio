@@ -251,27 +251,33 @@ function updateScatterPlot(data, commits) {
 function updateFileDisplay(filteredCommits) {
   const lines = filteredCommits.flatMap((d) => d.lines);
 
-  const files = d3.groups(lines, (d) => d.file).map(([name, lines]) => ({
-    name,
-    lines,
-  }));
+  // group by file
+  const files = d3.groups(lines, d => d.file)
+    .map(([name, lines]) => ({ name, lines }));
 
   const filesContainer = d3
-    .select('#files')
-    .selectAll('div')
-    .data(files, (d) => d.name) // stable key: file name
-    .join(
-      (enter) =>
-        enter.append('div').call((div) => {
-          div.append('dt').append('code');
-          div.append('dd');
-        })
-    );
+    .select("#files")
+    .selectAll("div")
+    .data(files, (d) => d.name)
+    .join(enter => {
+      const div = enter.append("div");
+      div.append("dt");
+      div.append("dd");
+      return div;
+    });
 
-  filesContainer.select('dt > code').text((d) => d.name);
-  filesContainer.select('dd').text((d) => `${d.lines.length} lines`);
+  // Filename + line count (in <small>)
+  filesContainer.select("dt").html(d =>
+    `<code>${d.name}</code><small>${d.lines.length} lines</small>`
+  );
+
+    filesContainer
+    .select("dd")
+    .selectAll("div")
+    .data(d => d.lines)
+    .join("div")
+    .attr("class", "loc");
 }
-
 
 const timeSlider = document.getElementById("commit-progress");
 const timeDisplay = document.getElementById("commit-time");
