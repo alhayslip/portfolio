@@ -12,52 +12,38 @@
 
   <h1>Repository Evolution</h1>
 
-  <!-- =========================================
-       SECTION 1 — COMMIT EXPLORER (SLIDER MODE)
-  ========================================== -->
-  <section id="explorer">
+  <!-- ============================
+       STEP 1.1 – FILTERING UI
+  ============================= -->
+  <div id="time-filter">
+    <label for="commit-progress">Show commits until:</label>
+    <input id="commit-progress" type="range" min="0" max="100" value="100" />
+    <time id="commit-time"></time>
+  </div>
 
-    <div id="slider-row">
-      <label for="commit-slider">Show commits until:</label>
-      <input id="commit-slider" type="range" min="0" max="0" value="0" />
-      <span id="current-date"></span>
-    </div>
+  <!-- Commit summary statistics -->
+  <section id="stats"></section>
 
-    <!-- Dot plot (1 dot = 1 line of code) -->
-    <dl id="files"></dl>
-
-    <!-- Commit summary stats -->
-    <section id="stats"></section>
-
-    <!-- Unified scatterplot is here -->
-    <h2>Commits by time of day</h2>
-    <section id="chart"></section>
-
-  </section>
-
-  <hr />
-
-  <!-- =========================================
-       SECTION 2 — SCROLLYTELLING (STEP 3)
-  ========================================== -->
-  <section id="scrolly-1">
-
-    <!-- LEFT: narrative text -->
+  <!-- ============================
+       STEP 3 – SCROLLYTELLING
+       Scatterplot lives inside #chart
+  ============================= -->
+  <div id="scrolly-1">
     <div id="scatter-story"></div>
-
-    <!-- RIGHT: sticky panel containing the SAME scatterplot -->
     <div id="scatter-plot">
-      <!-- NOTE: this is not a second chart; IDs merge so it's the same scatter -->
       <section id="chart"></section>
     </div>
-
-  </section>
+  </div>
 
 </main>
+
+<!-- STEP 2 – FILE UNIT VISUALIZATION (moved to end of body in Step 3) -->
+<dl id="files"></dl>
 
 <script src="main.js" type="module"></script>
 </body>
 </html>
+
 
 
 
