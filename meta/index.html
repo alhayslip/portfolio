@@ -83,6 +83,22 @@
 
     <h1>Commits by time of day</h1>
 
+    <div id="time-filter" style="display: flex; align-items: baseline; gap: 1rem; margin-bottom: 1rem;">
+  <label>
+    Show commits until:
+    <input 
+      type="range"
+      id="commit-progress"
+      min="0"
+      max="100"
+      value="100"
+      style="vertical-align: middle;"
+    />
+  </label>
+
+  <time id="commit-time" style="margin-left: auto; font-weight: bold;"></time>
+</div>
+
     <div id="stats"></div>
 
     <div id="chart"></div>
