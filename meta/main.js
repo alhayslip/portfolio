@@ -3,6 +3,14 @@ import * as d3 from "https://cdn.jsdelivr.net/npm/d3@7.9.0/+esm";
 //global state
 let commits = [];
 let filteredCommits = [];
+
+let lines = filteredCommits.flatMap((d) => d.lines);
+let files = d3
+  .groups(lines, (d) => d.file)
+  .map(([name, lines]) => {
+    return { name, lines };
+  });
+ 
 let xScale, yScale, timeScale;
 let commitProgress = 100;
 let commitMaxTime = null;
@@ -239,6 +247,30 @@ function updateScatterPlot(data, commits) {
     });
 }
 
+function updateFileDisplay(filteredCommits) {
+  const lines = filteredCommits.flatMap((d) => d.lines);
+
+  const files = d3.groups(lines, (d) => d.file).map(([name, lines]) => ({
+    name,
+    lines,
+  }));
+
+  const filesContainer = d3
+    .select('#files')
+    .selectAll('div')
+    .data(files, (d) => d.name) // stable key: file name
+    .join(
+      (enter) =>
+        enter.append('div').call((div) => {
+          div.append('dt').append('code');
+          div.append('dd');
+        })
+    );
+
+  filesContainer.select('dt > code').text((d) => d.name);
+  filesContainer.select('dd').text((d) => `${d.lines.length} lines`);
+}
+
 
 const timeSlider = document.getElementById("commit-progress");
 const timeDisplay = document.getElementById("commit-time");
@@ -256,6 +288,7 @@ function onTimeSliderChange() {
 
   updateScatterPlot(data, filteredCommits);
   renderCommitInfo(data, filteredCommits);
+  updateFileDisplay(filteredCommits); 
 }
 
 let data;
@@ -275,6 +308,7 @@ loadData().then((rows) => {
 
   renderCommitInfo(data, commits);
   renderScatterPlot(data, commits);
+  updateFileDisplay(commits);
 
  //here are the slider events
   timeSlider.addEventListener("input", onTimeSliderChange);
