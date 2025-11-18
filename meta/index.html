@@ -65,10 +65,13 @@
         box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
       }
 
-      circle.selected {
-        fill: #e15759;
-        fill-opacity: 0.9;
-      }
+circle {
+  transition: r 0.3s ease, cx 0.3s ease, cy 0.3s ease;
+
+  @starting-style {
+    r: 0;
+  }
+}
 
       .brush .selection {
         fill: #e0e0e0;
