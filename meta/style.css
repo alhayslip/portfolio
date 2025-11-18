@@ -86,10 +86,10 @@ circle {
 
 #files {
   margin-top: 1rem;
-  margin-bottom: 2rem;
+  margin-bottom: 1.5rem;
   display: grid;
   grid-template-columns: 1fr 4fr;
-  row-gap: 0.3rem;
+  row-gap: 0.4rem;
 }
 
 #files > div {
@@ -107,5 +107,54 @@ circle {
 #files dd {
   grid-column: 2;
   font-size: 0.95rem;
-  color: #444;
+  color: #555;
+}
+
+/* File line units visualization */
+#file-lines {
+  margin-top: 1rem;
+  margin-bottom: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.file-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.file-row code {
+  width: 200px;
+  font-size: 0.9rem;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.line-blocks {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1px;
+}
+
+.line-block {
+  width: 6px;
+  height: 12px;
+  border-radius: 2px;
+}
+
+/* Colors for line "types" */
+.line-added {
+  background: #4caf50;
+}
+.line-removed {
+  background: #f44336;
+}
+.line-modified {
+  background: #ff9800;
+}
+.line-other {
+  background: #9e9e9e;
 }
