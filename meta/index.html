@@ -4,20 +4,21 @@
     <meta charset="utf-8" />
     <title>Repository Evolution</title>
 
-    <!-- GLOBAL SITE STYLING -->
+    <!-- GLOBAL SITE STYLING (CORRECT PATH) -->
     <link rel="stylesheet" href="/portfolio/global.css" />
 
-    <!-- META PAGE STYLING -->
+    <!-- PAGE-SPECIFIC STYLING -->
     <link rel="stylesheet" href="style.css" />
   </head>
 
   <body>
+    <!-- GLOBAL NAV + THEME JS (CORRECT PATH) -->
     <script src="/portfolio/global.js" type="module"></script>
 
-    <!-- 🔥 USE THE SAME SITE-WIDE LAYOUT WRAPPER -->
+    <!-- Page wrapper: matches contact/projects/etc -->
     <main class="page" id="meta-root">
 
-      <!-- Header (slider + time) -->
+      <!-- Slider -->
       <header id="meta-header">
         <div id="slider-wrapper">
           <label for="commit-progress">
@@ -28,7 +29,7 @@
         </div>
       </header>
 
-      <!-- Stats summary box -->
+      <!-- Summary stats -->
       <section id="stats-section">
         <div class="stat"><strong>Total Commits:</strong> <span id="stat-commits">–</span></div>
         <div class="stat"><strong>Files Touched:</strong> <span id="stat-files">–</span></div>
@@ -38,13 +39,13 @@
         <div class="stat"><strong>Technologies:</strong> <span id="stat-tech">–</span></div>
       </section>
 
-      <!-- Files first -->
+      <!-- Files by LOC -->
       <section id="files-section">
         <h2 class="vis-title">Files by Lines of Code</h2>
         <dl id="files"></dl>
       </section>
 
-      <!-- Commits second -->
+      <!-- Commits by Time -->
       <section id="scatter-section">
         <h2 class="vis-title">Commits by Time of Day</h2>
         <div id="chart"></div>
@@ -52,9 +53,11 @@
 
     </main>
 
+    <!-- Meta JS -->
     <script src="main.js" type="module"></script>
   </body>
 </html>
+
 
 
 
