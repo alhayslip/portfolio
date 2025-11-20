@@ -4,50 +4,69 @@
     <meta charset="utf-8" />
     <title>Repository Evolution</title>
 
-    <!-- Load global site styling (navbar, theme, fonts, layout) -->
-    <link rel="stylesheet" href="/global.css" />
-
-    <!-- Meta page styling -->
+    <!-- ✅ Correct paths for GitHub Pages -->
+    <link rel="stylesheet" href="../global.css" />
     <link rel="stylesheet" href="style.css" />
   </head>
 
   <body>
+    <!-- Global navigation + theme toggle -->
     <script src="../global.js" type="module"></script>
 
-    <main id="meta-root">
+    <!-- Matches your site layout exactly -->
+    <main class="page">
+      <div class="content" id="meta-root">
 
-      <header id="meta-header">
-        <div id="slider-wrapper">
-          <label for="commitSlider">Show commits until:</label>
-          <input id="commitSlider" type="range" min="0" max="0" value="0" />
-        </div>
-        <div id="commitTime">Loading…</div>
-      </header>
+        <!-- Slider + Time -->
+        <header id="meta-header">
+          <div id="slider-wrapper">
+            <label for="commit-progress">
+              Show commits until:
+              <input id="commit-progress" type="range" min="0" max="100" value="100" />
+            </label>
+            <time id="commit-time">Loading…</time>
+          </div>
+        </header>
 
-      <section id="files-section">
-        <dl id="filesList"></dl>
-      </section>
+        <!-- Summary Statistics -->
+        <section id="stats-section">
+          <div class="stat"><strong>Total Commits:</strong> <span id="stat-commits">–</span></div>
+          <div class="stat"><strong>Total Lines:</strong> <span id="stat-lines">–</span></div>
+          <div class="stat"><strong>Files Touched:</strong> <span id="stat-files">–</span></div>
+          <div class="stat"><strong>Largest Commit:</strong> <span id="stat-largest">–</span></div>
+          <div class="stat"><strong>Most Active File:</strong> <span id="stat-active">–</span></div>
+          <div class="stat"><strong>Technologies:</strong> <span id="stat-tech">–</span></div>
+        </section>
 
-      <section id="stats-section">
-        <div class="stat"><div class="stat-label">COMMITS</div><div id="stat-commits" class="stat-value">–</div></div>
-        <div class="stat"><div class="stat-label">FILES</div><div id="stat-files" class="stat-value">–</div></div>
-        <div class="stat"><div class="stat-label">TOTAL LOC</div><div id="stat-loc" class="stat-value">–</div></div>
-        <div class="stat"><div class="stat-label">MAX DEPTH</div><div id="stat-depth" class="stat-value">–</div></div>
-        <div class="stat"><div class="stat-label">LONGEST LINE</div><div id="stat-longest" class="stat-value">–</div></div>
-        <div class="stat"><div class="stat-label">MAX LINES</div><div id="stat-maxLines" class="stat-value">–</div></div>
-      </section>
+        <!-- Files by Lines of Code -->
+        <section id="files-section">
+          <h2 class="vis-title">Files by Lines of Code</h2>
+          <dl id="files"></dl>
+        </section>
 
-      <section id="time-section">
-        <h2>Commits by time of day</h2>
-        <svg id="time-chart" width="900" height="260"></svg>
-      </section>
+        <!-- Commits by Time of Day -->
+        <section id="scatter-section">
+          <h2 class="vis-title">Commits by Time of Day</h2>
+          <div id="chart"></div>
+        </section>
 
+      </div>
     </main>
 
-    <!-- Meta page logic -->
-    <script type="module" src="./main.js"></script>
-
+    <!-- Meta visualization logic -->
+    <script src="main.js" type="module"></script>
   </body>
 </html>
+
+
+
+
+
+
+
+
+
+
+
 
 

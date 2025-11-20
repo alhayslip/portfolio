@@ -1,259 +1,294 @@
+// META — Complete main.js with:
+// ✔ Scatterplot
+// ✔ File-lines dotplot
+// ✔ Slider filtering
+// ✔ Summary statistics
+// ✔ Clean D3 architecture
+
 import * as d3 from "https://cdn.jsdelivr.net/npm/d3@7.9.0/+esm";
 
-// ------------------------------------------------------
-// AUTO PATH for GitHub Pages vs localhost
-// ------------------------------------------------------
-const isGithub = location.hostname.includes("github.io");
-const LOC_CSV_PATH = isGithub
-  ? "/portfolio/meta/loc.csv"
-  : "loc.csv";
+const LOC_CSV_PATH = "loc.csv";
 
-// ------------------------------------------------------
-// MAP ROWS EXACTLY TO YOUR CSV
-// ------------------------------------------------------
+/* -------------------------------------------------------------
+   1. DATA LOADING + PROCESSING
+------------------------------------------------------------- */
+
 function mapRow(d) {
   return {
-    commitId: d.commit,
-    file: d.file.replace(/\\/g, "/"),  // normalize windows paths
+    id: d.commit,
+    file: d.file.replace(/\\/g, "/"),
     line: +d.line,
     length: +d.length,
     depth: +d.depth,
-    datetime: new Date(d.datetime),    // ISO format from elocuent
+    datetime: new Date(d.datetime),
     type: d.type
   };
 }
 
-// ------------------------------------------------------
-// LOAD + PROCESS DATA
-// ------------------------------------------------------
-d3.csv(LOC_CSV_PATH).then(raw => {
-  if (!raw || raw.length === 0) {
-    console.error("loc.csv NOT FOUND at:", LOC_CSV_PATH);
-  }
+function processCommits(rows) {
+  return d3.rollups(
+    rows,
+    (D) => ({
+      id: D[0].id,
+      datetime: D[0].datetime,
+      lines: D,
+      totalLines: D.length,
+      hourFrac:
+        D[0].datetime.getHours() + D[0].datetime.getMinutes() / 60
+    }),
+    (d) => d.id
+  )
+    .map(([, commit]) => commit)
+    .sort((a, b) => a.datetime - b.datetime); // chronological
+}
 
-  const rows = raw.map(mapRow).filter(d => !isNaN(d.datetime));
+let commits = [];
+let filteredCommits = [];
 
-  // group by commit
-  const commitsGrouped = d3.group(rows, d => d.commitId);
+let timeScale;
+let commitMaxTime;
+let xScale, yScale;
 
-  let commits = [];
+/* -------------------------------------------------------------
+   2. INITIALIZE PAGE
+------------------------------------------------------------- */
 
-  for (const [commitId, rowsInCommit] of commitsGrouped) {
-    // group by file inside commit
-    const filesGrouped = d3.group(rowsInCommit, d => d.file);
+d3.csv(LOC_CSV_PATH).then((raw) => {
+  const rows = raw.map(mapRow).filter((d) => !isNaN(d.datetime));
+  commits = processCommits(rows);
 
-    const files = [];
+  // IMPORTANT: Scatterplot first so scales exist
+  renderScatterPlot(commits);
 
-    for (const [file, lines] of filesGrouped) {
-      const totalLoc = d3.sum(lines, r => r.length);
-      const maxDepth = d3.max(lines, r => r.depth);
-      const longestLine = d3.max(lines, r => r.length);
-      const maxLines = d3.max(lines, r => r.line);
+  initializeSlider();
 
-      files.push({
-        file,
-        loc: totalLoc,
-        depth: maxDepth,
-        maxLineLength: longestLine,
-        maxLines
-      });
-    }
-
-    const date = rowsInCommit[0].datetime;
-
-    commits.push({
-      commitId,
-      date,
-      files,
-      totalLoc: d3.sum(files, f => f.loc),
-      maxDepth: d3.max(files, f => f.depth),
-      longestLine: d3.max(files, f => f.maxLineLength),
-      maxLines: d3.max(files, f => f.maxLines)
-    });
-  }
-
-  // sort chronologically
-  commits.sort((a, b) => d3.ascending(a.date, b.date));
-
-  // add index + time-of-day
-  commits = commits.map((c, i) => ({
-    ...c,
-    index: i,
-    timeOfDay: (
-      c.date.getHours() +
-      c.date.getMinutes() / 60 +
-      c.date.getSeconds() / 3600
-    )
-  }));
-
-  // ------------------------------------------------------
-  // DOM REFERENCES
-  // ------------------------------------------------------
-  const slider = document.getElementById("commitSlider");
-  const commitTimeLabel = document.getElementById("commitTime");
-  const filesList = d3.select("#filesList");
-
-  const statCommits = document.getElementById("stat-commits");
-  const statFiles = document.getElementById("stat-files");
-  const statLoc = document.getElementById("stat-loc");
-  const statDepth = document.getElementById("stat-depth");
-  const statLongest = document.getElementById("stat-longest");
-  const statMaxLines = document.getElementById("stat-maxLines");
-
-  // ------------------------------------------------------
-  // TIME OF DAY CHART WITH **DATE ON X AXIS**
-  // ------------------------------------------------------
-  const svg = d3.select("#time-chart");
-  const width = +svg.attr("width");
-  const height = +svg.attr("height");
-
-  const margin = { top: 20, right: 20, bottom: 40, left: 60 };
-  const innerWidth = width - margin.left - margin.right;
-  const innerHeight = height - margin.top - margin.bottom;
-
-  const g = svg
-    .append("g")
-    .attr("transform", `translate(${margin.left},${margin.top})`);
-
-  // y = time of day
-  const yTime = d3.scaleLinear()
-    .domain([0, 24])
-    .range([innerHeight, 0]);
-
-  g.append("g")
-    .attr("class", "axis-y")
-    .call(
-      d3.axisLeft(yTime)
-        .ticks(13)
-        .tickFormat(h =>
-          d3.timeFormat("%H:%M")(new Date(2000, 0, 1, h))
-        )
-    );
-
-  // x = date scale
-  const xTime = d3.scaleTime()
-    .domain(d3.extent(commits, d => d.date))
-    .range([0, innerWidth]);
-
-  const xAxisGroup = g.append("g")
-    .attr("class", "axis-x")
-    .attr("transform", `translate(0,${innerHeight})`);
-
-  xAxisGroup.call(
-    d3.axisBottom(xTime)
-      .ticks(d3.timeDay.every(4))         // one tick per day
-      .tickFormat(d3.timeFormat("%b %d")) // "Oct 21"
-  );
-
-  const formatCommitTime = d3.timeFormat(
-    "%B %-d, %Y at %-I:%M %p"
-  );
-
-  // ------------------------------------------------------
-  // SLIDER SETUP
-  // ------------------------------------------------------
-  slider.min = 0;
-  slider.max = commits.length - 1;
-  slider.value = 0;
-
-  // ------------------------------------------------------
-  // RENDER FUNCTION
-  // ------------------------------------------------------
-  function render(index) {
-    const i = Math.max(0, Math.min(commits.length - 1, index));
-    const current = commits[i];
-    const seen = commits.slice(0, i + 1);
-
-    // update commit timestamp
-    commitTimeLabel.textContent = formatCommitTime(current.date);
-
-    // update stats
-    statCommits.textContent = seen.length;
-    statFiles.textContent = current.files.length;
-    statLoc.textContent = current.totalLoc;
-    statDepth.textContent = current.maxDepth ?? "–";
-    statLongest.textContent = current.longestLine ?? "–";
-    statMaxLines.textContent = current.maxLines ?? "–";
-
-    // ------------------------------------------------------
-    // FILE ROWS
-    // ------------------------------------------------------
-    filesList.selectAll("*").remove();
-
-    const color = d3.scaleOrdinal()
-      .domain(current.files.map(f => f.file))
-      .range(d3.schemeTableau10);
-
-    const rowsSel = filesList
-      .selectAll(".file-row")
-      .data(current.files)
-      .enter()
-      .append("div")
-      .attr("class", "file-row");
-
-    // left column
-    const left = rowsSel.append("div");
-
-    left.append("div")
-      .attr("class", "file-path")
-      .text(d => d.file);
-
-    left.append("div")
-      .attr("class", "file-lines")
-      .text(d => `${d.loc} lines`);
-
-    // right column: unit dots
-    const right = rowsSel.append("div").attr("class", "file-dots");
-
-    right.each(function (d) {
-      const dotsContainer = d3.select(this);
-      dotsContainer.selectAll("*").remove();
-
-      const loc = d.loc;
-      const maxDots = 18;
-      const dotCount = Math.max(
-        1,
-        Math.round((loc / current.totalLoc) * maxDots)
-      );
-
-      dotsContainer
-        .selectAll("span")
-        .data(d3.range(dotCount))
-        .enter()
-        .append("span")
-        .attr("class", "file-dot")
-        .style("--dot-color", color(d.file));
-    });
-
-    // ------------------------------------------------------
-    // TIME-OF-DAY SCATTER (DATE on X)
-    // ------------------------------------------------------
-    const dots = g.selectAll(".time-dot")
-      .data(seen, d => d.commitId);
-
-    dots.enter()
-      .append("circle")
-      .attr("class", "time-dot")
-      .attr("r", 10)
-      .attr("cx", d => xTime(d.date))
-      .attr("cy", d => yTime(d.timeOfDay))
-      .attr("fill", "#60a5fa")
-      .merge(dots)
-      .transition()
-      .duration(150)
-      .attr("cx", d => xTime(d.date))
-      .attr("cy", d => yTime(d.timeOfDay));
-
-    dots.exit().remove();
-  }
-
-  // initial render
-  render(+slider.value);
-
-  slider.addEventListener("input", () => {
-    render(+slider.value);
-  });
+  filteredCommits = commits;
+  updateFileDisplay(filteredCommits);
+  updateSummaryStats(filteredCommits);
 });
+
+/* -------------------------------------------------------------
+   3. SLIDER + TIME LABEL
+------------------------------------------------------------- */
+
+function initializeSlider() {
+  timeScale = d3
+    .scaleTime()
+    .domain([
+      d3.min(commits, (d) => d.datetime),
+      d3.max(commits, (d) => d.datetime)
+    ])
+    .range([0, 100]);
+
+  document
+    .getElementById("commit-progress")
+    .addEventListener("input", onSliderChange);
+
+  onSliderChange(); // initialize
+}
+
+function onSliderChange() {
+  const pct = +document.getElementById("commit-progress").value;
+
+  commitMaxTime = timeScale.invert(pct);
+
+  document.getElementById("commit-time").textContent =
+    commitMaxTime.toLocaleString("en-US", {
+      dateStyle: "long",
+      timeStyle: "short"
+    });
+
+  filteredCommits = commits.filter(
+    (d) => d.datetime <= commitMaxTime
+  );
+
+  updateScatterPlot(filteredCommits);
+  updateFileDisplay(filteredCommits);
+  updateSummaryStats(filteredCommits);
+}
+
+/* -------------------------------------------------------------
+   4. COMMITS BY TIME OF DAY SCATTERPLOT
+------------------------------------------------------------- */
+
+function renderScatterPlot(data) {
+  const width = 1000;
+  const height = 420;
+  const margin = { top: 10, right: 10, bottom: 30, left: 35 };
+
+  const svg = d3
+    .select("#chart")
+    .append("svg")
+    .attr("width", width)
+    .attr("height", height);
+
+  xScale = d3
+    .scaleTime()
+    .domain(d3.extent(data, (d) => d.datetime))
+    .range([margin.left, width - margin.right]);
+
+  yScale = d3
+    .scaleLinear()
+    .domain([0, 24])
+    .range([height - margin.bottom, margin.top]);
+
+  svg
+    .append("g")
+    .attr("class", "x-axis")
+    .attr(
+      "transform",
+      `translate(0, ${height - margin.bottom})`
+    )
+    .call(d3.axisBottom(xScale));
+
+  svg
+    .append("g")
+    .attr("class", "y-axis")
+    .attr("transform", `translate(${margin.left}, 0)`)
+    .call(d3.axisLeft(yScale).ticks(6));
+
+  svg.append("g").attr("class", "dots");
+
+  updateScatterPlot(data);
+}
+
+function updateScatterPlot(data) {
+  const svg = d3.select("#chart svg");
+
+  xScale.domain(d3.extent(data, (d) => d.datetime));
+
+  svg.select(".x-axis").call(d3.axisBottom(xScale));
+
+  const [minLines, maxLines] = d3.extent(
+    data,
+    (d) => d.totalLines
+  );
+  const rScale = d3
+    .scaleSqrt()
+    .domain([minLines, maxLines])
+    .range([2, 30]);
+
+  svg
+    .select(".dots")
+    .selectAll("circle")
+    .data(data, (d) => d.id)
+    .join("circle")
+    .attr("cx", (d) => xScale(d.datetime))
+    .attr("cy", (d) => yScale(d.hourFrac))
+    .attr("r", (d) => rScale(d.totalLines))
+    .attr("fill", "#1f77b4")
+    .style("opacity", 0.75);
+}
+
+/* -------------------------------------------------------------
+   5. FILE LINES DOTPLOT (Colored by Technology)
+------------------------------------------------------------- */
+
+function updateFileDisplay(filtered) {
+  const lines = filtered.flatMap((d) => d.lines);
+
+  const files = d3
+    .groups(lines, (d) => d.file)
+    .map(([name, lines]) => ({ name, lines }))
+    .sort((a, b) => b.lines.length - a.lines.length);
+
+  const techTypes = Array.from(new Set(lines.map((d) => d.type)));
+  const colors = d3
+    .scaleOrdinal(d3.schemeTableau10)
+    .domain(techTypes);
+
+  const rows = d3
+    .select("#files")
+    .selectAll(".file-row")
+    .data(files, (d) => d.name)
+    .join((enter) => {
+      const row = enter
+        .append("div")
+        .attr("class", "file-row");
+
+      row.append("div").attr("class", "file-name");
+      row.append("div").attr("class", "file-lines");
+      row.append("div").attr("class", "file-dots");
+
+      return row;
+    });
+
+  rows.select(".file-name").text((d) => d.name);
+  rows
+    .select(".file-lines")
+    .text((d) => `${d.lines.length} lines`);
+
+  rows
+    .select(".file-dots")
+    .selectAll(".loc")
+    .data((d) => d.lines)
+    .join("div")
+    .attr("class", "loc")
+    .style("background", (d) => colors(d.type));
+}
+
+/* -------------------------------------------------------------
+   6. SUMMARY STATISTICS
+------------------------------------------------------------- */
+
+function updateSummaryStats(filtered) {
+  const totalCommits = filtered.length;
+  const totalLines = d3.sum(filtered, (d) => d.totalLines);
+
+  const allLines = filtered.flatMap((d) => d.lines);
+
+  const fileCounts = d3.rollups(
+    allLines,
+    (v) => v.length,
+    (d) => d.file
+  );
+
+  const totalFiles = fileCounts.length;
+
+  const largestCommit = d3.max(
+    filtered,
+    (d) => d.totalLines
+  );
+
+  const [activeFile, activeLines] =
+    fileCounts.sort((a, b) => b[1] - a[1])[0] || [
+      "–",
+      0
+    ];
+
+  const techSet = new Set(allLines.map((d) => d.type));
+  const techString =
+    [...techSet].join(", ") || "–";
+
+  document.getElementById(
+    "stat-commits"
+  ).textContent = totalCommits;
+  document.getElementById(
+    "stat-lines"
+  ).textContent = totalLines;
+  document.getElementById(
+    "stat-files"
+  ).textContent = totalFiles;
+  document.getElementById(
+    "stat-largest"
+  ).textContent = largestCommit;
+  document.getElementById(
+    "stat-active"
+  ).textContent = `${activeFile} (${activeLines})`;
+  document.getElementById(
+    "stat-tech"
+  ).textContent = techString;
+}
+
+
+
+
+
+
+
+
+
+
 
 
 

@@ -1,123 +1,130 @@
-/* Layout */
+/* Layout container */
 #meta-root {
-  max-width: 960px;
-  margin: 2rem auto 4rem;
-  padding: 0 1.5rem 3rem;
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text",
-    "Helvetica Neue", Arial, sans-serif;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem 4rem;
 }
 
-/* Header + slider */
-#meta-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 1.5rem;
-  margin-bottom: 1.5rem;
-}
-
+/* -----------------------
+   Slider + time
+------------------------ */
 #slider-wrapper {
-  flex: 1;
   display: flex;
   align-items: center;
-  gap: 0.75rem;
-  font-size: 0.9rem;
-}
-
-#commitSlider {
-  flex: 1;
-}
-
-#commitTime {
-  font-size: 0.85rem;
-  color: #555;
-  white-space: nowrap;
-}
-
-/* Files unit rows */
-#files-section {
-  margin-bottom: 1.75rem;
-}
-
-#filesList {
-  margin: 0;
-  padding: 0;
-}
-
-.file-row {
-  display: grid;
-  grid-template-columns: 220px minmax(0, 1fr);
-  column-gap: 1.5rem;
-  row-gap: 0.15rem;
-  margin-bottom: 0.75rem;
-}
-
-.file-path {
-  font-size: 0.9rem;
-}
-
-.file-lines {
-  font-size: 0.8rem;
-  color: #666;
-}
-
-.file-dots {
-  align-self: center;
-  padding-top: 0.2rem;
-}
-
-.file-dot {
-  width: 7px;
-  height: 7px;
-  border-radius: 999px;
-  display: inline-block;
-  margin-right: 3px;
-  background-color: var(--dot-color, #888);
-}
-
-/* Stats bar */
-#stats-section {
-  display: grid;
-  grid-template-columns: repeat(6, minmax(0, 1fr));
   gap: 1rem;
-  margin: 1.5rem 0 2rem;
-  border-top: 1px solid #e5e7eb;
-  padding-top: 1rem;
 }
 
-.stat-label {
-  font-size: 0.7rem;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: #6b7280;
+#commit-progress {
+  width: 260px;
 }
 
-.stat-value {
-  font-size: 1rem;
-  font-weight: 600;
-  margin-top: 0.25rem;
+#commit-time {
+  margin-left: auto;
+  opacity: 0.75;
 }
 
-/* Time-of-day chart */
-#time-section h2 {
-  font-size: 1.1rem;
+/* Headings */
+.vis-title {
   margin-bottom: 0.75rem;
+  font-size: 1.25rem;
 }
 
-/* Simple axis text styling */
-#time-chart text {
+/* -----------------------
+   Scatterplot
+------------------------ */
+#chart svg {
+  width: 100%;
+  height: 420px;
+}
+
+.dots circle {
+  transition: cx 180ms ease, cy 180ms ease, r 280ms ease;
+
+  @starting-style {
+    r: 0;
+  }
+}
+
+.x-axis path,
+.y-axis path,
+.x-axis line,
+.y-axis line {
+  stroke: #d1d5db;
+}
+
+.x-axis text,
+.y-axis text {
   font-size: 0.8rem;
   fill: #374151;
 }
 
-#time-chart .axis line,
-#time-chart .axis path {
-  stroke: #d1d5db;
+/* -----------------------
+   File Lines Dot Plot
+------------------------ */
+
+#files {
+  margin-top: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.75rem;
 }
 
-#time-chart .time-dot {
-  opacity: 0.8;
+.file-row {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  grid-template-rows: auto auto auto;
+  column-gap: 1.5rem;
+  row-gap: 0.35rem;
+
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid #e5e7eb;
 }
+
+.file-name {
+  font-family: ui-monospace, SFMono-Regular, Monospace;
+  font-size: 0.9rem;
+}
+
+.file-lines {
+  opacity: 0.7;
+  font-size: 0.75rem;
+}
+
+.file-dots {
+  grid-column: 2 / 3;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.15em;
+  align-items: center;
+}
+
+.loc {
+  width: 0.55em;
+  aspect-ratio: 1;
+  border-radius: 50%;
+}
+
+#stats-section {
+  margin: 1.75rem 0;
+  padding: 1rem 1.25rem;
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.75rem;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.4rem 1.5rem;
+  font-size: 0.9rem;
+}
+
+#stats-section .stat strong {
+  font-weight: 600;
+}
+
+
+
+
+
+
 
 
 

@@ -4,6 +4,11 @@ function $$(selector, context = document) {
   return Array.from(context.querySelectorAll(selector));
 }
 
+const BASE_PATH =
+  location.hostname === "localhost" || location.hostname === "127.0.0.1"
+    ? "/"
+    : "/portfolio/";
+
 let pages = [
   { url: "", title: "Home Page" },
   { url: "projects/", title: "Academic Projects" },
@@ -12,11 +17,6 @@ let pages = [
   {url: "meta/", title:"Meta"},
   {url: "resume/", title: "My Resume" }
 ];
-
-const BASE_PATH =
-  location.hostname === "localhost" || location.hostname === "127.0.0.1"
-    ? "/"
-    : "/portfolio/";
 
 let nav = document.createElement("nav");
 document.body.prepend(nav);
