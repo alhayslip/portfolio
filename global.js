@@ -1,27 +1,40 @@
-console.log("IT’S ALIVE!");
+console.log("GLOBAL.JS LOADED");
 
+// ---------------------------
+// Utility helpers
+// ---------------------------
 function $$(selector, context = document) {
   return Array.from(context.querySelectorAll(selector));
 }
 
+// ---------------------------
+// Path handling (Local vs GitHub Pages)
+// ---------------------------
 const BASE_PATH =
   location.hostname === "localhost" || location.hostname === "127.0.0.1"
     ? "/"
     : "/portfolio/";
 
-let pages = [
+// ---------------------------
+// Navigation Pages
+// ---------------------------
+const pages = [
   { url: "", title: "Home Page" },
   { url: "projects/", title: "Academic Projects" },
   { url: "contact/", title: "Contact Information" },
   { url: "https://github.com/alhayslip", title: "My GitHub Page" },
-  {url: "meta/", title:"Meta"},
-  {url: "resume/", title: "My Resume" }
+  { url: "meta/", title: "Meta" },
+  { url: "resume/", title: "My Resume" }
 ];
 
-let nav = document.createElement("nav");
+// ---------------------------
+// Build the Nav Bar
+// ---------------------------
+const nav = document.createElement("nav");
 document.body.prepend(nav);
 
 for (let p of pages) {
+  // Dropdown for Academic Projects
   if (p.title === "Academic Projects") {
     const dropdown = document.createElement("div");
     dropdown.classList.add("dropdown");
@@ -39,7 +52,7 @@ for (let p of pages) {
       { url: "projects/project1.html", title: "Project 1" },
       { url: "projects/project2.html", title: "Project 2" },
       { url: "projects/project3.html", title: "Project 3" },
-      { url: "projects/project4.html", title: "Project 4" },
+      { url: "projects/project4.html", title: "Project 4" }
     ];
 
     for (let sp of subpages) {
@@ -53,21 +66,31 @@ for (let p of pages) {
     nav.append(dropdown);
 
   } else {
-    let url = !p.url.startsWith("http") ? BASE_PATH + p.url : p.url;
-    let a = document.createElement("a");
-    a.href = url;
+    // Regular nav link
+    const isExternal = p.url.startsWith("http");
+
+    const a = document.createElement("a");
+    a.href = isExternal ? p.url : BASE_PATH + p.url;
     a.textContent = p.title;
 
-    a.classList.toggle(
-      "current",
-      a.host === location.host && a.pathname === location.pathname
-    );
+    // Highlight current page
+    if (!isExternal) {
+      const currentPath = location.pathname.replace(/\/$/, "");
+      const linkPath = a.pathname.replace(/\/$/, "");
 
-    a.toggleAttribute("target", a.host !== location.host);
+      a.classList.toggle("current", currentPath === linkPath);
+    }
+
+    // External links open in new tab
+    if (isExternal) a.target = "_blank";
+
     nav.append(a);
   }
 }
 
+// ---------------------------
+// Theme Switcher
+// ---------------------------
 document.body.insertAdjacentHTML(
   "afterbegin",
   `
@@ -79,97 +102,98 @@ document.body.insertAdjacentHTML(
       <option value="dark">Dark</option>
     </select>
   </label>
-`
+  `
 );
 
-const select = document.querySelector("#theme-select");
+const themeSelect = document.querySelector("#theme-select");
 
 function setColorScheme(scheme) {
   document.documentElement.style.setProperty("color-scheme", scheme);
   localStorage.colorScheme = scheme;
-  select.value = scheme;
+  themeSelect.value = scheme;
 }
 
-if ("colorScheme" in localStorage) {
+// Load saved theme
+if (localStorage.colorScheme) {
   setColorScheme(localStorage.colorScheme);
 }
 
-select.addEventListener("input", (event) => {
+// Change theme
+themeSelect.addEventListener("input", (event) => {
   setColorScheme(event.target.value);
 });
 
+// ---------------------------
+// Optional: Handle contact page form
+// (Only runs if a form exists)
+// ---------------------------
 const form = document.querySelector("form");
 
-form?.addEventListener("submit", (event) => {
-  event.preventDefault();
-  const data = new FormData(form);
-  let url = form.action + "?";
-  const params = [];
+if (form) {
+  form.addEventListener("submit", (event) => {
+    event.preventDefault();
+    const data = new FormData(form);
+    let url = form.action + "?";
+    const params = [];
 
-  for (let [name, value] of data) {
-    params.push(`${name}=${encodeURIComponent(value)}`);
-  }
+    for (let [name, value] of data.entries()) {
+      params.push(`${name}=${encodeURIComponent(value)}`);
+    }
 
-  url += params.join("&");
-  location.href = url;
-});
+    url += params.join("&");
+    location.href = url;
+  });
+}
 
+// ---------------------------
+// Fetch helper (for project JSON files)
+// ---------------------------
 export async function fetchJSON(url) {
   try {
     const response = await fetch(url);
-    if (!response.ok) {
-      throw new Error(`Failed to fetch projects: ${response.statusText}`);
-    }
+    if (!response.ok) throw new Error(`HTTP ${response.status}`);
     return await response.json();
-  } catch (error) {
-    console.error("Error fetching or parsing JSON data:", error);
+  } catch (err) {
+    console.error("fetchJSON error:", err);
     return [];
   }
 }
 
-export function renderProjects(projects, containerElement, headingLevel = "h2") {
-  if (!containerElement) return;
+// ---------------------------
+// Render project list
+// ---------------------------
+export function renderProjects(projects, container, headingLevel = "h2") {
+  if (!container) return;
 
-  containerElement.innerHTML = "";
+  container.innerHTML = "";
 
   if (!projects.length) {
-    containerElement.innerHTML = "<p>No projects to display.</p>";
+    container.innerHTML = "<p>No projects to display.</p>";
     return;
   }
 
   projects.forEach((project) => {
     const article = document.createElement("article");
-    const title = project.title || "Untitled Project";
-    const image = project.image || "";
-    const description = project.description || "";
-    const year = project.year || "N/A";
-    const url = project.url || null;
-
-    // Build HTML content dynamically
     article.innerHTML = `
-      <${headingLevel}>${title}</${headingLevel}>
-      <img src="${image}" alt="${title}">
+      <${headingLevel}>${project.title || "Untitled Project"}</${headingLevel}>
+      ${project.image ? `<img src="${project.image}" alt="${project.title}">` : ""}
       <div class="project-text">
-        <p>${description}</p>
-        <p class="project-year">${year}</p>
+        <p>${project.description || ""}</p>
+        <p class="project-year">${project.year || "N/A"}</p>
         ${
-          url
-            ? `<a href="${url}" target="_blank" class="project-link">View Project ↗</a>`
+          project.url
+            ? `<a href="${project.url}" target="_blank" class="project-link">View Project ↗</a>`
             : ""
         }
       </div>
     `;
-
-    containerElement.appendChild(article);
+    container.appendChild(article);
   });
 }
 
-export async function fetchGitHubData(username) {
-  const response = await fetch(`https://api.github.com/users/${username}`);
-  if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
-  return response.json();
-}
-
+// ---------------------------
+// Render single project card
+// ---------------------------
 export function renderProject(project) {
   return `
     <div class="project">
@@ -181,4 +205,13 @@ export function renderProject(project) {
       </div>
     </div>
   `;
+}
+
+// ---------------------------
+// Fetch GitHub user info
+// ---------------------------
+export async function fetchGitHubData(username) {
+  const response = await fetch(`https://api.github.com/users/${username}`);
+  if (!response.ok) throw new Error(`GitHub API: HTTP ${response.status}`);
+  return response.json();
 }
